@@ -59,10 +59,14 @@ public class Software {
     public void setVersion(String version) {this.version = version;}
 
     public List<Extras> getExtras() {return extras;}
-    public void setExtras(List<Extras> extras) {this.extras = extras;}
+    public void setExtras(String nombre, String version, String descrip, int partes) {
+        this.extras.add(new Extras(nombre, version, descrip, partes));
+    }
 
     public List<Copias> getCopias() {return copias;}
-    public void setCopias(List<Copias> copias) {this.copias = copias;}
+    public void setCopias(String formato, String observ, Ubicaciones ubiDepos) {
+        this.copias.add(new Copias(formato, observ, ubiDepos));
+    }
 
     public List<Medios> getMedios() {return medios;}
     public void setMedios(List<Medios> medios) {this.medios = medios;}
