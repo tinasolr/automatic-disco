@@ -31,5 +31,4 @@ public class Copias {
     public Ubicaciones getUbiDepo() {return ubiDepo;}
     public void setUbiDepo(Ubicaciones ubiDepo) {this.ubiDepo = ubiDepo;}
 
-    //public void parsarron(){}
 }
