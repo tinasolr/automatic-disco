@@ -27,10 +27,10 @@ public class Copias {
 
     public String getObserv() {return observ;}
     public void setObserv(String observ) {this.observ = observ;}
-    
+
     public Ubicaciones getUbiDepo() {return ubiDepo;}
     public void setUbiDepo(Ubicaciones ubiDepo) {this.ubiDepo = ubiDepo;}
-    
-    //public void Panzaron (){}
+
+    //public void parzarron (){}
 
 }
