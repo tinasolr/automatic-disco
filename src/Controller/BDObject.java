@@ -47,7 +47,7 @@ public abstract class BDObject {
             res = instr.executeQuery("Select " + parameter + " from " + table);
 
             while(res.next()){
-                objetos.add(readResultSet());
+                objetos.add(readResultSet(res));
             }
 
                 conn.close();
@@ -58,5 +58,5 @@ public abstract class BDObject {
         return objetos;
     }
 
-    public abstract <E> E readResultSet();
+    public abstract <E> E readResultSet(ResultSet res);
 }
