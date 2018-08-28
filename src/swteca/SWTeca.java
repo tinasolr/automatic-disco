@@ -5,7 +5,6 @@
  */
 package swteca;
 
-import Controller.*;
 import javafx.application.*;
 import javafx.event.*;
 import javafx.scene.*;
@@ -22,8 +21,6 @@ public class SWTeca extends Application {
     @Override
     public void start(Stage primaryStage) {
 
-        BDConnect b = new BDConnect();
-        b.connect();
         Button btn = new Button();
         btn.setText("Say 'Hello World'");
         btn.setOnAction(new EventHandler<ActionEvent>() {
