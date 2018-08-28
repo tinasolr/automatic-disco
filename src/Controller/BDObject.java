@@ -7,19 +7,19 @@
 package Controller;
 
 import java.sql.*;
+import java.util.*;
 
 /**
  *
  * @author tinar
  */
-public class BDConnect {
+public abstract class BDObject {
     private final String DRIVER = "com.mysql.jdbc.Driver";
     private final String URL = "jdbc:mysql://db4free.net:3306/dbpruebaswt";
     private final String USER = "nicotina";
     private final String PASSW = "nicotina";
     private Connection conn;
-
-    public BDConnect(){}
+    private Statement instr;
 
     public void connect(){
         try {
@@ -35,4 +35,28 @@ public class BDConnect {
                     + e);
         }
     }
+
+    public ArrayList<?> leer(String parameter, String table) {
+        ArrayList<?> objetos = new ArrayList<>();
+        ResultSet res;
+        try {
+
+            if(conn.isClosed())
+                connect();
+
+            res = instr.executeQuery("Select " + parameter + " from " + table);
+
+            while(res.next()){
+                objetos.add(readResultSet());
+            }
+
+                conn.close();
+        } catch (SQLException e) {
+                e.printStackTrace();
+        }
+
+        return objetos;
+    }
+
+    public abstract <E> E readResultSet();
 }
