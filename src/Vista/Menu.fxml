@@ -11,8 +11,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="641.0" prefWidth="927.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="641.0" prefWidth="927.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MenuController">
    <children>
       <MenuBar layoutX="-8.0" layoutY="2.0" prefHeight="25.0" prefWidth="934.0">
         <menus>
@@ -48,11 +47,11 @@
       <Button layoutX="407.0" layoutY="58.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="78.0" text="Filtrar" />
       <AnchorPane layoutX="498.0" layoutY="31.0" prefHeight="80.0" prefWidth="429.0">
          <children>
-            <RadioButton layoutX="14.0" layoutY="27.0" mnemonicParsing="false" text="Todos los campos" />
-            <RadioButton layoutX="152.0" layoutY="16.0" mnemonicParsing="false" text="Código" />
-            <RadioButton layoutX="152.0" layoutY="47.0" mnemonicParsing="false" text="Sistema Operativo" />
-            <RadioButton layoutX="286.0" layoutY="16.0" mnemonicParsing="false" text="Nombre" />
-            <RadioButton layoutX="288.0" layoutY="47.0" mnemonicParsing="false" text="Versión" />
+            <RadioButton fx:id="todosRdb" layoutX="14.0" layoutY="27.0" mnemonicParsing="false" text="Todos los campos" />
+            <RadioButton fx:id="codigoRdb" layoutX="152.0" layoutY="16.0" mnemonicParsing="false" text="Código" />
+            <RadioButton fx:id="sistOpRdb" layoutX="152.0" layoutY="47.0" mnemonicParsing="false" text="Sistema Operativo" />
+            <RadioButton fx:id="nombreRdb" layoutX="286.0" layoutY="16.0" mnemonicParsing="false" text="Nombre" />
+            <RadioButton fx:id="versionRdb" layoutX="288.0" layoutY="47.0" mnemonicParsing="false" text="Versión" />
          </children>
       </AnchorPane>
       <TableView layoutY="111.0" prefHeight="531.0" prefWidth="927.0">
