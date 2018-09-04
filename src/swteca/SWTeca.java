@@ -5,10 +5,10 @@
  */
 package swteca;
 
+import java.io.*;
 import javafx.application.*;
-import javafx.event.*;
+import javafx.fxml.*;
 import javafx.scene.*;
-import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
@@ -18,27 +18,29 @@ import javafx.stage.*;
  */
 public class SWTeca extends Application {
 
+    private Stage primaryStage;
+    private AnchorPane root;
+
     @Override
     public void start(Stage primaryStage) {
 
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("SoftwareTeca");
+        initRoot();
+    }
 
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
+    public void initRoot(){
+        try{
 
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+            Parent root = FXMLLoader.load(getClass().getResource("/Vista/Menu.fxml"));
 
-        Scene scene = new Scene(root, 300, 250);
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.show();
 
-        primaryStage.setTitle("Hello World!");
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
