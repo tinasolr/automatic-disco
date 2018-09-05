@@ -5,6 +5,8 @@
  */
 package swteca;
 
+import Controller.*;
+import Model.*;
 import java.io.*;
 import javafx.application.*;
 import javafx.fxml.*;
@@ -47,7 +49,12 @@ public class SWTeca extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch(args);
+        ExtrasCtrl x = new ExtrasCtrl();
+        x.cargarExtras();
+        for(Extras c : x.getExtras()){
+            System.out.println(c.getNombre());
+        }
+    //    launch(args);
     }
 
 }

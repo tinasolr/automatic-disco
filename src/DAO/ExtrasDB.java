@@ -7,6 +7,7 @@
 package DAO;
 
 import java.sql.*;
+import java.util.*;
 
 /**
  *
@@ -30,6 +31,7 @@ public class ExtrasDB extends DBObject{
     }
 
     @Override
+    //LEER TODOS LOS EXTRAS - LA USA LA FUNCION READ() DE DBOBJECT
     public ExtrasDB readResultSet(ResultSet res) {
         ExtrasDB extra = null;
 
@@ -50,12 +52,12 @@ public class ExtrasDB extends DBObject{
     }
 
     @Override
+    //ESCRIBIR EN LA BD CON UN PREPARED STATEMENT - LO USA WRITE() DE DBOBJECT
     public void executePStoWrite(Connection con) {
         try {
 
             PreparedStatement ps = con.prepareStatement("INSERT INTO "
-                    + "Extras "
-                    + "(extra_nom,extra_vers,extra_descr,extra_partes,sw_id) "
+                    + "Extras(extra_nom,extra_vers,extra_descr,extra_partes,sw_id) "
                     + "VALUES (?,?,?,?,?,?,?)");
             ps.setString(1, nombre);
             ps.setString(2, version);
@@ -92,6 +94,31 @@ public class ExtrasDB extends DBObject{
         return result;
     }
 
+    public List<ExtrasDB> extrasDeSoftware(int sw_id){
+        ResultSet res = null;
+        List<ExtrasDB> exDB = new ArrayList<>();
+
+        try {
+
+            if(conn.isClosed())
+                connect();
+
+            res = instr.executeQuery("SELECT * "
+                                    + "FROM Extras "
+                                    + "WHERE sw_id = " + sw_id);
+
+            while(res.next()){
+                exDB.add(readResultSet(res));
+            }
+
+            conn.close();
+
+        } catch (SQLException e) {
+            System.out.println("BDObject search() :: " + e.getMessage());
+        }
+        return exDB;
+    }
+
     public String getNombre() {  return nombre;  }
     public void setNombre(String nombre) {  this.nombre = nombre;  }
 
@@ -103,6 +130,9 @@ public class ExtrasDB extends DBObject{
 
     public int getPartes() {  return partes;  }
     public void setPartes(int partes) {  this.partes = partes;   }
+
+    public int getSwid() {return swid;}
+    public void setSwid(int swid) {this.swid = swid;}
 
     @Override
     public String toString() {
