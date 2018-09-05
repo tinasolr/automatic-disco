@@ -5,16 +5,16 @@
  */
 package Controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
+import java.net.*;
+import java.util.*;
+import javafx.fxml.*;
 
 /**
  * FXML Controller class
  *
  * @author Nico
  */
-public class MenuController implements Initializable {
+public class MenuIOCtrl implements Initializable {
 
     /**
      * Initializes the controller class.
@@ -22,6 +22,6 @@ public class MenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
 }

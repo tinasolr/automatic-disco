@@ -14,12 +14,12 @@ import java.util.*;
  * @author tinar
  */
 public abstract class DBObject {
-    private final String DRIVER = "com.mysql.jdbc.Driver";
-    private final String URL = "jdbc:mysql://db4free.net:3306/dbpruebaswt";
+    private final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    private final String URL = "jdbc:mysql://db4free.net:3306/dbpruebaswt?autoReconnect=true&useSSL=false";
     private final String USER = "nicotina";
     private final String PASSW = "nicotina";
-    private Connection conn;
-    private Statement instr;
+    protected Connection conn;
+    protected Statement instr;
 
     public void connect(){
         try {
@@ -29,6 +29,8 @@ public abstract class DBObject {
         }
         try {
             conn = DriverManager.getConnection(URL, USER, PASSW);
+            instr = conn.createStatement();
+
             System.out.println("Connection Established.");
         } catch (SQLException e) {
             System.out.println("Error connecting to database: " + e.getMessage());
@@ -37,13 +39,13 @@ public abstract class DBObject {
 
     public ArrayList<?> read(String table) {
         ArrayList<?> objetos = new ArrayList<>();
-        ResultSet res;
+        ResultSet res = null;
         try {
 
             if(conn.isClosed())
                 connect();
 
-            res = instr.executeQuery("Select * from " + table);
+            res = instr.executeQuery("SELECT * FROM " + table);
 
             while(res.next()){
                 objetos.add(readResultSet(res));
@@ -94,5 +96,19 @@ public abstract class DBObject {
     }
 
     public abstract String executePStoSearch(Connection conn);
+
+    public Connection getConn() {
+        return conn;
+    }
+
+    public void setConn(Connection conn) {
+        this.conn = conn;
+    }
+
+    public Statement getInstr() {
+        return instr;
+    }
+
+
 
 }

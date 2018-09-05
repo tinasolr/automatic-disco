@@ -6,16 +6,16 @@ package Controller;
  * and open the template in the editor.
  */
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
+import java.net.*;
+import java.util.*;
+import javafx.fxml.*;
 
 /**
  * FXML Controller class
  *
  * @author Nico
  */
-public class NuevoSoftwareController implements Initializable {
+public class NuevoSoftwareIOCtrl implements Initializable {
 
     /**
      * Initializes the controller class.
@@ -23,6 +23,6 @@ public class NuevoSoftwareController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
 }
