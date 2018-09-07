@@ -20,6 +20,7 @@ public class ExtrasDB extends DBObject{
     private String descrip;
     private int partes;
     private int swid;
+    private int id;
 
     public ExtrasDB() {connect();}
 
@@ -53,19 +54,19 @@ public class ExtrasDB extends DBObject{
 
     @Override
     //ESCRIBIR EN LA BD CON UN PREPARED STATEMENT - LO USA WRITE() DE DBOBJECT
-    public void executePStoWrite(Connection con) {
+    public void executePStoWrite() {
         try {
 
-            PreparedStatement ps = con.prepareStatement("INSERT INTO "
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO "
                     + "Extras(extra_nom,extra_vers,extra_descr,extra_partes,sw_id) "
-                    + "VALUES (?,?,?,?,?,?,?)");
+                    + "VALUES (?,?,?,?,?)");
             ps.setString(1, nombre);
             ps.setString(2, version);
             ps.setString(3, descrip);
             ps.setInt(4, partes);
             ps.setInt(5, swid);
 
-            ps.execute();
+            ps.executeUpdate();
 
         } catch (SQLException ex) {
             System.out.println("Problema en la escritura de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
@@ -74,24 +75,47 @@ public class ExtrasDB extends DBObject{
 
 
     @Override
-    public String executePStoSearch(Connection conn) {
+    public String executeSearch() {
         String result = null;
+        ResultSet res = null;
         try {
 
-            PreparedStatement ps = conn.prepareStatement("Select extra_id "
-                    + "FROM Extras "
-                    + "WHERE extra_nombre LIKE ?");
-
-            ps.setString(1, nombre);
-
-            ResultSet res = ps.executeQuery();
+            CallableStatement storedProc = conn.prepareCall("{call search_idextra(?,?)}");
+            storedProc.setInt(1, swid);
+            storedProc.setString(2, nombre);
+            res = storedProc.executeQuery();
             res.next();
-            int r = res.getInt("extra_id");
+            int r = res.getInt(1);
             result = String.valueOf(r);
+
+              res.close();
         } catch (SQLException ex) {
-            System.out.println("Problema en la escritura de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
+            System.out.println("Problema en la busqueda de la tabla Extras :: " + ex.getLocalizedMessage());
+            ex.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public void executePStoUpdate() {
+        try {
+
+            PreparedStatement ps = conn.prepareStatement("UPDATE 'Extras' "
+                    + "SET 'extra_nom' = ?,'extra_vers' = ?,'extra_descr' = ?,'extra_partes' = ? "
+                    + "WHERE 'sw_id' = ? AND 'extra_id' = ?");
+
+            ps.setString(1, nombre);
+            ps.setString(2, version);
+            ps.setString(3, descrip);
+            ps.setInt(4, partes);
+            ps.setInt(5, swid);
+            ps.setInt(6, id);
+
+            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println("Problema en la modificación de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
+        }
     }
 
     public List<ExtrasDB> extrasDeSoftware(int sw_id){
@@ -119,6 +143,52 @@ public class ExtrasDB extends DBObject{
         return exDB;
     }
 
+        @Override
+    public void executeDelete() {
+        try {
+
+            CallableStatement storedProc = conn.prepareCall("{call eliminar_extra(?,?)}");
+            storedProc.setInt(1, id);
+            storedProc.setInt(2, swid);
+            storedProc.executeUpdate();
+//            PreparedStatement ps = conn.prepareStatement("DELETE FROM 'Extras' "
+//                    + "WHERE 'sw_id' = ? AND 'extra_id' = ?");
+//
+//            ps.setInt(1, swid);
+//            ps.setInt(2, id);
+//
+//            ps.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println("Problema en la baja de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
+        }
+    }
+
+    public void deleteAllExtras(){
+        try {
+
+            if(conn.isClosed())
+                connect();
+
+            executeDeleteAll();
+
+            conn.close();
+
+        } catch (SQLException e) {
+            System.out.println("BDObject deleteAllExtras() :: " + e.getMessage());
+        }
+    }
+
+    public void executeDeleteAll(){
+        try{
+            CallableStatement storedProc = conn.prepareCall("{call eliminar_todos_extra(?)}");
+            storedProc.setInt(1, swid);
+            storedProc.executeUpdate();
+        }catch(SQLException ex){
+            System.out.println("Error >> Baja de filas para software id - " + swid + " >> Tabla Extras :: " + ex.getLocalizedMessage());
+        }
+    }
+
     public String getNombre() {  return nombre;  }
     public void setNombre(String nombre) {  this.nombre = nombre;  }
 
@@ -133,6 +203,9 @@ public class ExtrasDB extends DBObject{
 
     public int getSwid() {return swid;}
     public void setSwid(int swid) {this.swid = swid;}
+
+    public int getId() {return id;}
+    public void setId(int id) {this.id = id;}
 
     @Override
     public String toString() {
