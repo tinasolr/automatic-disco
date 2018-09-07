@@ -61,13 +61,13 @@ public abstract class DBObject {
 
     public abstract <E> E readResultSet(ResultSet res);
 
-    public void write(String table) {
+    public void write() {
         try {
 
             if(conn.isClosed())
                 connect();
 
-            executePStoWrite(conn);
+            executePStoWrite();
 
             conn.close();
 
@@ -76,7 +76,41 @@ public abstract class DBObject {
         }
     }
 
-    public abstract void executePStoWrite(Connection c);
+    public abstract void executePStoWrite();
+
+    public void update() {
+        try {
+
+            if(conn.isClosed())
+                connect();
+
+            executePStoUpdate();
+
+            conn.close();
+
+        } catch (SQLException e) {
+            System.out.println("BDObject update() :: " + e.getMessage());
+        }
+    }
+
+    public abstract void executePStoUpdate();
+
+    public void delete(){
+        try {
+
+            if(conn.isClosed())
+                connect();
+
+            executeDelete();
+
+            conn.close();
+
+        } catch (SQLException e) {
+            System.out.println("BDObject delete() :: " + e.getMessage());
+        }
+    }
+
+    public abstract void executeDelete();
 
     public String searchTable(){
         String id = null;
@@ -85,7 +119,7 @@ public abstract class DBObject {
             if(conn.isClosed())
                 connect();
 
-            id = executePStoSearch(conn);
+            id = executeSearch();
 
             conn.close();
 
@@ -95,7 +129,7 @@ public abstract class DBObject {
         return id;
     }
 
-    public abstract String executePStoSearch(Connection conn);
+    public abstract String executeSearch();
 
     public Connection getConn() {
         return conn;

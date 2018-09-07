@@ -5,13 +5,10 @@
  */
 package swteca;
 
-import Controller.*;
-import Model.*;
 import java.io.*;
 import javafx.application.*;
 import javafx.fxml.*;
 import javafx.scene.*;
-import javafx.scene.layout.*;
 import javafx.stage.*;
 
 /**
@@ -21,7 +18,6 @@ import javafx.stage.*;
 public class SWTeca extends Application {
 
     private Stage primaryStage;
-    private AnchorPane root;
 
     @Override
     public void start(Stage primaryStage) {
@@ -34,7 +30,7 @@ public class SWTeca extends Application {
     public void initRoot(){
         try{
 
-            Parent root = FXMLLoader.load(getClass().getResource("/Vista/Menu.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/Vista/ABMExtra.fxml"));
 
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
@@ -49,12 +45,7 @@ public class SWTeca extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        ExtrasCtrl x = new ExtrasCtrl();
-        x.cargarExtras();
-        for(Extras c : x.getExtras()){
-            System.out.println(c.getNombre());
-        }
-    //    launch(args);
+        launch(args);
     }
 
 }

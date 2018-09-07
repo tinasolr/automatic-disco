@@ -24,35 +24,56 @@ public class ExtrasCtrl {
 
     public void cargarExtras(int swid){
         List<ExtrasDB> ex = extrasDB.extrasDeSoftware(swid);
-        extras.clear();
+        if(!extras.isEmpty())
+            extras.clear();
         for(ExtrasDB x : ex){
             extras.add(new Extras(x.getNombre(),x.getVersion(),x.getDescrip(),x.getPartes()));
         }
     }
 
-    public void cargarExtras(){
-        List<ExtrasDB> ex = (List<ExtrasDB>) extrasDB.read("Extras");
-        extras.clear();
-        for(ExtrasDB x : ex){
-            extras.add(new Extras(x.getNombre(),x.getVersion(),x.getDescrip(),x.getPartes()));
-        }
+    public void modificarExtra(String nombre, String descrip, String version, int partes, Software soft){
+        extrasDB.setNombre(nombre);
+        extrasDB.setSwid(soft.getCodigo());
+        String id = extrasDB.searchTable();
+        int extraid = Integer.parseInt(id);
+        extrasDB.setId(extraid);
+        extrasDB.setDescrip(descrip);
+        extrasDB.setVersion(version);
+        extrasDB.setPartes(partes);
+        extrasDB.update();
+        if(!extras.isEmpty())
+            extras.clear();
     }
 
-    public void modificarExtra(){
-
+    public void eliminarExtra(String nombre, Software soft){
+        extrasDB.setNombre(nombre);
+        extrasDB.setSwid(soft.getCodigo());
+        String id = extrasDB.searchTable();
+        int extraid = Integer.parseInt(id);
+        extrasDB.setId(extraid);
+        extrasDB.delete();
+        if(!extras.isEmpty())
+            extras.clear();
     }
 
-    public void eliminarExtra(){
-
+    public void eliminarExtras(Software soft){
+        extrasDB.setSwid(soft.getCodigo());
+        extrasDB.deleteAllExtras();
+        if(!extras.isEmpty())
+            extras.clear();
     }
 
-    public void altaExtra(String nombre, String descrip, String version, int partes, Software soft){
+    public Extras altaExtra(String nombre, String descrip, String version, int partes, Software soft){
         extrasDB.setNombre(nombre);
         extrasDB.setDescrip(descrip);
         extrasDB.setVersion(version);
         extrasDB.setPartes(partes);
         extrasDB.setSwid(soft.getCodigo());
-        extrasDB.write("Extras");
+        extrasDB.write();
+        if(!extras.isEmpty())
+            extras.clear();
+        Extras nuevo = new Extras(nombre, version, descrip, partes);
+        return nuevo;
     }
     public List<Extras> getExtras() { return extras; }
     public void setExtras(List<Extras> extras) {        this.extras = extras;    }
