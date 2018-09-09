@@ -10,39 +10,31 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ABMExtraIOCtrl">
    <children>
-      <AnchorPane prefHeight="250.0" prefWidth="200.0">
+      <AnchorPane prefHeight="199.0" prefWidth="621.0">
          <children>
             <Label fx:id="lblTituloSw" alignment="CENTER" layoutX="206.0" layoutY="3.0" text="Información del Software">
                <font>
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <Label fx:id="lblNombreSw" layoutX="28.0" layoutY="56.0" text="Nombre:" />
-            <Label fx:id="lblVersionSw" layoutX="28.0" layoutY="92.0" text="Version:" />
-            <Label fx:id="lblSistOpSw" layoutX="28.0" layoutY="131.0" text="Sistemas Operativos:" />
-            <TextField layoutX="83.0" layoutY="51.0" prefHeight="25.0" prefWidth="216.0" promptText="Ej. Lotus123" />
-            <TextField layoutX="83.0" layoutY="89.0" prefHeight="25.0" prefWidth="216.0" promptText="Ej. 2.4" />
-            <ComboBox layoutX="149.0" layoutY="127.0" prefWidth="150.0" promptText="Seleccionar..." />
-            <ListView layoutX="28.0" layoutY="165.0" prefHeight="109.0" prefWidth="272.0" />
-            <Separator layoutX="333.0" layoutY="49.0" orientation="VERTICAL" prefHeight="233.0" prefWidth="6.0" />
-            <AnchorPane layoutX="379.0" layoutY="48.0" maxHeight="200.0" maxWidth="200.0" prefHeight="200.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <image>
-                        <Image url="file:/C:/Users/tinar/Pictures/primary-unknown.jpg" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
-            <Button layoutX="417.0" layoutY="251.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="124.0" text="Agregar imagen" />
+            <Label fx:id="lblNombreSw" layoutX="23.0" layoutY="51.0" text="Nombre:" />
+            <Label fx:id="lblVersionSw" layoutX="23.0" layoutY="87.0" text="Version:" />
+            <Label fx:id="lblSistOpSw" layoutX="23.0" layoutY="124.0" text="Sistemas Operativos:" />
+            <TextField fx:id="txtNombreSw" layoutX="78.0" layoutY="46.0" prefHeight="25.0" prefWidth="216.0" promptText="Ej. Lotus123" />
+            <TextField fx:id="txtVersionSw" layoutX="78.0" layoutY="84.0" prefHeight="25.0" prefWidth="216.0" promptText="Ej. 2.4" />
+            <ComboBox fx:id="cmbSos" layoutX="144.0" layoutY="120.0" prefWidth="150.0" promptText="Seleccionar..." />
+            <ListView fx:id="lstSistemasOp" editable="true" layoutX="315.0" layoutY="42.0" prefHeight="144.0" prefWidth="272.0">
+               <tooltip>
+                  <Tooltip text="Para agregar, seleccionar sistemas operativo y hacer click en Agregar. \n Para eliminar, seleccionarlo en la lista y hacer click en Quitar" />
+               </tooltip></ListView>
+            <Button fx:id="btnAgregarSo" layoutX="28.0" layoutY="159.0" mnemonicParsing="false" onAction="#agregarSistemaOperativo" prefHeight="25.0" prefWidth="100.0" text="Agregar" />
+            <Button fx:id="btnQuitarSo" layoutX="194.0" layoutY="159.0" mnemonicParsing="false" onAction="#quitarSistemaOperativo" prefHeight="25.0" prefWidth="100.0" text="Quitar" />
          </children>
       </AnchorPane>
       <AnchorPane id="AnchorPane" prefHeight="299.0" prefWidth="621.0">

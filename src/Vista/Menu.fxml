@@ -86,10 +86,10 @@
                         </ScrollPane>
                      </children>
                   </AnchorPane>
-                  <BorderPane fx:id="borderPane" prefHeight="200.0" prefWidth="200.0">
-                      <center>
-<!--                        <fx:include source="/Vista/ConsultaSoftware.fxml"/>-->
-                      </center>
+                  <BorderPane fx:id="mainWindow" prefHeight="200.0" prefWidth="200.0">
+                    <center>
+                        <fx:include source="/Vista/ConsultaSoftware.fxml"/>
+                    </center>
                   </BorderPane>
               </items>
             </SplitPane>
