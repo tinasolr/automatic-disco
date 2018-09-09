@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.ABMExtraIOCtrl">
+   <children>
+      <AnchorPane prefHeight="250.0" prefWidth="200.0">
+         <children>
+            <Label fx:id="lblTituloSw" alignment="CENTER" layoutX="206.0" layoutY="3.0" text="Información del Software">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblNombreSw" layoutX="28.0" layoutY="56.0" text="Nombre:" />
+            <Label fx:id="lblVersionSw" layoutX="28.0" layoutY="92.0" text="Version:" />
+            <Label fx:id="lblSistOpSw" layoutX="28.0" layoutY="131.0" text="Sistemas Operativos:" />
+            <TextField layoutX="83.0" layoutY="51.0" prefHeight="25.0" prefWidth="216.0" promptText="Ej. Lotus123" />
+            <TextField layoutX="83.0" layoutY="89.0" prefHeight="25.0" prefWidth="216.0" promptText="Ej. 2.4" />
+            <ComboBox layoutX="149.0" layoutY="127.0" prefWidth="150.0" promptText="Seleccionar..." />
+            <ListView layoutX="28.0" layoutY="165.0" prefHeight="109.0" prefWidth="272.0" />
+            <Separator layoutX="333.0" layoutY="49.0" orientation="VERTICAL" prefHeight="233.0" prefWidth="6.0" />
+            <AnchorPane layoutX="379.0" layoutY="48.0" maxHeight="200.0" maxWidth="200.0" prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <ImageView fitHeight="200.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <image>
+                        <Image url="file:/C:/Users/tinar/Pictures/primary-unknown.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <Button layoutX="417.0" layoutY="251.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="124.0" text="Agregar imagen" />
+         </children>
+      </AnchorPane>
+      <AnchorPane id="AnchorPane" prefHeight="299.0" prefWidth="621.0">
+         <children>
+            <TableView fx:id="tblExtras" layoutX="22.0" layoutY="37.0" prefHeight="144.0" prefWidth="459.0" AnchorPane.leftAnchor="22.0">
+               <columns>
+                  <TableColumn fx:id="colNombre" prefWidth="118.66666221618652" text="Nombre" />
+                  <TableColumn fx:id="colVersion" prefWidth="71.3333740234375" text="Versión" />
+                  <TableColumn fx:id="colPartes" prefWidth="46.00004577636719" text="Partes" />
+                  <TableColumn fx:id="colDescrip" prefWidth="222.66668701171875" text="Descripción" />
+               </columns>
+            </TableView>
+            <Label fx:id="lblNombre" layoutX="22.0" layoutY="194.0" text="Nombre:" />
+            <Label fx:id="lblVersion" layoutX="22.0" layoutY="231.0" text="Version:" />
+            <Label fx:id="lblPartes" layoutX="22.0" layoutY="268.0" text="Partes:">
+               <tooltip>
+                  <Tooltip fx:id="toolTipPartes" text="Ej. Si se necesitan 2 CDs para instalar un driver de impresión, se ingresa '2'" textAlignment="CENTER" wrapText="true" />
+               </tooltip>
+            </Label>
+            <Label fx:id="lblDescripcion" layoutX="240.0" layoutY="188.0" text="Descripción" />
+            <TextField fx:id="txtNombre" layoutX="77.0" layoutY="190.0" promptText="Ej. Printer" />
+            <TextField fx:id="txtVersion" layoutX="77.0" layoutY="227.0" prefHeight="25.0" prefWidth="149.0" promptText="Ej. v1.2.3 o 1.2.3" />
+            <TextField fx:id="txtPartes" layoutX="77.0" layoutY="264.0" prefHeight="25.0" prefWidth="55.0" />
+            <TextArea fx:id="txtDescripcion" layoutX="240.0" layoutY="208.0" prefHeight="81.0" prefWidth="240.0" promptText="Ingrese una corta descripcion" />
+            <Button fx:id="btnAgregar" layoutX="500.0" layoutY="59.0" mnemonicParsing="false" onAction="#agregarExtra" prefHeight="25.0" prefWidth="100.0" text="Agregar" />
+            <Button fx:id="btnQuitar" layoutX="500.0" layoutY="99.0" mnemonicParsing="false" onAction="#quitarExtra" prefHeight="25.0" prefWidth="100.0" text="Quitar" />
+            <Button fx:id="btnElimTodos" layoutX="500.0" layoutY="139.0" mnemonicParsing="false" onAction="#eliminarTodos" prefHeight="25.0" prefWidth="100.0" text="Eliminar Todos" />
+            <Separator layoutY="3.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+            <Button fx:id="btnFinalizar" layoutX="500.0" layoutY="236.0" mnemonicParsing="false" onAction="#finalizar" prefHeight="25.0" prefWidth="100.0" text="Finalizar" />
+            <Label fx:id="lblTituloSw1" alignment="CENTER" layoutX="229.0" layoutY="7.0" text="Extras del Software">
+               <font>
+                  <Font name="System Bold" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
