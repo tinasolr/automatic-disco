@@ -5,9 +5,14 @@
  */
 package Controller;
 
+import java.io.*;
 import java.net.*;
 import java.util.*;
+import javafx.event.*;
 import javafx.fxml.*;
+import javafx.scene.*;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
 
 /**
  * FXML Controller class
@@ -16,12 +21,82 @@ import javafx.fxml.*;
  */
 public class MenuIOCtrl implements Initializable {
 
+    @FXML    private MenuBar mnuPpal;
+    @FXML    private Menu mArchivo;
+    @FXML    private Menu arcNuevo;
+    @FXML    private MenuItem arcImportar;
+    @FXML    private MenuItem arcExportar;
+    @FXML    private MenuItem arcSalir;
+    @FXML    private Menu mEditar;
+    @FXML    private Menu mVer;
+    @FXML    private MenuItem ConsultaSoftware;
+    @FXML    private Menu mAyuda;
+    @FXML    private MenuItem ayAbout;
+    @FXML    private RadioButton rdbTodos;
+    @FXML    private ToggleGroup groupFiltrar;
+    @FXML    private RadioButton rdbCodigo;
+    @FXML    private RadioButton rdbSistOp;
+    @FXML    private RadioButton rdbNombre;
+    @FXML    private RadioButton rdbVersion;
+    @FXML    private BorderPane borderPane;
+    @FXML    private MenuItem AltaSoftware;
+    @FXML    private MenuItem AltaMedio;
+    @FXML    private MenuItem AltaCopia;
+    @FXML    private MenuItem ModFormatos;
+    @FXML    private MenuItem ModUbicaciones;
+    @FXML    private MenuItem ModSistOp;
+    @FXML    private MenuItem ConsultaMedios;
+    @FXML    private MenuItem ConsultaCopias;
+    @FXML    private TextField txtFiltrar;
+    @FXML    private Button btnFiltrar;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
     }
 
+    public void changeScene(String url){
+        try {
+            FXMLLoader loader = new FXMLLoader(MenuIOCtrl.class.getResource("/Vista/Menu.fxml"));
+
+            Scene scene = new Scene(loader.load(getClass().getResource(url)));
+            swteca.SWTeca.primaryStage.setScene(scene);
+            swteca.SWTeca.primaryStage.show();
+
+        } catch (IOException iOException) {
+            System.err.println(iOException.getLocalizedMessage());
+        }
+    }
+
+    @FXML
+    private void handleChangeView(ActionEvent event) {
+        try {
+            String menuItemID = ((MenuItem) event.getSource()).getId();
+
+            if(!menuItemID.matches("Consulta.*"))
+                disableSearchItems(true);
+            else
+                disableSearchItems(false);
+            
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/" + menuItemID + ".fxml"));
+
+            borderPane.setCenter(loader.load());
+
+        } catch (IOException e) {
+            System.err.println(e.getLocalizedMessage());
+        }
+    }
+
+    private void disableSearchItems(boolean x){
+        txtFiltrar.setDisable(x);
+        btnFiltrar.setDisable(x);
+        rdbCodigo.setDisable(x);
+        rdbNombre.setDisable(x);
+        rdbSistOp.setDisable(x);
+        rdbVersion.setDisable(x);
+        rdbTodos.setDisable(x);
+    }
 }
