@@ -37,8 +37,8 @@ public abstract class DBObject {
         }
     }
 
-    public ArrayList<?> read(String table) {
-        ArrayList<?> objetos = new ArrayList<>();
+    public <E> List<E> read(String table) {
+        List<E> objetos = new ArrayList<>();
         ResultSet res = null;
         try {
 
@@ -67,7 +67,7 @@ public abstract class DBObject {
             if(conn.isClosed())
                 connect();
 
-            executePStoWrite();
+            executeWrite();
 
             conn.close();
 
@@ -76,7 +76,7 @@ public abstract class DBObject {
         }
     }
 
-    public abstract void executePStoWrite();
+    public abstract void executeWrite();
 
     public void update() {
         try {
@@ -84,7 +84,7 @@ public abstract class DBObject {
             if(conn.isClosed())
                 connect();
 
-            executePStoUpdate();
+            executeUpdate();
 
             conn.close();
 
@@ -93,7 +93,7 @@ public abstract class DBObject {
         }
     }
 
-    public abstract void executePStoUpdate();
+    public abstract void executeUpdate();
 
     public void delete(){
         try {

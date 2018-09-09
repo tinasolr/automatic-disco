@@ -38,7 +38,7 @@ public class MenuIOCtrl implements Initializable {
     @FXML    private RadioButton rdbSistOp;
     @FXML    private RadioButton rdbNombre;
     @FXML    private RadioButton rdbVersion;
-    @FXML    private BorderPane borderPane;
+    private BorderPane borderPane;
     @FXML    private MenuItem AltaSoftware;
     @FXML    private MenuItem AltaMedio;
     @FXML    private MenuItem AltaCopia;
@@ -49,6 +49,7 @@ public class MenuIOCtrl implements Initializable {
     @FXML    private MenuItem ConsultaCopias;
     @FXML    private TextField txtFiltrar;
     @FXML    private Button btnFiltrar;
+    @FXML    private BorderPane mainWindow;
 
     /**
      * Initializes the controller class.
@@ -80,12 +81,16 @@ public class MenuIOCtrl implements Initializable {
                 disableSearchItems(true);
             else
                 disableSearchItems(false);
-            
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/" + menuItemID + ".fxml"));
 
-            borderPane.setCenter(loader.load());
+            FXMLLoader loader = new FXMLLoader();
+
+            loader.setLocation(getClass().getResource("/Vista/" + menuItemID + ".fxml"));
+            Node x = loader.load();
+
+            mainWindow.setCenter(x);
 
         } catch (IOException e) {
+            e.printStackTrace();
             System.err.println(e.getLocalizedMessage());
         }
     }

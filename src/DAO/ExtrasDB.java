@@ -46,15 +46,15 @@ public class ExtrasDB extends DBObject{
             extra = new ExtrasDB(nombre, version, descrip, partes);
 
         } catch (SQLException ex) {
-            System.out.println("Problema en la lectura de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
+            System.err.println("Problema en la lectura de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
         }
 
         return extra;
     }
 
     @Override
-    //ESCRIBIR EN LA BD CON UN PREPARED STATEMENT - LO USA WRITE() DE DBOBJECT
-    public void executePStoWrite() {
+    //ESCRIBIR EN LA BD CON UN STORED PROCEDURE - LO USA WRITE() DE DBOBJECT
+    public void executeWrite() {
         try {
             CallableStatement sp = conn.prepareCall("{call alta_extra(?,?,?,?,?)}");
 //            PreparedStatement ps = conn.prepareStatement("INSERT INTO "
@@ -69,7 +69,7 @@ public class ExtrasDB extends DBObject{
             sp.executeUpdate();
 
         } catch (SQLException ex) {
-            System.out.println("Problema en la escritura de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
+            System.err.println("Problema en la escritura de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
         }
     }
 
@@ -90,14 +90,14 @@ public class ExtrasDB extends DBObject{
 
               res.close();
         } catch (SQLException ex) {
-            System.out.println("Problema en la busqueda de la tabla Extras :: " + ex.getLocalizedMessage());
+            System.err.println("Problema en la busqueda de la tabla Extras :: " + ex.getLocalizedMessage());
             ex.printStackTrace();
         }
         return result;
     }
 
     @Override
-    public void executePStoUpdate() {
+    public void executeUpdate() {
         try {
 
             CallableStatement sp = conn.prepareCall("{call mod_extra(?,?,?,?,?,?)}");
@@ -115,7 +115,7 @@ public class ExtrasDB extends DBObject{
             sp.executeUpdate();
 
         } catch (SQLException ex) {
-            System.out.println("Problema en la modificación de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
+            System.err.println("Problema en la modificación de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
         }
     }
 
@@ -137,7 +137,7 @@ public class ExtrasDB extends DBObject{
             conn.close();
 
         } catch (SQLException e) {
-            System.out.println("BDObject search() :: " + e.getMessage());
+            System.err.println("Error >> extras de software " + sw_id + " :: " + e.getLocalizedMessage());
         }
         return exDB;
     }
@@ -152,7 +152,7 @@ public class ExtrasDB extends DBObject{
             storedProc.executeUpdate();
 
         } catch (SQLException ex) {
-            System.out.println("Problema en la baja de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
+            System.err.println("Problema en la baja de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
         }
     }
 
@@ -167,7 +167,7 @@ public class ExtrasDB extends DBObject{
             conn.close();
 
         } catch (SQLException e) {
-            System.out.println("BDObject deleteAllExtras() :: " + e.getMessage());
+            System.err.println("BDObject deleteAllExtras() :: " + e.getMessage());
         }
     }
 
@@ -177,7 +177,7 @@ public class ExtrasDB extends DBObject{
             storedProc.setInt(1, swid);
             storedProc.executeUpdate();
         }catch(SQLException ex){
-            System.out.println("Error >> Baja de filas para software id - " + swid + " >> Tabla Extras :: " + ex.getLocalizedMessage());
+            System.err.println("Error >> Baja de filas para software id - " + swid + " >> Tabla Extras :: " + ex.getLocalizedMessage());
         }
     }
 

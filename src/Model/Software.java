@@ -55,6 +55,9 @@ public class Software {
     public void setExtras(String nombre, String version, String descrip, int partes) {
         this.extras.add(new Extras(nombre, version, descrip, partes));
     }
+    public void setExtras(int pos, String nombre, String version, String descrip, int partes) {
+        this.extras.set(pos, new Extras(nombre, version, descrip, partes));
+    }
 
     public List<Copias> getCopias() {return copias;}
     public void setCopias(String formato, String observ, Ubicaciones ubiDepos) {
