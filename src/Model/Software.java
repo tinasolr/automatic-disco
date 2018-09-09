@@ -15,18 +15,11 @@ public class Software {
 
     private int codigo;
     private String nombre;
-    private List<String> sistOp;
+    private List<String> sistOp = new ArrayList<>();
     private String version;
-    private List<Extras> extras;
-    private List<Copias> copias;
+    private List<Extras> extras = new ArrayList<>();
+    private List<Copias> copias = new ArrayList<>();
     private List<Medios> medios;
-
-    {
-        sistOp = new ArrayList<>();
-        extras = new ArrayList<>();
-        copias = new ArrayList<>();
-        medios = new ArrayList<>();
-    }
 
     public Software(){}
 
