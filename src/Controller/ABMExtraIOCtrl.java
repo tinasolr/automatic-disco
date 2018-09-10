@@ -67,13 +67,17 @@ public class ABMExtraIOCtrl implements Initializable {
         String version = txtVersion.getText();
         int partes = Integer.parseInt(txtPartes.getText());
         String descrip = txtDescripcion.getText();
+        
+        if (valIngresoExtra(nombre, version, txtPartes.getText(),descrip)==1)
+        {
+            sw.setExtras(nombre, version, descrip, partes);
+            exCtrl.altaExtra(nombre, descrip, version, partes, codigoSW);
 
-        sw.setExtras(nombre, version, descrip, partes);
-        exCtrl.altaExtra(nombre, descrip, version, partes, codigoSW);
-
-        Extras nuevo = new Extras(nombre, version, descrip, partes);
-        tblExtras.getItems().add(nuevo);
-        clearFields();
+            Extras nuevo = new Extras(nombre, version, descrip, partes);
+            tblExtras.getItems().add(nuevo);
+            clearFields();
+        }
+         
     }
 
     @FXML
@@ -126,5 +130,13 @@ public class ABMExtraIOCtrl implements Initializable {
         txtVersion.setText("");
         txtDescripcion.setText("");
         txtPartes.setText("");
+    }
+    
+    public int valIngresoExtra(String nombre, String version, String partes,String descrip)
+    {
+        int res=1;
+        
+        if (nombre.equals("")|| version.equals("")|| partes.equals("") || descrip.equals("")) res=0;
+        return res;
     }
 }
