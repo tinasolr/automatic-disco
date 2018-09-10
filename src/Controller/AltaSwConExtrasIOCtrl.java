@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Controller;
 
 import Model.*;
@@ -15,13 +14,13 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
-/**
- * FXML
- *
- * @author tinar
- */
-public class ABMExtraIOCtrl implements Initializable {
 
+/**
+ *
+ * @author Nico
+ */
+public class AltaSwConExtrasIOCtrl  implements Initializable {
+    
     @FXML  private Label lblNombre;
     @FXML  private Label lblVersion;
     @FXML  private Label lblPartes;
@@ -60,10 +59,10 @@ public class ABMExtraIOCtrl implements Initializable {
     private final ExtrasCtrl exCtrl = new ExtrasCtrl();
     private List<String> sistOperativos = new ArrayList<>();
 
-    public ABMExtraIOCtrl(){
+    public AltaSwConExtrasIOCtrl(){
         swCtrl.cargarSoftware();
     }
-    public ABMExtraIOCtrl(int codigo){
+    public AltaSwConExtrasIOCtrl(int codigo){
         swCtrl.cargarSoftware();
         this.codigoSW = codigo;
         this.sw = swCtrl.findSoftware(codigo);
@@ -119,7 +118,13 @@ public class ABMExtraIOCtrl implements Initializable {
 
         //Verificar que los datos ingresados sean válidos o mandar popUp(textoError)
         //Armar un objeto software con el nombre, versión y la lista de sistOperativos
-
+        
+        String nombre = txtNombre.getText();
+        String version = txtVersion.getText();
+        String descrip = txtDescripcion.getText();
+        
+        //if(valIngresoSoft())
+        
         List<Extras> a = tblExtras.getItems();
         for(Extras e : a){
             sw.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
@@ -174,4 +179,5 @@ public class ABMExtraIOCtrl implements Initializable {
             res= false;
         return res;
     }
+    
 }
