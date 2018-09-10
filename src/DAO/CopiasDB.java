@@ -29,7 +29,7 @@ public class CopiasDB extends DBObject {
         this.formid = formid;
     }
 
-    public CopiasDB() { }
+    public CopiasDB() { connect(); }
 
     public List<CopiasDB> copiasDeSoftware(int sw_id){
         ResultSet res = null;

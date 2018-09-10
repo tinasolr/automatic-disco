@@ -25,8 +25,7 @@ public class MediosDB extends DBObject{
     private int partes;
     private int origen;
 
-    public MediosDB() {
-    }
+    public MediosDB() { connect(); }
 
     public MediosDB(int id, int formid, boolean caja, String imagen, boolean manual, String nombre, String observ, int partes, int origen) {
         this.id = id;

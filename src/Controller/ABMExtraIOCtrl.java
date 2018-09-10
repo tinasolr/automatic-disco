@@ -11,8 +11,10 @@ import java.net.*;
 import java.util.*;
 import javafx.event.*;
 import javafx.fxml.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
+import javafx.scene.layout.*;
 /**
  * FXML
  *
@@ -49,64 +51,96 @@ public class ABMExtraIOCtrl implements Initializable {
     @FXML    private Button btnAgregarSo;
     @FXML    private Button btnQuitarSo;
     @FXML    private Label lblTituloSw1;
+    @FXML    private AnchorPane panelSuperior;
+    @FXML    private AnchorPane panelInferior;
 
     private int codigoSW;
     private Software sw;
     private final SoftwareCtrl swCtrl = new SoftwareCtrl();
     private final ExtrasCtrl exCtrl = new ExtrasCtrl();
+    private List<String> sistOperativos = new ArrayList<>();
 
-    public ABMExtraIOCtrl(){}
+    public ABMExtraIOCtrl(){
+        swCtrl.cargarSoftware();
+    }
     public ABMExtraIOCtrl(int codigo){
+        swCtrl.cargarSoftware();
         this.codigoSW = codigo;
         this.sw = swCtrl.findSoftware(codigo);
     }
 
     @FXML
     private void agregarExtra(ActionEvent event) {
+        //VALIDAR INGRESO POR PANTALLA
+
         String nombre = txtNombre.getText();
         String version = txtVersion.getText();
-        int partes = Integer.parseInt(txtPartes.getText());
         String descrip = txtDescripcion.getText();
-        
-        if (valIngresoExtra(nombre, version, txtPartes.getText(),descrip)==1)
-        {
-            sw.setExtras(nombre, version, descrip, partes);
-            exCtrl.altaExtra(nombre, descrip, version, partes, codigoSW);
 
-            Extras nuevo = new Extras(nombre, version, descrip, partes);
-            tblExtras.getItems().add(nuevo);
-            clearFields();
-        }
-         
+        if (valIngresoExtra(nombre, version, txtPartes.getText())){
+            if(!version.matches("[0-9]+(\\.[0-9]+)*")){
+                if(!txtPartes.getText().matches("[0-9]+")){
+                    int partes = Integer.parseInt(txtPartes.getText());
+                    Extras nuevo = new Extras(nombre, version, descrip, partes);
+                    tblExtras.getItems().add(nuevo);
+                    clearFields();
+                }else{ popUp("Ingrese un número de partes.");}
+            }else{ popUp("Ingresar un número de versión válido.");}
+        }else{ popUp("Rellenar espacios vacios y volver a intentar. ");}
+
+    }
+
+    public void popUp(String texto){
+        Alert alert = new Alert(AlertType.ERROR, texto);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.OK) {
+                alert.close();
+            }
     }
 
     @FXML
     private void quitarExtra(ActionEvent event) {
         Extras eliminar = tblExtras.getSelectionModel().getSelectedItem();
-        exCtrl.eliminarExtra(eliminar.getNombre(), sw);
-
-        sw.getExtras().remove(eliminar);
-        tblExtras.getItems().remove(eliminar);
+        if(eliminar==null)
+            popUp("Seleccione un extra a eliminar");
+        else{
+            tblExtras.getItems().remove(eliminar);
+        }
     }
 
     @FXML
     private void eliminarTodos(ActionEvent event) {
-        exCtrl.eliminarExtras(sw);
-        sw.getExtras().clear();
         tblExtras.getItems().clear();
     }
 
     @FXML
     private void finalizar(ActionEvent event) {
-        System.exit(0);
+
+        //Verificar que los datos ingresados sean válidos o mandar popUp(textoError)
+        //Armar un objeto software con el nombre, versión y la lista de sistOperativos
+
+        List<Extras> a = tblExtras.getItems();
+        for(Extras e : a){
+            sw.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
+            exCtrl.altaExtra(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes(), codigoSW);
+        }
     }
 
+    /*FALTA AGREGAR SISTEMA OPERATIVO A PARTIR DE LA SELECCION DE LA COMBOBOX*/
     @FXML
     private void agregarSistemaOperativo(ActionEvent event) {
+        //Tomar selección de la combobox
+        //agregar selección a la ListView
+        //agregar selección a sistOperativos para poder después cargarlo con el software
     }
 
+    /*FALTA AGREGAR SISTEMA OPERATIVO A PARTIR DE LA SELECCION DE LA COMBOBOX*/
     @FXML
     private void quitarSistemaOperativo(ActionEvent event) {
+        //Tomar selección de la ListView
+        //Removerla de la listview
+        //remover selección de sistOperativos
     }
 
 
@@ -121,8 +155,8 @@ public class ABMExtraIOCtrl implements Initializable {
         colVersion.setCellValueFactory(new PropertyValueFactory<>("version"));
         colPartes.setCellValueFactory(new PropertyValueFactory<>("partes"));
         colDescrip.setCellValueFactory(new PropertyValueFactory<>("descrip"));
-        if(!sw.getExtras().isEmpty())
-        tblExtras.getItems().setAll(sw.getExtras());
+        if(sw!=null && !sw.getExtras().isEmpty())
+            tblExtras.getItems().setAll(sw.getExtras());
     }
 
     public void clearFields(){
@@ -131,12 +165,13 @@ public class ABMExtraIOCtrl implements Initializable {
         txtDescripcion.setText("");
         txtPartes.setText("");
     }
-    
-    public int valIngresoExtra(String nombre, String version, String partes,String descrip)
+
+    public boolean valIngresoExtra(String nombre, String version, String partes)
     {
-        int res=1;
-        
-        if (nombre.equals("")|| version.equals("")|| partes.equals("") || descrip.equals("")) res=0;
+        boolean res= true;
+
+        if(nombre.equals("")|| version.equals("")|| partes.equals(""))
+            res= false;
         return res;
     }
 }

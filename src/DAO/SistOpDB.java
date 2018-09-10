@@ -21,7 +21,7 @@ public class SistOpDB extends DBObject{
         this.nombre = nombre;
     }
 
-    public SistOpDB(){}
+    public SistOpDB(){connect();}
 
     public List<SistOpDB> sistopDeSoftware(int sw_id){
         ResultSet res = null;

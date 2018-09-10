@@ -26,6 +26,7 @@ public class SoftwareCtrl {
 
     public SoftwareCtrl(){}
 
+    //INGRESO DE SOFTWARE
     public void cargarSoftware(){
         List<SoftwareDB> swdb = swDB.read("Software");
         if(!sws.isEmpty())
@@ -37,12 +38,17 @@ public class SoftwareCtrl {
             //BUSCAR SO
             List<SistOpDB> sistOp = soDB.sistopDeSoftware(codigo);
             List<String> so = new ArrayList<>();
-            for(SistOpDB si : sistOp)
-                so.add(si.getNombre());
+            if(!sistOp.isEmpty()){
+                for(SistOpDB si : sistOp)
+                    so.add(si.getNombre());
+            }
             //BUSCAR MEDIOS
             List<MediosDB> m = medDB.mediosDeSoftware(codigo);
-            medCtrl.buscarMedios(m);
-            List<Medios> medios = medCtrl.getMedSw();
+            List<Medios> medios = new ArrayList<>();
+            if(!m.isEmpty()){
+                medCtrl.buscarMedios(m);
+                medios = medCtrl.getMedSw();
+            }
             //CREAR SOFTWARE
             Software soft = new Software(codigo, nombre, so, version, medios);
             //AGREGAR EXTRAS
@@ -61,4 +67,70 @@ public class SoftwareCtrl {
         }
         return null;
     }
+
+    public List<Software> getSws() {
+        return sws;
+    }
+
+    public void setSws(List<Software> sws) {
+        this.sws = sws;
+    }
+
+    public Software getSw() {
+        return sw;
+    }
+
+    public void setSw(Software sw) {
+        this.sw = sw;
+    }
+
+    public SoftwareDB getSwDB() {
+        return swDB;
+    }
+
+    public void setSwDB(SoftwareDB swDB) {
+        this.swDB = swDB;
+    }
+
+    public MediosCtrl getMedCtrl() {
+        return medCtrl;
+    }
+
+    public void setMedCtrl(MediosCtrl medCtrl) {
+        this.medCtrl = medCtrl;
+    }
+
+    public MediosDB getMedDB() {
+        return medDB;
+    }
+
+    public void setMedDB(MediosDB medDB) {
+        this.medDB = medDB;
+    }
+
+    public SistOpDB getSoDB() {
+        return soDB;
+    }
+
+    public void setSoDB(SistOpDB soDB) {
+        this.soDB = soDB;
+    }
+
+    public ExtrasCtrl getExCtrl() {
+        return exCtrl;
+    }
+
+    public void setExCtrl(ExtrasCtrl exCtrl) {
+        this.exCtrl = exCtrl;
+    }
+
+    public ExtrasDB getExtrasDB() {
+        return extrasDB;
+    }
+
+    public void setExtrasDB(ExtrasDB extrasDB) {
+        this.extrasDB = extrasDB;
+    }
+
+    
 }
