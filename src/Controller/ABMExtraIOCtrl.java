@@ -117,6 +117,7 @@ public class ABMExtraIOCtrl implements Initializable {
         colVersion.setCellValueFactory(new PropertyValueFactory<>("version"));
         colPartes.setCellValueFactory(new PropertyValueFactory<>("partes"));
         colDescrip.setCellValueFactory(new PropertyValueFactory<>("descrip"));
+        if(!sw.getExtras().isEmpty())
         tblExtras.getItems().setAll(sw.getExtras());
     }
 
