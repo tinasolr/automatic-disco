@@ -28,6 +28,7 @@ public class SoftwareCtrl {
 
     //INGRESO DE SOFTWARE
     public void cargarSoftware(){
+
         List<SoftwareDB> swdb = swDB.read("Software");
         if(!sws.isEmpty())
             sws.clear();
@@ -68,6 +69,14 @@ public class SoftwareCtrl {
         return null;
     }
 
+     public void altaSoftware(String nombre, String version){
+        swDB.setNombre(nombre);
+        swDB.setVersion(version);
+        swDB.write();
+    }
+    
+    
+    
     public List<Software> getSws() {
         return sws;
     }
