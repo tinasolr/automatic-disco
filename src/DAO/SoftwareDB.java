@@ -19,6 +19,7 @@ public class SoftwareDB extends DBObject{
     private String version;
     private String nuevoNom;
     private String nuevoVers;
+    private String soNom;
 
     public SoftwareDB() { connect();  }
 
@@ -96,6 +97,56 @@ public class SoftwareDB extends DBObject{
     @Override
     public String executeSearch() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public void deleteSOSw(){
+        ResultSet res = null;
+        try {
+
+            if(conn.isClosed())
+                connect();
+
+            res = instr.executeQuery("SELECT so_id FROM sistoperativos WHERE `so_nom` = '" + soNom + "'");
+            res.next();
+            int cod = res.getInt("so_id");
+
+            res.close();
+
+            instr.execute("DELETE FROM sistoperativos_software WHERE `so_id` = " + cod + " AND `sw_id` = " + codigo);
+
+            conn.close();
+            System.out.println("Connection closed.");
+
+        } catch (SQLException e) {
+            System.out.println("BDObject delete() :: " + e.getMessage());
+        }
+    }
+
+    public void insertSOSw(){
+        ResultSet res = null;
+        try {
+
+            if(conn.isClosed())
+                connect();
+
+            PreparedStatement ps = conn.prepareStatement("SELECT `so_id` FROM `SistOperativos` WHERE `so_nom` = ?");
+            ps.setString(1, soNom);
+
+            res = ps.executeQuery();
+
+            res.next();
+            int cod = res.getInt(1);
+
+            instr.executeUpdate("INSERT INTO sistoperativos_software(so_id, sw_id) VALUES (" + cod + " AND `sw_id` = " + codigo);
+
+            res.close();
+            conn.close();
+            System.out.println("Connection closed.");
+
+        } catch (SQLException e) {
+            System.out.println("BDObject inserSOSw() :: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public int getCodigo() {return codigo;}

@@ -23,6 +23,15 @@
             <file>file:/C:/Nico/Facultad/USAL/4to%20año/Seminario%20de%20Integración%20Profesional/automatic-disco/src/Vista/Menu.fxml</file>
             <file>file:/C:/Nico/Facultad/USAL/4to%20año/Seminario%20de%20Integración%20Profesional/automatic-disco/src/Vista/NuevoSoftware.fxml</file>
             <file>file:/C:/Nico/Facultad/USAL/4to%20año/Seminario%20de%20Integración%20Profesional/automatic-disco/src/swteca/SWTeca.java</file>
+            <file>file:/C:/Users/tinar/Documents/NetBeansProjects/automatic-disco/src/DAO/SistOpDB.java</file>
+            <file>file:/C:/Users/tinar/Documents/NetBeansProjects/automatic-disco/src/DAO/ExtrasDB.java</file>
+            <file>file:/C:/Users/tinar/Documents/NetBeansProjects/automatic-disco/src/Controller/SoftwareCtrl.java</file>
+            <file>file:/C:/Users/tinar/Documents/NetBeansProjects/automatic-disco/src/DAO/SoftwareDB.java</file>
+            <file>file:/C:/Users/tinar/Documents/NetBeansProjects/automatic-disco/src/Controller/ABMExtraIOCtrl.java</file>
+            <file>file:/C:/Users/tinar/Documents/NetBeansProjects/automatic-disco/src/Controller/ConsMasivaSwIOCtrl.java</file>
+            <file>file:/C:/Users/tinar/Documents/NetBeansProjects/automatic-disco/src/Vista/Validaciones.java</file>
+            <file>file:/C:/Users/tinar/Documents/NetBeansProjects/automatic-disco/src/DAO/DBObject.java</file>
+            <file>file:/C:/Users/tinar/Documents/NetBeansProjects/automatic-disco/src/Model/Software.java</file>
         </group>
     </open-files>
 </project-private>

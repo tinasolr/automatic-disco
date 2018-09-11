@@ -16,6 +16,7 @@ import java.util.*;
 public class SistOpDB extends DBObject{
 
     private String nombre;
+    private String newNombre;
 
     public SistOpDB(String nombre) {
         this.nombre = nombre;
@@ -74,18 +75,42 @@ public class SistOpDB extends DBObject{
 
     @Override
     public void executeWrite() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+         try {
+            CallableStatement sp = conn.prepareCall("{call alta_so(?)}");
+
+            sp.setString(1, nombre);
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Problema en la escritura de una fila de la tabla SistOperativos :: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override
     public void executeUpdate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            CallableStatement sp = conn.prepareCall("{call mod_so(?, ?)}");
+
+            sp.setString(1, newNombre);
+            sp.setString(2, nombre);
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Problema en la modificación de una fila de la tabla SistOperativos :: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override
     public void executeDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        try {
+            CallableStatement sp = conn.prepareCall("{call elim_so(?)}");
+
+            sp.setString(1, nombre);
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Problema en la modificación de una fila de la tabla SistOperativos :: " + ex.getLocalizedMessage());
+        }    }
 
     @Override
     public String executeSearch() {

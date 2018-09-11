@@ -16,6 +16,8 @@ import java.util.*;
 public abstract class DBObject {
     private final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private final String URL = "jdbc:mysql://db4free.net:3306/dbpruebaswt?autoReconnect=true&useSSL=false";
+    private final String URLBDLOCAL = "jdbc:mysql://localhost/dbpruebaswt?autoReconnect=true&useSSL=false";
+    private boolean isRemote = false;
     private final String USER = "nicotina";
     private final String PASSW = "nicotina";
     protected Connection conn;
@@ -28,10 +30,19 @@ public abstract class DBObject {
             System.out.println("Unable to load driver.");
         }
         try {
-            conn = DriverManager.getConnection(URL, USER, PASSW);
-            instr = conn.createStatement();
+            if(isRemote){
+                conn = DriverManager.getConnection(URL, USER, PASSW);
 
-            System.out.println("Connection Established.");
+                instr = conn.createStatement();
+
+                System.out.println("Connection Established.");
+            }else{
+                conn = DriverManager.getConnection(URLBDLOCAL, USER, PASSW);
+
+                instr = conn.createStatement();
+
+                System.out.println("Connection Established.");
+            }
         } catch (SQLException e) {
             System.out.println("Error connecting to database: " + e.getMessage());
         }
@@ -52,6 +63,7 @@ public abstract class DBObject {
             }
 
             conn.close();
+            System.out.println("Connection closed.");
         } catch (SQLException e) {
             System.out.println("BDObject read() :: " + e.getMessage());
         }
@@ -70,6 +82,7 @@ public abstract class DBObject {
             executeWrite();
 
             conn.close();
+            System.out.println("Connection closed.");
 
         } catch (SQLException e) {
             System.out.println("BDObject write() :: " + e.getMessage());
@@ -87,6 +100,7 @@ public abstract class DBObject {
             executeUpdate();
 
             conn.close();
+            System.out.println("Connection closed.");
 
         } catch (SQLException e) {
             System.out.println("BDObject update() :: " + e.getMessage());
@@ -104,9 +118,11 @@ public abstract class DBObject {
             executeDelete();
 
             conn.close();
+            System.out.println("Connection closed.");
 
         } catch (SQLException e) {
             System.out.println("BDObject delete() :: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -122,6 +138,7 @@ public abstract class DBObject {
             id = executeSearch();
 
             conn.close();
+            System.out.println("Connection closed.");
 
         } catch (SQLException e) {
             System.out.println("BDObject search() :: " + e.getMessage());

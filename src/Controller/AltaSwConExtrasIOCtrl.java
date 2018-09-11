@@ -21,7 +21,7 @@ import javafx.scene.layout.*;
  * @author Nico
  */
 public class AltaSwConExtrasIOCtrl  implements Initializable {
-    
+
     @FXML  private Label lblNombre;
     @FXML  private Label lblVersion;
     @FXML  private Label lblPartes;
@@ -83,14 +83,28 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
                 if(!txtPartes.getText().matches("[0-9]+")){
                     int partes = Integer.parseInt(txtPartes.getText());
                     Extras nuevo = new Extras(nombre, version, descrip, partes);
-                    tblExtras.getItems().add(nuevo);
-                    clearFields();
+                    if(!duplicateEx(nuevo)){
+                        tblExtras.getItems().add(nuevo);
+                        clearFields();
+                    }else {popUp("Ya se encuentra ingresado.");}
                 }else{ popUp("Ingrese un número de partes.");}
             }else{ popUp("Ingresar un número de versión válido.");}
         }else{ popUp("Rellenar espacios vacios y volver a intentar. ");}
 
     }
 
+     private boolean duplicateEx(Extras xx){
+        if (tblExtras.getItems().stream().anyMatch((e) -> (e.getNombre().equalsIgnoreCase(xx.getNombre())
+                && e.getVersion().equalsIgnoreCase(xx.getVersion())
+                && e.getPartes()==xx.getPartes()
+                && e.getDescrip().equalsIgnoreCase(xx.getDescrip())))) {
+            return true;
+        }
+
+
+        return false;
+    }
+     
     public void popUp(String texto){
         Alert alert = new Alert(AlertType.ERROR, texto);
             alert.showAndWait();
