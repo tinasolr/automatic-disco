@@ -84,6 +84,13 @@ public class SoftwareCtrl {
         swDB.insertSOSw();
     }
 
+     public void altaSoftware(String nombre, String version){
+        swDB.setNombre(nombre);
+        swDB.setVersion(version);
+        swDB.write();
+    }
+    
+    
     public List<Software> getSws() {
         return sws;
     }
