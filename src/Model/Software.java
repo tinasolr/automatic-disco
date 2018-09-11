@@ -67,4 +67,9 @@ public class Software {
     public List<Medios> getMedios() {return medios;}
     public void setMedios(List<Medios> medios) {this.medios = medios;}
 
+    @Override
+    public String toString() {
+        return "Software{" + "codigo=" + codigo + ", nombre=" + nombre + ", sistOp=" + sistOp + ", version=" + version + ", extras=" + extras + ", copias=" + copias + ", medios=" + medios + '}';
+    }
+
 }

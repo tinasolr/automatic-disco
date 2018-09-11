@@ -9,7 +9,6 @@ import java.io.*;
 import javafx.application.*;
 import javafx.fxml.*;
 import javafx.scene.*;
-import javafx.scene.layout.*;
 import javafx.stage.*;
 
 /**
@@ -19,7 +18,7 @@ import javafx.stage.*;
 public class SWTeca extends Application {
 
     public static Stage primaryStage;
-    public static AnchorPane root;
+    public static Parent root;
 
     @Override
     public void start(Stage primaryStage) {
@@ -33,7 +32,7 @@ public class SWTeca extends Application {
         try{
 
             FXMLLoader loader = new FXMLLoader();
-            root = (AnchorPane)loader.load(getClass().getResource("/Vista/Menu.fxml"));
+            root = loader.load(getClass().getResource("/Vista/Menu.fxml"));
 
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);

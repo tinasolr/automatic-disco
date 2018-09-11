@@ -17,17 +17,18 @@ import java.util.*;
 public class SoftwareCtrl {
     private List<Software> sws = new ArrayList<>();
     private Software sw;
-    private SoftwareDB swDB = new SoftwareDB();
+    private SoftwareDB swDB;
     private MediosCtrl medCtrl = new MediosCtrl();
     private MediosDB medDB = new MediosDB();
     private SistOpDB soDB = new SistOpDB();
     private ExtrasCtrl exCtrl = new ExtrasCtrl();
-    private ExtrasDB extrasDB = new ExtrasDB();
+    private ExtrasDB extrasDB;
 
     public SoftwareCtrl(){}
 
     //INGRESO DE SOFTWARE
     public void cargarSoftware(){
+        swDB  = new SoftwareDB();
         List<SoftwareDB> swdb = swDB.read("Software");
         if(!sws.isEmpty())
             sws.clear();
@@ -52,6 +53,7 @@ public class SoftwareCtrl {
             //CREAR SOFTWARE
             Software soft = new Software(codigo, nombre, so, version, medios);
             //AGREGAR EXTRAS
+            extrasDB = new ExtrasDB();
             List<ExtrasDB> ex = extrasDB.extrasDeSoftware(codigo);
             for(ExtrasDB x : ex){
                 soft.setExtras(x.getNombre(),x.getVersion(),x.getDescrip(),x.getPartes());
@@ -66,6 +68,20 @@ public class SoftwareCtrl {
                 return s;
         }
         return null;
+    }
+
+    public void eliminarSoDeSw(int codigo, String sistOp){
+        swDB  = new SoftwareDB();
+        swDB.setCodigo(codigo);
+        swDB.setNombre(sistOp);
+        swDB.deleteSOSw();
+    }
+
+    public void agregarSoDeSw(int codigo, String sistOp){
+        swDB  = new SoftwareDB();
+        swDB.setCodigo(codigo);
+        swDB.setNombre(sistOp);
+        swDB.insertSOSw();
     }
 
     public List<Software> getSws() {
@@ -132,5 +148,5 @@ public class SoftwareCtrl {
         this.extrasDB = extrasDB;
     }
 
-    
+
 }

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package Controller;
 
 import Model.*;
@@ -15,12 +14,12 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
+
 /**
- * FXML
  *
- * @author tinar
+ * @author Nico
  */
-public class ABMExtraIOCtrl implements Initializable {
+public class AltaSwConExtrasIOCtrl  implements Initializable {
 
     @FXML  private Label lblNombre;
     @FXML  private Label lblVersion;
@@ -60,10 +59,10 @@ public class ABMExtraIOCtrl implements Initializable {
     private final ExtrasCtrl exCtrl = new ExtrasCtrl();
     private List<String> sistOperativos = new ArrayList<>();
 
-    public ABMExtraIOCtrl(){
+    public AltaSwConExtrasIOCtrl(){
         swCtrl.cargarSoftware();
     }
-    public ABMExtraIOCtrl(int codigo){
+    public AltaSwConExtrasIOCtrl(int codigo){
         swCtrl.cargarSoftware();
         this.codigoSW = codigo;
         this.sw = swCtrl.findSoftware(codigo);
@@ -82,14 +81,28 @@ public class ABMExtraIOCtrl implements Initializable {
                 if(!txtPartes.getText().matches("[0-9]+")){
                     int partes = Integer.parseInt(txtPartes.getText());
                     Extras nuevo = new Extras(nombre, version, descrip, partes);
-                    tblExtras.getItems().add(nuevo);
-                    clearFields();
+                    if(!duplicateEx(nuevo)){
+                        tblExtras.getItems().add(nuevo);
+                        clearFields();
+                    }else {popUp("Ya se encuentra ingresado.");}
                 }else{ popUp("Ingrese un número de partes.");}
             }else{ popUp("Ingresar un número de versión válido.");}
         }else{ popUp("Rellenar espacios vacios y volver a intentar. ");}
 
     }
 
+     private boolean duplicateEx(Extras xx){
+        if (tblExtras.getItems().stream().anyMatch((e) -> (e.getNombre().equalsIgnoreCase(xx.getNombre())
+                && e.getVersion().equalsIgnoreCase(xx.getVersion())
+                && e.getPartes()==xx.getPartes()
+                && e.getDescrip().equalsIgnoreCase(xx.getDescrip())))) {
+            return true;
+        }
+
+
+        return false;
+    }
+     
     public void popUp(String texto){
         Alert alert = new Alert(AlertType.ERROR, texto);
             alert.showAndWait();
@@ -119,6 +132,12 @@ public class ABMExtraIOCtrl implements Initializable {
 
         //Verificar que los datos ingresados sean válidos o mandar popUp(textoError)
         //Armar un objeto software con el nombre, versión y la lista de sistOperativos
+
+        String nombre = txtNombre.getText();
+        String version = txtVersion.getText();
+        String descrip = txtDescripcion.getText();
+
+        //if(valIngresoSoft())
 
         List<Extras> a = tblExtras.getItems();
         for(Extras e : a){
@@ -174,4 +193,5 @@ public class ABMExtraIOCtrl implements Initializable {
             res= false;
         return res;
     }
+
 }

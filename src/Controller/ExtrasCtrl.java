@@ -14,13 +14,14 @@ import Model.*;
  * @author tinar
  */
 public class ExtrasCtrl {
-    private Extras extra;
-    private ExtrasDB extrasDB = new ExtrasDB();
+
+    private ExtrasDB extrasDB;
 
     public ExtrasCtrl() {
     }
 
     public void modificarExtra(String nombre, String descrip, String version, int partes, Software soft){
+        extrasDB  = new ExtrasDB();
         extrasDB.setNombre(nombre);
         extrasDB.setSwid(soft.getCodigo());
         String id = extrasDB.searchTable();
@@ -32,9 +33,10 @@ public class ExtrasCtrl {
         extrasDB.update();
     }
 
-    public void eliminarExtra(String nombre, Software soft){
+    public void eliminarExtra(String nombre, int soft){
+        extrasDB = new ExtrasDB();
         extrasDB.setNombre(nombre);
-        extrasDB.setSwid(soft.getCodigo());
+        extrasDB.setSwid(soft);
         String id = extrasDB.searchTable();
         int extraid = Integer.parseInt(id);
         extrasDB.setId(extraid);
@@ -42,11 +44,13 @@ public class ExtrasCtrl {
     }
 
     public void eliminarExtras(Software soft){
+        extrasDB = new ExtrasDB();
         extrasDB.setSwid(soft.getCodigo());
         extrasDB.deleteAllExtras();
     }
 
     public void altaExtra(String nombre, String descrip, String version, int partes, int sw){
+        extrasDB = new ExtrasDB();
         extrasDB.setNombre(nombre);
         extrasDB.setDescrip(descrip);
         extrasDB.setVersion(version);

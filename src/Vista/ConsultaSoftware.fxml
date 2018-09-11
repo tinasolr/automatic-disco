@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -13,6 +15,15 @@
             <TableColumn fx:id="colVersionSw" minWidth="0.0" prefWidth="137.33331298828125" text="Versión" />
             <TableColumn fx:id="colSistOpSw" minWidth="0.0" prefWidth="249.99993896484375" text="Sistema Operativo" />
          </columns>
+         <contextMenu>
+            <ContextMenu fx:id="mnuDerecho">
+              <items>
+                  <MenuItem fx:id="derVer" mnemonicParsing="false" onAction="#consIndividual" text="Ver" />
+                <MenuItem fx:id="derModificar" mnemonicParsing="false" onAction="#modSoftware" text="Modificar" />
+                  <MenuItem fx:id="derEliminar" mnemonicParsing="false" onAction="#elimSoftware" text="Eliminar" />
+              </items>
+            </ContextMenu>
+         </contextMenu>
       </TableView>
    </children>
 </AnchorPane>
