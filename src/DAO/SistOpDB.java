@@ -41,9 +41,10 @@ public class SistOpDB extends DBObject{
             }
 
             res.close();
-
+            res = null;
             for(Integer x : ids){
                 res = instr.executeQuery("Select * from `SistOperativos` AS s WHERE s.so_id = " + x);
+                res.next();
                 objDB.add(readResultSet(res));
                 res.close();
             }
@@ -51,7 +52,7 @@ public class SistOpDB extends DBObject{
             conn.close();
 
         } catch (SQLException e) {
-            System.err.println("Error >> copias de software " + sw_id + " :: " + e.getLocalizedMessage());
+            System.err.println("Error >> so de software " + sw_id + " :: " + e.getLocalizedMessage());
         }
         return objDB;
     }
@@ -63,10 +64,10 @@ public class SistOpDB extends DBObject{
         try {
 
             this.nombre = res.getString("so_nom");
-
             obj = new SistOpDB(nombre);
 
         } catch (SQLException ex) {
+            ex.printStackTrace();
             System.err.println("Error >> la lectura >> tabla SistOperativos :: " + ex.getLocalizedMessage());
         }
 

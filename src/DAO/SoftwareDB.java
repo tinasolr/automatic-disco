@@ -90,6 +90,7 @@ public class SoftwareDB extends DBObject{
             sp.executeUpdate();
 
         } catch (SQLException ex) {
+            ex.printStackTrace();
             System.err.println("Problema en la eliminación de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
         }
     }
@@ -129,15 +130,18 @@ public class SoftwareDB extends DBObject{
             if(conn.isClosed())
                 connect();
 
+//            CallableStatement ps = conn.prepareCall("{call search_soid_byname(?)}");
             PreparedStatement ps = conn.prepareStatement("SELECT `so_id` FROM `SistOperativos` WHERE `so_nom` = ?");
             ps.setString(1, soNom);
 
             res = ps.executeQuery();
+            int cod = 0;
+            if(res.last())
+                cod = res.getInt(1);
+            if(cod>0)
+                instr.executeUpdate("INSERT INTO sistoperativos_software(so_id, sw_id) VALUES (" + cod + ", " + codigo + ")");
 
-            res.next();
-            int cod = res.getInt(1);
-
-            instr.executeUpdate("INSERT INTO sistoperativos_software(so_id, sw_id) VALUES (" + cod + " AND `sw_id` = " + codigo);
+            printResultSet(res);
 
             res.close();
             conn.close();
@@ -159,5 +163,11 @@ public class SoftwareDB extends DBObject{
     public void setNuevoNom(String nuevoNom) {        this.nuevoNom = nuevoNom;    }
     public String getNuevoVers() {        return nuevoVers;    }
     public void setNuevoVers(String nuevoVers) {        this.nuevoVers = nuevoVers;   }
+    public String getSoNom() {
+        return soNom;
+    }
 
+    public void setSoNom(String soNom) {
+        this.soNom = soNom;
+    }
 }

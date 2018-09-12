@@ -29,10 +29,11 @@ public class SoftwareCtrl {
     //INGRESO DE SOFTWARE
     public void cargarSoftware(){
         swDB  = new SoftwareDB();
+        sws.clear();
         List<SoftwareDB> swdb = swDB.read("Software");
-        if(!sws.isEmpty())
-            sws.clear();
+
         for(SoftwareDB s : swdb){
+
             int codigo = s.getCodigo();
             String nombre = s.getNombre();
             String version = s.getVersion();
@@ -58,6 +59,7 @@ public class SoftwareCtrl {
             for(ExtrasDB x : ex){
                 soft.setExtras(x.getNombre(),x.getVersion(),x.getDescrip(),x.getPartes());
             }
+
             sws.add(soft);
         }
     }
@@ -73,24 +75,39 @@ public class SoftwareCtrl {
     public void eliminarSoDeSw(int codigo, String sistOp){
         swDB  = new SoftwareDB();
         swDB.setCodigo(codigo);
-        swDB.setNombre(sistOp);
+        swDB.setSoNom(sistOp);
         swDB.deleteSOSw();
     }
 
     public void agregarSoDeSw(int codigo, String sistOp){
         swDB  = new SoftwareDB();
         swDB.setCodigo(codigo);
-        swDB.setNombre(sistOp);
+        swDB.setSoNom(sistOp);
         swDB.insertSOSw();
     }
 
      public void altaSoftware(String nombre, String version){
+        swDB  = new SoftwareDB();
         swDB.setNombre(nombre);
         swDB.setVersion(version);
         swDB.write();
     }
-    
-    
+
+     public void modSoftware(String nombre, String version, String newNom, String newVers){
+        swDB  = new SoftwareDB();
+        swDB.setNombre(nombre);
+        swDB.setNuevoNom(newNom);
+        swDB.setVersion(version);
+        swDB.setNuevoVers(newVers);
+        swDB.update();
+    }
+
+     public void elimSoftware(int codigo){
+        swDB  = new SoftwareDB();
+        swDB.setCodigo(codigo);
+        swDB.delete();
+    }
+
     public List<Software> getSws() {
         return sws;
     }

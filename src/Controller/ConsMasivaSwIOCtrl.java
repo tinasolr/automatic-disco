@@ -20,7 +20,7 @@ import javafx.stage.*;
 
 public class ConsMasivaSwIOCtrl implements Initializable {
 
-    @FXML private AnchorPane showSw;
+    @FXML    private AnchorPane showSw;
     @FXML    private TableView<Software> tblSoftware;
     @FXML    private TableColumn<Software, String> colCodigoSw;
     @FXML    private TableColumn<Software, String> colNombreSw;
@@ -31,7 +31,7 @@ public class ConsMasivaSwIOCtrl implements Initializable {
     @FXML    private MenuItem derModificar;
     @FXML    private MenuItem derEliminar;
 
-    private SoftwareCtrl swCtrl = new SoftwareCtrl();
+    private SoftwareCtrl swCtrl;
 
     @FXML
     private void consIndividual(ActionEvent event) {
@@ -44,13 +44,14 @@ public class ConsMasivaSwIOCtrl implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ModSoftware.fxml"));
             ModSwConExtrasIOCtrl msce = new ModSwConExtrasIOCtrl();
             msce.setCodigoSw(tblSoftware.getSelectionModel().getSelectedItem().getCodigo());
+            msce.setConsMas(this);
             loader.setController(msce);
             Parent root = loader.load();
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Modificar Software");
             stage.setScene(scene);
-
+            stage.sizeToScene();
             stage.show();
 
         } catch (IOException e) {
@@ -60,6 +61,12 @@ public class ConsMasivaSwIOCtrl implements Initializable {
 
     @FXML
     private void elimSoftware(ActionEvent event) {
+        if(popUpWarning("Está seguro de que desea eliminar el software?")){
+            swCtrl = new SoftwareCtrl();
+            int codigo = tblSoftware.getSelectionModel().getSelectedItem().getCodigo();
+            swCtrl.elimSoftware(codigo);
+            loadTable();
+        }
     }
 
     @Override
@@ -69,13 +76,26 @@ public class ConsMasivaSwIOCtrl implements Initializable {
     }
 
     public void loadTable(){
+        swCtrl = new SoftwareCtrl();
         swCtrl.cargarSoftware();
         colCodigoSw.setCellValueFactory(new PropertyValueFactory<>("codigo"));
         colNombreSw.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colVersionSw.setCellValueFactory(new PropertyValueFactory<>("version"));
         colSistOpSw.setCellValueFactory(new PropertyValueFactory<>("sistOp"));
+
         if(swCtrl.getSws()!=null)
             tblSoftware.getItems().setAll(swCtrl.getSws());
     }
 
+    public boolean popUpWarning(String texto){
+        Alert alert = new Alert(Alert.AlertType.WARNING, texto, ButtonType.YES, ButtonType.NO);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                alert.close();
+                return true;
+            }
+        alert.close();
+        return false;
+    }
 }

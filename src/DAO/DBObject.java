@@ -50,18 +50,21 @@ public abstract class DBObject {
 
     public <E> List<E> read(String table) {
         List<E> objetos = new ArrayList<>();
-        ResultSet res = null;
+        ResultSet rs = null;
         try {
 
             if(conn.isClosed())
                 connect();
 
-            res = instr.executeQuery("SELECT * FROM " + table);
+            rs = instr.executeQuery("SELECT * FROM " + table);
+//            printResultSet(rs);
+//            while(res.next()){
+//                objetos.add(readResultSet(res));
+//            }
 
-            while(res.next()){
-                objetos.add(readResultSet(res));
+            while (rs.next()) {
+                objetos.add(readResultSet(rs));
             }
-
             conn.close();
             System.out.println("Connection closed.");
         } catch (SQLException e) {
@@ -160,6 +163,16 @@ public abstract class DBObject {
         return instr;
     }
 
-
+    final public static void printResultSet(ResultSet rs) throws SQLException{
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columnsNumber = rsmd.getColumnCount();
+        while (rs.next()) {
+            for (int i = 1; i <= columnsNumber; i++) {
+                if (i > 1) System.out.print(" | ");
+                System.out.print(rs.getString(i));
+            }
+            System.out.println("");
+        }
+    }
 
 }

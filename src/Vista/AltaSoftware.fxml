@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AltaSwConExtrasIOCtrl">
+<VBox alignment="CENTER" prefHeight="530.0" prefWidth="625.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AltaSwConExtrasIOCtrl">
    <children>
-      <AnchorPane fx:id="panelSuperior" prefHeight="199.0" prefWidth="621.0">
+      <AnchorPane fx:id="panelSuperior" minWidth="621.0" prefHeight="216.0" prefWidth="625.0">
          <children>
             <Label fx:id="lblTituloSw" alignment="CENTER" layoutX="206.0" layoutY="3.0" text="Información del Software">
                <font>
@@ -37,7 +37,7 @@
             <Button fx:id="btnQuitarSo" layoutX="194.0" layoutY="159.0" mnemonicParsing="false" onAction="#quitarSistemaOperativo" prefHeight="25.0" prefWidth="100.0" text="Quitar" />
          </children>
       </AnchorPane>
-      <AnchorPane id="AnchorPane" fx:id="panelInferior" prefHeight="299.0" prefWidth="621.0">
+      <AnchorPane id="AnchorPane" fx:id="panelInferior" minHeight="310.0" minWidth="625.0" prefHeight="310.0" prefWidth="625.0">
          <children>
             <TableView fx:id="tblExtras" layoutX="22.0" layoutY="37.0" prefHeight="144.0" prefWidth="459.0" AnchorPane.leftAnchor="22.0">
                <columns>
