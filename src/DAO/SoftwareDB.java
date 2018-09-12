@@ -159,5 +159,10 @@ public class SoftwareDB extends DBObject{
     public void setNuevoNom(String nuevoNom) {        this.nuevoNom = nuevoNom;    }
     public String getNuevoVers() {        return nuevoVers;    }
     public void setNuevoVers(String nuevoVers) {        this.nuevoVers = nuevoVers;   }
+    public String getSoNom() {        return soNom;    }
+    public void setSoNom(String soNom) {        this.soNom = soNom;   }
+    
+    
+    
 
 }

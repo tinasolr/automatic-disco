@@ -73,14 +73,14 @@ public class SoftwareCtrl {
     public void eliminarSoDeSw(int codigo, String sistOp){
         swDB  = new SoftwareDB();
         swDB.setCodigo(codigo);
-        swDB.setNombre(sistOp);
+        swDB.setSoNom(sistOp);
         swDB.deleteSOSw();
     }
 
     public void agregarSoDeSw(int codigo, String sistOp){
         swDB  = new SoftwareDB();
         swDB.setCodigo(codigo);
-        swDB.setNombre(sistOp);
+        swDB.setSoNom(sistOp);
         swDB.insertSOSw();
     }
 
