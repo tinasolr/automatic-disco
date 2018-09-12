@@ -79,8 +79,8 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
         String descrip = txtDescripcion.getText();
 
         if (valIngresoExtra(nombre, version, txtPartes.getText())){
-            if(!version.matches("[0-9]+(\\.[0-9]+)*")){
-                if(!txtPartes.getText().matches("[0-9]+")){
+            if(version.matches("[0-9]+(\\.[0-9]+)*")){
+                if(txtPartes.getText().matches("[0-9]+")){
                     int partes = Integer.parseInt(txtPartes.getText());
                     Extras nuevo = new Extras(nombre, version, descrip, partes);
                     if(!duplicateEx(nuevo)){
@@ -217,7 +217,7 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
 
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
+
         SistOpDB so = new SistOpDB();
         List<SistOpDB> sos = so.read("SistOperativos");
         if(!cmbSos.getItems().isEmpty())

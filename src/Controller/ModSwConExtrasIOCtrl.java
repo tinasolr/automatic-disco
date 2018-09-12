@@ -67,7 +67,6 @@ public class ModSwConExtrasIOCtrl implements Initializable {
     @FXML
     private void agregarSistemaOperativo(ActionEvent event) {
         String so = cmbSos.getSelectionModel().getSelectedItem();
-        System.out.println(so);
         if(!duplicate(so)){
             swCtrl  = new SoftwareCtrl();
             swCtrl.agregarSoDeSw(codigoSw, so);
@@ -88,7 +87,9 @@ public class ModSwConExtrasIOCtrl implements Initializable {
             swCtrl  = new SoftwareCtrl();
             swCtrl.eliminarSoDeSw(codigoSw, so);
             Software s = swCtrl.findSoftware(codigoSw);
-            s.getSistOp().remove(so);
+            for(int i = 0 ; i < s.getSistOp().size(); i++)
+                if(s.getSistOp().get(i).equalsIgnoreCase(so))
+                    s.getSistOp().remove(i);
             lstSistemasOp.getItems().remove(so);
         }
     }
@@ -114,8 +115,8 @@ public class ModSwConExtrasIOCtrl implements Initializable {
         String descrip = txtDescripcion.getText();
 
         if (valIngresoExtra(nombre, version, txtPartes.getText())){
-            if(!version.matches("[0-9]+(\\.[0-9]+)*")){
-                if(!txtPartes.getText().matches("[0-9]+")){
+            if(version.matches("[0-9]+(\\.[0-9]+)*")){
+                if(txtPartes.getText().matches("[0-9]+")){
                     int partes = Integer.parseInt(txtPartes.getText());
                     Extras nuevo = new Extras(nombre, version, descrip, partes);
                     if(!duplicateEx(nuevo)){
@@ -193,10 +194,16 @@ public class ModSwConExtrasIOCtrl implements Initializable {
     @FXML
     private void finalizar(ActionEvent event) {
         Stage ventana = (Stage) panelSuperior.getScene().getWindow();
-        swCtrl = new SoftwareCtrl();
-        s = swCtrl.findSoftware(codigoSw);
-        s.setNombre(txtNombreSw.getText());
-        s.setVersion(txtVersionSw.getText());
+        if(s==null){
+            swCtrl = new SoftwareCtrl();
+            s = swCtrl.findSoftware(codigoSw);
+        }
+        String nomViejo = s.getNombre();
+        String versViejo = s.getVersion();
+        String nomNuevo = txtNombreSw.getText();
+        String versNuevo = txtVersionSw.getText();
+        s.setNombre(nomNuevo);
+        s.setVersion(versNuevo);
         List<String> sistOp = new ArrayList<>();
         for(String x : lstSistemasOp.getItems())
             sistOp.add(x);
@@ -207,14 +214,16 @@ public class ModSwConExtrasIOCtrl implements Initializable {
             for(Extras y : s.getExtras()){
                 if(y.getNombre().equalsIgnoreCase(x.getNombre())
                     && y.getVersion().equalsIgnoreCase(x.getVersion())
-                    && y.getPartes()==y.getPartes()
-                    && y.getDescrip().equalsIgnoreCase(x.getDescrip()))
+                    && y.getPartes()==y.getPartes())
                     add = false;
             }
             if(add)
                 s.setExtras(x.getNombre(), x.getVersion(), x.getDescrip(), x.getPartes());
         }
+        System.out.println(s.toString());
+        swCtrl.modSoftware(nomViejo, versViejo, nomNuevo, versNuevo);
         ventana.close();
+        consMas.loadTable();
     }
 
     @Override
