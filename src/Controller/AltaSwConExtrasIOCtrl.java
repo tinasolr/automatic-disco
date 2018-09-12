@@ -5,8 +5,8 @@
  */
 package Controller;
 
-import Model.*;
 import DAO.*;
+import Model.*;
 import java.net.*;
 import java.util.*;
 import javafx.event.*;
@@ -104,7 +104,7 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
 
         return false;
     }
-     
+
     public void popUp(String texto){
         Alert alert = new Alert(AlertType.ERROR, texto);
             alert.showAndWait();
@@ -134,23 +134,23 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
 
         //Verificar que los datos ingresados sean válidos o mandar popUp(textoError)
         //Armar un objeto software con el nombre, versión y la lista de sistOperativos
-        
+
         String nombre = txtNombreSw.getText();
         String version = txtVersionSw.getText();
         int cantSO = lstSistemasOp.getItems().size();
-        
-        if(valIngresoSoft(nombre, version,cantSO)){    
+
+        if(valIngresoSoft(nombre, version,cantSO)){
             if(!version.matches("[0-9]+(\\.[0-9]+)*")){
                     if(cantSO>0){
-                        
+
                         List<String> so = new ArrayList<String>();
                         lstSistemasOp.getSelectionModel().getSelectedItems().addAll(so);
-                        
+
                         //Falta guardar SO en BD
-                        
+
                         //GuardaSW en BD
                         swCtrl.altaSoftware(nombre, version);
-                        
+
                         //GuardaExtras en BD
                         List<Extras> a = tblExtras.getItems();
                         for(Extras e : a)
@@ -158,14 +158,14 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
                             sw.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
                             exCtrl.altaExtra(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes(), codigoSW);
                          }
-                        
+
                         clearFields();
                     }else{ popUp("Ingrese el sistema operativo.");}
                 }else{ popUp("Ingresar un número de versión válido.");}
-            }else{ popUp("Rellenar espacios vacios y volver a intentar. ");}    
-          
-        
-      
+            }else{ popUp("Rellenar espacios vacios y volver a intentar. ");}
+
+
+
     }
 
     /*FALTA AGREGAR SISTEMA OPERATIVO A PARTIR DE LA SELECCION DE LA COMBOBOX*/
@@ -186,17 +186,17 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
 
 
     @Override
-   
+
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         
         SistOpDB so = new SistOpDB();
         List<SistOpDB> sos = so.read("SistOperativos");
-        for(SistOpDB x : sos)
-            lstSistemasOp.getItems().add(x.getNombre());
-        
+        if(!cmbSos.getItems().isEmpty())
+            cmbSos.getItems().clear();
+        sos.forEach((x) -> { cmbSos.getItems().add(x.getNombre()); });
         loadTable();
-        
+
     }
 
     public void loadTable(){
@@ -223,12 +223,12 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
             res= false;
         return res;
     }
-    
+
     public boolean valIngresoSoft(String nombre, String version, int cantSO)
     {
         boolean res=true;
         if(nombre.equals("")|| version.equals("")|| cantSO==0) res=false;
         return res;
     }
-    
+
 }
