@@ -7,20 +7,19 @@ package Controller;
 
 import DAO.*;
 import Model.*;
+import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.*;
 import javafx.event.*;
 import javafx.fxml.*;
+import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
-/**
- *
- * @author Nico
- */
 public class AltaSwConExtrasIOCtrl  implements Initializable {
 
     @FXML  private Label lblNombre;
@@ -55,7 +54,7 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
     @FXML    private AnchorPane panelSuperior;
     @FXML    private AnchorPane panelInferior;
 
-    
+    private BorderPane mainWindow;
     private int codigoSW;
     private Software sw;
     private final SoftwareCtrl swCtrl = new SoftwareCtrl();
@@ -137,7 +136,6 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
 
         //Verificar que los datos ingresados sean válidos o mandar popUp(textoError)
         //Armar un objeto software con el nombre, versión y la lista de sistOperativos
-        Stage ventana = (Stage) panelSuperior.getScene().getWindow();
         String nombre = txtNombreSw.getText();
         String version = txtVersionSw.getText();
         Software soft = new Software();
@@ -176,8 +174,7 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
                         SoftwareCtrl swCtrl = new SoftwareCtrl();
                         swCtrl.getSws().add(soft);
                         popUp("Software ingresado con éxito.");
-                        ventana.close();
-                        consMas.loadTable();              
+                        changeBackToConsultaSw();             
                         
                     }else{ popUp("Ingrese el sistema operativo.");}
                 }else{ popUp("Ingresar un número de versión válido.");}
@@ -232,6 +229,16 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
         if(cmbSos.getSelectionModel().getSelectedItem()!=null) btnAgregarSo.setDisable(false);
     }
 
+    public void changeBackToConsultaSw(){
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/Vista/ConsultaSoftware.fxml"));
+            Node x = loader.load();
+            mainWindow.setCenter(x);
+        } catch (IOException ex) {
+            Logger.getLogger(AltaSwConExtrasIOCtrl.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
 
@@ -279,5 +286,284 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
         return res;
     }
 
-    
+
+    public Label getLblNombre() {
+        return lblNombre;
+    }
+
+    public void setLblNombre(Label lblNombre) {
+        this.lblNombre = lblNombre;
+    }
+
+    public Label getLblVersion() {
+        return lblVersion;
+    }
+
+    public void setLblVersion(Label lblVersion) {
+        this.lblVersion = lblVersion;
+    }
+
+    public Label getLblPartes() {
+        return lblPartes;
+    }
+
+    public void setLblPartes(Label lblPartes) {
+        this.lblPartes = lblPartes;
+    }
+
+    public Label getLblDescripcion() {
+        return lblDescripcion;
+    }
+
+    public void setLblDescripcion(Label lblDescripcion) {
+        this.lblDescripcion = lblDescripcion;
+    }
+
+    public TextField getTxtNombre() {
+        return txtNombre;
+    }
+
+    public void setTxtNombre(TextField txtNombre) {
+        this.txtNombre = txtNombre;
+    }
+
+    public TextField getTxtVersion() {
+        return txtVersion;
+    }
+
+    public void setTxtVersion(TextField txtVersion) {
+        this.txtVersion = txtVersion;
+    }
+
+    public TextField getTxtPartes() {
+        return txtPartes;
+    }
+
+    public void setTxtPartes(TextField txtPartes) {
+        this.txtPartes = txtPartes;
+    }
+
+    public TextArea getTxtDescripcion() {
+        return txtDescripcion;
+    }
+
+    public void setTxtDescripcion(TextArea txtDescripcion) {
+        this.txtDescripcion = txtDescripcion;
+    }
+
+    public Button getBtnAgregar() {
+        return btnAgregar;
+    }
+
+    public void setBtnAgregar(Button btnAgregar) {
+        this.btnAgregar = btnAgregar;
+    }
+
+    public Button getBtnElimTodos() {
+        return btnElimTodos;
+    }
+
+    public void setBtnElimTodos(Button btnElimTodos) {
+        this.btnElimTodos = btnElimTodos;
+    }
+
+    public Tooltip getToolTipPartes() {
+        return toolTipPartes;
+    }
+
+    public void setToolTipPartes(Tooltip toolTipPartes) {
+        this.toolTipPartes = toolTipPartes;
+    }
+
+    public Button getBtnQuitar() {
+        return btnQuitar;
+    }
+
+    public void setBtnQuitar(Button btnQuitar) {
+        this.btnQuitar = btnQuitar;
+    }
+
+    public TableView<Extras> getTblExtras() {
+        return tblExtras;
+    }
+
+    public void setTblExtras(TableView<Extras> tblExtras) {
+        this.tblExtras = tblExtras;
+    }
+
+    public TableColumn<Extras, String> getColNombre() {
+        return colNombre;
+    }
+
+    public void setColNombre(TableColumn<Extras, String> colNombre) {
+        this.colNombre = colNombre;
+    }
+
+    public TableColumn<Extras, String> getColVersion() {
+        return colVersion;
+    }
+
+    public void setColVersion(TableColumn<Extras, String> colVersion) {
+        this.colVersion = colVersion;
+    }
+
+    public TableColumn<Extras, String> getColPartes() {
+        return colPartes;
+    }
+
+    public void setColPartes(TableColumn<Extras, String> colPartes) {
+        this.colPartes = colPartes;
+    }
+
+    public TableColumn<Extras, String> getColDescrip() {
+        return colDescrip;
+    }
+
+    public void setColDescrip(TableColumn<Extras, String> colDescrip) {
+        this.colDescrip = colDescrip;
+    }
+
+    public Button getBtnFinalizar() {
+        return btnFinalizar;
+    }
+
+    public void setBtnFinalizar(Button btnFinalizar) {
+        this.btnFinalizar = btnFinalizar;
+    }
+
+    public Label getLblTituloSw() {
+        return lblTituloSw;
+    }
+
+    public void setLblTituloSw(Label lblTituloSw) {
+        this.lblTituloSw = lblTituloSw;
+    }
+
+    public Label getLblNombreSw() {
+        return lblNombreSw;
+    }
+
+    public void setLblNombreSw(Label lblNombreSw) {
+        this.lblNombreSw = lblNombreSw;
+    }
+
+    public Label getLblVersionSw() {
+        return lblVersionSw;
+    }
+
+    public void setLblVersionSw(Label lblVersionSw) {
+        this.lblVersionSw = lblVersionSw;
+    }
+
+    public Label getLblSistOpSw() {
+        return lblSistOpSw;
+    }
+
+    public void setLblSistOpSw(Label lblSistOpSw) {
+        this.lblSistOpSw = lblSistOpSw;
+    }
+
+    public TextField getTxtNombreSw() {
+        return txtNombreSw;
+    }
+
+    public void setTxtNombreSw(TextField txtNombreSw) {
+        this.txtNombreSw = txtNombreSw;
+    }
+
+    public TextField getTxtVersionSw() {
+        return txtVersionSw;
+    }
+
+    public void setTxtVersionSw(TextField txtVersionSw) {
+        this.txtVersionSw = txtVersionSw;
+    }
+
+    public ComboBox<String> getCmbSos() {
+        return cmbSos;
+    }
+
+    public void setCmbSos(ComboBox<String> cmbSos) {
+        this.cmbSos = cmbSos;
+    }
+
+    public ListView<String> getLstSistemasOp() {
+        return lstSistemasOp;
+    }
+
+    public void setLstSistemasOp(ListView<String> lstSistemasOp) {
+        this.lstSistemasOp = lstSistemasOp;
+    }
+
+    public Button getBtnAgregarSo() {
+        return btnAgregarSo;
+    }
+
+    public void setBtnAgregarSo(Button btnAgregarSo) {
+        this.btnAgregarSo = btnAgregarSo;
+    }
+
+    public Button getBtnQuitarSo() {
+        return btnQuitarSo;
+    }
+
+    public void setBtnQuitarSo(Button btnQuitarSo) {
+        this.btnQuitarSo = btnQuitarSo;
+    }
+
+    public Label getLblTituloSw1() {
+        return lblTituloSw1;
+    }
+
+    public void setLblTituloSw1(Label lblTituloSw1) {
+        this.lblTituloSw1 = lblTituloSw1;
+    }
+
+    public AnchorPane getPanelSuperior() {
+        return panelSuperior;
+    }
+
+    public void setPanelSuperior(AnchorPane panelSuperior) {
+        this.panelSuperior = panelSuperior;
+    }
+
+    public AnchorPane getPanelInferior() {
+        return panelInferior;
+    }
+
+    public void setPanelInferior(AnchorPane panelInferior) {
+        this.panelInferior = panelInferior;
+    }
+
+    public int getCodigoSW() {
+        return codigoSW;
+    }
+
+    public void setCodigoSW(int codigoSW) {
+        this.codigoSW = codigoSW;
+    }
+
+    public Software getSw() {
+        return sw;
+    }
+
+    public void setSw(Software sw) {
+        this.sw = sw;
+    }
+
+    public List<String> getSistOperativos() {
+        return sistOperativos;
+    }
+
+    public void setSistOperativos(List<String> sistOperativos) {
+        this.sistOperativos = sistOperativos;
+    }
+
+    public BorderPane getMainWindow() {
+        return mainWindow;
+    }
+
+    public void setMainWindow(BorderPane mainWindow) {
+        this.mainWindow = mainWindow;
+    }
 }
