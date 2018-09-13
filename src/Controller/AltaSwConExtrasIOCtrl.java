@@ -19,10 +19,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
 
-/**
- *
- * @author Nico
- */
 public class AltaSwConExtrasIOCtrl  implements Initializable {
 
     @FXML  private Label lblNombre;
@@ -148,9 +144,9 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
 
                         List<String> so = new ArrayList<String>();
                         lstSistemasOp.getSelectionModel().getSelectedItems().addAll(so);
-
-                        //Falta guardar SO en BD
-
+                        //Guarda SO en BD
+                        for(String s: so)
+                            swCtrl.agregarSoDeSw(codigoSW, s);
                         //GuardaSW en BD
                         swCtrl.altaSoftware(nombre, version);
 
@@ -176,7 +172,30 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
     private void agregarSistemaOperativo(ActionEvent event) {
         //Tomar selección de la combobox
         //agregar selección a la ListView
-        //agregar selección a sistOperativos para poder después cargarlo con el software
+        //agregar selección a sistOperativos para poder después cargarlo con el software. Esto se soluciono agregando los items de la lista en un array de String cuando se apreta el boton finalizar. Mas Optimo
+        
+        //String aux = cmbSos.getSelectionModel().getSelectedItem();
+        boolean agregarEnLista = true;
+        
+        
+
+        if(cmbSos.getSelectionModel().getSelectedItem().toString()!="null")
+        {    
+            if(lstSistemasOp.getItems().size()==0) lstSistemasOp.getItems().add(cmbSos.getSelectionModel().getSelectedItem());
+            else
+            {
+                //Averiguo si el SO a agregar no se encuentra en lista
+                for(int x=0;x<lstSistemasOp.getItems().size();x++) 
+                {    
+                    if(cmbSos.getSelectionModel().getSelectedItem().equals((String)lstSistemasOp.getItems().get(x))) agregarEnLista=false;    
+                    System.out.println(""+cmbSos.getSelectionModel().getSelectedItem()+"-"+(String)lstSistemasOp.getItems().get(x)+"");
+                }
+                //Si no esta en la lista, lo agrego
+                System.out.println("Llegue mas lejos");
+                if(agregarEnLista==true) lstSistemasOp.getItems().add(cmbSos.getSelectionModel().getSelectedItem());
+                System.out.println("Crack");
+            }
+        }
     }
 
     /*FALTA AGREGAR SISTEMA OPERATIVO A PARTIR DE LA SELECCION DE LA COMBOBOX*/
@@ -184,7 +203,12 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
     private void quitarSistemaOperativo(ActionEvent event) {
         //Tomar selección de la ListView
         //Removerla de la listview
-        //remover selección de sistOperativos
+        //remover selección de sistOperativos ---- Esto se soluciono agregando los items de la lista en un array de String cuando se apreta el boton finalizar. Mas Optimo
+
+        //lstSistemasOp.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        if(lstSistemasOp.getItems().size()>0) lstSistemasOp.getItems().removeAll(lstSistemasOp.getSelectionModel().getSelectedItems());
+     
     }
 
     public void changeBackToConsultaSw(){
