@@ -87,10 +87,11 @@ public class ModSwConExtrasIOCtrl implements Initializable {
             swCtrl  = new SoftwareCtrl();
             swCtrl.eliminarSoDeSw(codigoSw, so);
             Software s = swCtrl.findSoftware(codigoSw);
-            for(int i = 0 ; i < s.getSistOp().size(); i++)
-                if(s.getSistOp().get(i).equalsIgnoreCase(so))
-                    s.getSistOp().remove(i);
-            lstSistemasOp.getItems().remove(so);
+            if(lstSistemasOp.getItems().size()>0) lstSistemasOp.getItems().removeAll(lstSistemasOp.getSelectionModel().getSelectedItems());
+//            for(int i = 0 ; i < s.getSistOp().size(); i++)
+//                if(s.getSistOp().get(i).equalsIgnoreCase(so))
+//                    s.getSistOp().remove(i);
+//            lstSistemasOp.getItems().remove(so);
         }
     }
 

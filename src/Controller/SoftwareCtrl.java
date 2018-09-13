@@ -52,6 +52,7 @@ public class SoftwareCtrl {
                 medios = medCtrl.getMedSw();
             }
             //CREAR SOFTWARE
+//            List<Medios> medios = new ArrayList<>();
             Software soft = new Software(codigo, nombre, so, version, medios);
             //AGREGAR EXTRAS
             extrasDB = new ExtrasDB();

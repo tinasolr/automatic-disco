@@ -18,7 +18,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
-import javafx.stage.*;
 
 public class AltaSwConExtrasIOCtrl  implements Initializable {
 
@@ -84,7 +83,7 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
             if(version.matches("[0-9]+(\\.[0-9]+)*")){
                 if(txtPartes.getText().matches("[0-9]+")){
                     int partes = Integer.parseInt(txtPartes.getText());
-                    Extras nuevo = new Extras(nombre, version, descrip, partes);
+                    Extras nuevo = new Extras(nombre, descrip, version, partes);
                     if(!duplicateEx(nuevo)){
                         tblExtras.getItems().add(nuevo);
                         clearFields();
@@ -116,6 +115,15 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
             }
     }
 
+    public void popUpExito(String texto){
+        Alert alert = new Alert(AlertType.INFORMATION, texto);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.OK) {
+                alert.close();
+            }
+    }
+
     @FXML
     private void quitarExtra(ActionEvent event) {
         Extras eliminar = tblExtras.getSelectionModel().getSelectedItem();
@@ -139,15 +147,15 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
         String nombre = txtNombreSw.getText();
         String version = txtVersionSw.getText();
         Software soft = new Software();
-        
+
         int cantSO = lstSistemasOp.getItems().size(), cod;
-        
-        
+
+
         if(valIngresoSoft(nombre, version,cantSO)){
             if(version.matches("[0-9]+(\\.[0-9]+)*")){
                     if(cantSO>0){
-         
-                        
+
+
                         //GuardaSW en BD
                         swCtrl.altaSoftware(nombre, version);
                         soft.setNombre(nombre);
@@ -155,7 +163,7 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
                         //GuardaSO en BD
                         swDB.setNombre(nombre);
                         swDB.setVersion(version);
-                        cod= Integer.parseInt(swDB.executeSearch());                  
+                        cod= Integer.parseInt(swDB.executeSearch());
                         List<String> sistOp = new ArrayList<>();
                         for(String x : lstSistemasOp.getItems()){
                             swCtrl.agregarSoDeSw(cod, x);
@@ -170,12 +178,12 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
                             exCtrl.altaExtra(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes(), cod);
                             soft.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
                          }
-                        
+
                         SoftwareCtrl swCtrl = new SoftwareCtrl();
                         swCtrl.getSws().add(soft);
-                        popUp("Software ingresado con éxito.");
-                        changeBackToConsultaSw();             
-                        
+                        popUpExito("Software ingresado con éxito.");
+                        changeBackToConsultaSw();
+
                     }else{ popUp("Ingrese el sistema operativo.");}
                 }else{ popUp("Ingresar un número de versión válido.");}
             }else{ popUp("Rellenar espacios vacios y volver a intentar. ");}
@@ -188,21 +196,21 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
         //Tomar selección de la combobox
         //agregar selección a la ListView
         //agregar selección a sistOperativos para poder después cargarlo con el software. Esto se soluciono agregando los items de la lista en un array de String cuando se apreta el boton finalizar. Mas Optimo
-        
+
         //String aux = cmbSos.getSelectionModel().getSelectedItem();
         boolean agregarEnLista = true;
-        
-        
+
+
 
         //if(cmbSos.getSelectionModel().getSelectedItem().toString()!="null")
-        //{    
+        //{
             if(lstSistemasOp.getItems().size()==0) lstSistemasOp.getItems().add(cmbSos.getSelectionModel().getSelectedItem());
             else
             {
                 //Averiguo si el SO a agregar no se encuentra en lista
-                for(int x=0;x<lstSistemasOp.getItems().size();x++) 
-                {    
-                    if(cmbSos.getSelectionModel().getSelectedItem().equals((String)lstSistemasOp.getItems().get(x))) agregarEnLista=false;    
+                for(int x=0;x<lstSistemasOp.getItems().size();x++)
+                {
+                    if(cmbSos.getSelectionModel().getSelectedItem().equals((String)lstSistemasOp.getItems().get(x))) agregarEnLista=false;
                     System.out.println(""+cmbSos.getSelectionModel().getSelectedItem()+"-"+(String)lstSistemasOp.getItems().get(x)+"");
                 }
                 //Si no esta en la lista, lo agrego
@@ -221,10 +229,10 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
         //lstSistemasOp.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         if(lstSistemasOp.getItems().size()>0) lstSistemasOp.getItems().removeAll(lstSistemasOp.getSelectionModel().getSelectedItems());
-     
+
     }
     @FXML
-    private void ComboBoxActivo(ActionEvent event) 
+    private void ComboBoxActivo(ActionEvent event)
     {
         if(cmbSos.getSelectionModel().getSelectedItem()!=null) btnAgregarSo.setDisable(false);
     }
