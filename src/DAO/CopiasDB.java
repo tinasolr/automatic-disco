@@ -19,7 +19,8 @@ public class CopiasDB extends DBObject {
     private int swid;
     private int formid;
     private String obs;
-
+    private String ubi;
+    private boolean enDepo;
 
 
     private CopiasDB(int id, String obs, int formid, int swid) {
@@ -27,6 +28,35 @@ public class CopiasDB extends DBObject {
         this.swid = swid;
         this.obs = obs;
         this.formid = formid;
+    }
+
+        public void asociarUbicacionACopia(){
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL asociar_copia_ubicacion(?, ?, ?)}");
+
+            sp.setInt(1, id);
+            sp.setString(2, ubi);
+            sp.setBoolean(3, enDepo);
+
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Escritura >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+        }
+    }
+
+    public void desasociarUbicacionACopia(){
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL desasociar_copia_ubicacion(?, ?)}");
+
+            sp.setInt(1, id);
+            sp.setString(2, ubi);
+
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Eliminar >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+        }
     }
 
     public CopiasDB() { connect(); }

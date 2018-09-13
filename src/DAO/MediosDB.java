@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class MediosDB extends DBObject{
 
-    private int id;
+    private String id;
     private int formid;
     private boolean caja;
     private String imagen;
@@ -24,10 +24,13 @@ public class MediosDB extends DBObject{
     private String observ;
     private int partes;
     private int origen;
+    private int swid;
+    private String ubic;
+    private boolean enDepo;
 
     public MediosDB() { connect(); }
 
-    public MediosDB(int id, int formid, boolean caja, String imagen, boolean manual, String nombre, String observ, int partes, int origen) {
+    public MediosDB(String id, int formid, boolean caja, String imagen, boolean manual, String nombre, String observ, int partes, int origen) {
         this.id = id;
         this.formid = formid;
         this.caja = caja;
@@ -42,31 +45,90 @@ public class MediosDB extends DBObject{
     public List<MediosDB> mediosDeSoftware(int sw_id){
         ResultSet res = null;
         List<MediosDB> objDB = new ArrayList<>();
-        List<Integer> ids = new ArrayList<>();
+        List<String> ids = new ArrayList<>();
         try {
 
             if(conn.isClosed())
                 connect();
 
-            res = instr.executeQuery("SELECT medio_id FROM `Medios_Software` WHERE `sw_id` = " + sw_id);
+            res = instr.executeQuery("Select medio_id from `medios_software` AS s WHERE s.sw_id = " + sw_id);
 
             while(res.next()){
-                ids.add(res.getInt("medio_id"));
+                ids.add(res.getString("medio_id"));
             }
 
             res.close();
-
-            for(Integer x : ids){
-                res = instr.executeQuery("Select * from `Medios` AS m WHERE m.medio_id = " + x);
+            res = null;
+            for(String x : ids){
+                res = instr.executeQuery("Select * from `medios` AS s WHERE s.medio_id LIKE '" + x + "'");
+                res.next();
                 objDB.add(readResultSet(res));
                 res.close();
             }
+
             conn.close();
 
         } catch (SQLException e) {
-            System.err.println("Error >> medios de software " + sw_id + " :: " + e.getLocalizedMessage());
+            System.err.println("Error >> Lectura >> Medios de Software " + sw_id + " :: " + e.getLocalizedMessage());
         }
         return objDB;
+    }
+
+    public void asociarMedioASoftware(){
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL asociar_medio_software(?, ?)}");
+
+            sp.setString(1, id);
+            sp.setInt(2, swid);
+
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Escritura >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+        }
+    }
+
+        public void desasociarMedioASoftware(){
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL desasociar_medio_software(?, ?)}");
+
+            sp.setString(1, id);
+            sp.setInt(2, swid);
+
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Eliminar >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+        }
+    }
+
+    public void asociarUbicacionAMedio(){
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL asociar_medio_ubicacion(?, ?, ?)}");
+
+            sp.setString(1, id);
+            sp.setString(2, ubic);
+            sp.setBoolean(3, enDepo);
+
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Escritura >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+        }
+    }
+
+    public void desasociarUbicacionAMedio(){
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL desasociar_medio_ubicacion(?, ?)}");
+
+            sp.setString(1, id);
+            sp.setString(2, ubic);
+
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Eliminar >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override
@@ -75,7 +137,7 @@ public class MediosDB extends DBObject{
 
          try {
 
-            this.id = res.getInt("medio_id");
+            this.id = res.getString("medio_id");
             this.formid = res.getInt("form_id");
             this.caja = res.getBoolean("medio_caja");
             this.imagen = res.getString("medio_imagen");
