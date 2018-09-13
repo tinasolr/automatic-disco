@@ -15,6 +15,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
+import javafx.stage.*;
 
 /**
  *
@@ -59,7 +60,9 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
     private Software sw;
     private final SoftwareCtrl swCtrl = new SoftwareCtrl();
     private final ExtrasCtrl exCtrl = new ExtrasCtrl();
+    private final SoftwareDB swDB = new SoftwareDB();
     private List<String> sistOperativos = new ArrayList<>();
+    private ConsMasivaSwIOCtrl consMas;
 
     public AltaSwConExtrasIOCtrl(){
         swCtrl.cargarSoftware();
@@ -134,37 +137,51 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
 
         //Verificar que los datos ingresados sean válidos o mandar popUp(textoError)
         //Armar un objeto software con el nombre, versión y la lista de sistOperativos
-
+        Stage ventana = (Stage) panelSuperior.getScene().getWindow();
         String nombre = txtNombreSw.getText();
         String version = txtVersionSw.getText();
-        int cantSO = lstSistemasOp.getItems().size();
-
+        Software soft = new Software();
+        
+        int cantSO = lstSistemasOp.getItems().size(), cod;
+        
+        
         if(valIngresoSoft(nombre, version,cantSO)){
-            if(!version.matches("[0-9]+(\\.[0-9]+)*")){
+            if(version.matches("[0-9]+(\\.[0-9]+)*")){
                     if(cantSO>0){
-
-                        List<String> so = new ArrayList<String>();
-                        lstSistemasOp.getSelectionModel().getSelectedItems().addAll(so);
-                        //Guarda SO en BD
-                        for(String s: so)
-                            swCtrl.agregarSoDeSw(codigoSW, s);
+         
+                        
                         //GuardaSW en BD
                         swCtrl.altaSoftware(nombre, version);
-
+                        soft.setNombre(nombre);
+                        soft.setVersion(version);
+                        //GuardaSO en BD
+                        swDB.setNombre(nombre);
+                        swDB.setVersion(version);
+                        cod= Integer.parseInt(swDB.executeSearch());                  
+                        List<String> sistOp = new ArrayList<>();
+                        for(String x : lstSistemasOp.getItems()){
+                            swCtrl.agregarSoDeSw(cod, x);
+                           sistOp.add(x);
+                        }
+                        soft.setSistOp(sistOp);
                         //GuardaExtras en BD
                         List<Extras> a = tblExtras.getItems();
                         for(Extras e : a)
                         {
-                            sw.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
-                            exCtrl.altaExtra(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes(), codigoSW);
+                            //sw.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
+                            exCtrl.altaExtra(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes(), cod);
+                            soft.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
                          }
-
-                        clearFields();
+                        
+                        SoftwareCtrl swCtrl = new SoftwareCtrl();
+                        swCtrl.getSws().add(soft);
+                        popUp("Software ingresado con éxito.");
+                        ventana.close();
+                        consMas.loadTable();              
+                        
                     }else{ popUp("Ingrese el sistema operativo.");}
                 }else{ popUp("Ingresar un número de versión válido.");}
             }else{ popUp("Rellenar espacios vacios y volver a intentar. ");}
-
-
 
     }
 
@@ -180,8 +197,8 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
         
         
 
-        if(cmbSos.getSelectionModel().getSelectedItem().toString()!="null")
-        {    
+        //if(cmbSos.getSelectionModel().getSelectedItem().toString()!="null")
+        //{    
             if(lstSistemasOp.getItems().size()==0) lstSistemasOp.getItems().add(cmbSos.getSelectionModel().getSelectedItem());
             else
             {
@@ -192,11 +209,9 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
                     System.out.println(""+cmbSos.getSelectionModel().getSelectedItem()+"-"+(String)lstSistemasOp.getItems().get(x)+"");
                 }
                 //Si no esta en la lista, lo agrego
-                System.out.println("Llegue mas lejos");
                 if(agregarEnLista==true) lstSistemasOp.getItems().add(cmbSos.getSelectionModel().getSelectedItem());
-                System.out.println("Crack");
             }
-        }
+        //}
     }
 
     /*FALTA AGREGAR SISTEMA OPERATIVO A PARTIR DE LA SELECCION DE LA COMBOBOX*/
@@ -210,6 +225,11 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
 
         if(lstSistemasOp.getItems().size()>0) lstSistemasOp.getItems().removeAll(lstSistemasOp.getSelectionModel().getSelectedItems());
      
+    }
+    @FXML
+    private void ComboBoxActivo(ActionEvent event) 
+    {
+        if(cmbSos.getSelectionModel().getSelectedItem()!=null) btnAgregarSo.setDisable(false);
     }
 
 
@@ -259,4 +279,5 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
         return res;
     }
 
+    
 }

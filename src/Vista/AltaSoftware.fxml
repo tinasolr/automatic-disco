@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="530.0" prefWidth="625.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AltaSwConExtrasIOCtrl">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="480.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.AltaSwConExtrasIOCtrl">
    <children>
       <AnchorPane fx:id="panelSuperior" minWidth="621.0" prefHeight="216.0" prefWidth="625.0">
          <children>
@@ -28,12 +28,12 @@
             <Label fx:id="lblSistOpSw" layoutX="23.0" layoutY="124.0" text="Sistemas Operativos:" />
             <TextField fx:id="txtNombreSw" layoutX="78.0" layoutY="46.0" prefHeight="25.0" prefWidth="216.0" promptText="Ej. Lotus123" />
             <TextField fx:id="txtVersionSw" layoutX="78.0" layoutY="84.0" prefHeight="25.0" prefWidth="216.0" promptText="Ej. 2.4" />
-            <ComboBox fx:id="cmbSos" layoutX="144.0" layoutY="120.0" prefWidth="150.0" promptText="Seleccionar..." />
+            <ComboBox fx:id="cmbSos" layoutX="144.0" layoutY="120.0" onAction="#ComboBoxActivo" prefWidth="150.0" promptText="Seleccionar..." />
             <ListView fx:id="lstSistemasOp" editable="true" layoutX="315.0" layoutY="42.0" prefHeight="144.0" prefWidth="272.0">
                <tooltip>
                   <Tooltip text="Para agregar, seleccionar sistemas operativo y hacer click en Agregar. \n Para eliminar, seleccionarlo en la lista y hacer click en Quitar" />
                </tooltip></ListView>
-            <Button fx:id="btnAgregarSo" layoutX="28.0" layoutY="159.0" mnemonicParsing="false" onAction="#agregarSistemaOperativo" prefHeight="25.0" prefWidth="100.0" text="Agregar" />
+            <Button fx:id="btnAgregarSo" disable="true" layoutX="28.0" layoutY="159.0" mnemonicParsing="false" onAction="#agregarSistemaOperativo" prefHeight="25.0" prefWidth="100.0" text="Agregar" />
             <Button fx:id="btnQuitarSo" layoutX="194.0" layoutY="159.0" mnemonicParsing="false" onAction="#quitarSistemaOperativo" prefHeight="25.0" prefWidth="100.0" text="Quitar" />
          </children>
       </AnchorPane>

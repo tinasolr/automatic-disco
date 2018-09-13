@@ -97,9 +97,27 @@ public class SoftwareDB extends DBObject{
 
     @Override
     public String executeSearch() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        String result = null;
+        ResultSet res = null;
+        try {
 
+            //CallableStatement storedProc = conn.prepareCall("{call find_softwareid(<nombre de software>, <version de software>)}");
+            CallableStatement storedProc = conn.prepareCall("{call find_softwareid(?,?)}");
+            storedProc.setString(1, nombre);
+            storedProc.setString(2, version);
+            res = storedProc.executeQuery();
+            res.next();
+            int r = res.getInt(1);
+            result = String.valueOf(r);
+
+              res.close();
+        } catch (SQLException ex) {
+            System.err.println("Problema en la busqueda de la tabla Software :: " + ex.getLocalizedMessage());
+            ex.printStackTrace();
+        }
+        return result;
+    }
+  
     public void deleteSOSw(){
         ResultSet res = null;
         try {
@@ -139,7 +157,7 @@ public class SoftwareDB extends DBObject{
             if(res.last())
                 cod = res.getInt(1);
             if(cod>0)
-                instr.executeUpdate("INSERT INTO sistoperativos_software(so_id, sw_id) VALUES (" + cod + ", " + codigo + ")");
+                instr.executeUpdate("INSERT INTO SistOperativos_Software(so_id, sw_id) VALUES (" + cod + ", " + codigo + ")");
 
             printResultSet(res);
 
