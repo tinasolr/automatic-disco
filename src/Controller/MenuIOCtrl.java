@@ -85,6 +85,10 @@ public class MenuIOCtrl implements Initializable {
             FXMLLoader loader = new FXMLLoader();
 
             loader.setLocation(getClass().getResource("/Vista/" + menuItemID + ".fxml"));
+            if(menuItemID.equalsIgnoreCase("AltaSoftware")){
+                AltaSwConExtrasIOCtrl aw = (AltaSwConExtrasIOCtrl)loader.getController();
+                aw.setMainWindow(mainWindow);
+            }
             Node x = loader.load();
 
             mainWindow.setCenter(x);
