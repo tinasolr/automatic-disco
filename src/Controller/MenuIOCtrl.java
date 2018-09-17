@@ -92,12 +92,7 @@ public class MenuIOCtrl implements Initializable {
                 System.out.println(aw);
                 aw.setMainWindow(mainWindow);
             }
-            if(menuItemID.equalsIgnoreCase("AltaUbicaciones")){
-                AltaUbicacionesCtrl aw = (AltaUbicacionesCtrl)loader.getController();
-                System.out.println(aw);
-
-                aw.setMainWindow(mainWindow);
-            }
+            
 
             
             mainWindow.setCenter(x);
