@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="641.0" prefWidth="927.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MenuIOCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="641.0" prefWidth="927.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.MenuIOCtrl">
    <children>
       <MenuBar fx:id="mnuPpal" layoutX="-8.0" layoutY="2.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="934.0" AnchorPane.bottomAnchor="615.6666666666666" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -23,6 +23,7 @@
                     <items>
                       <MenuItem fx:id="AltaSoftware" mnemonicParsing="false" onAction="#handleChangeView" text="Software" />
                         <MenuItem fx:id="AltaMedio" mnemonicParsing="false" text="Medio" />
+                        <MenuItem fx:id="AltaUbicaciones" mnemonicParsing="false" onAction="#handleChangeView" text="Alta Ubicaciones" />
                         <MenuItem fx:id="AltaCopia" mnemonicParsing="false" text="Copia" />
                     </items>
                   </Menu>
@@ -88,7 +89,7 @@
                   </AnchorPane>
                   <BorderPane fx:id="mainWindow" prefHeight="200.0" prefWidth="200.0">
                     <center>
-                        <fx:include source="/Vista/ConsultaSoftware.fxml"/>
+                       <!-- <fx:include source="/Vista/ConsultaSoftware.fxml"/--> 
                     </center>
                   </BorderPane>
               </items>
