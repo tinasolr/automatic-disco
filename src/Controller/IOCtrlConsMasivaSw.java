@@ -18,7 +18,7 @@ import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
-public class ConsMasivaSwIOCtrl implements Initializable {
+public class IOCtrlConsMasivaSw implements Initializable {
 
     @FXML    private AnchorPane showSw;
     @FXML    private TableView<Software> tblSoftware;
@@ -42,7 +42,7 @@ public class ConsMasivaSwIOCtrl implements Initializable {
         try{
 
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ModSoftware.fxml"));
-            ModSwConExtrasIOCtrl msce = new ModSwConExtrasIOCtrl();
+            IOCtrlModSwConExtras msce = new IOCtrlModSwConExtras();
             msce.setCodigoSw(tblSoftware.getSelectionModel().getSelectedItem().getCodigo());
             msce.setConsMas(this);
             loader.setController(msce);

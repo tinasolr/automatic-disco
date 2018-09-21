@@ -25,7 +25,7 @@ ss
  *
  * @author tinar
  */
-public class ModSwConExtrasIOCtrl implements Initializable {
+public class IOCtrlModSwConExtras implements Initializable {
 
     @FXML    private AnchorPane panelSuperior;
     @FXML    private Label lblTituloSw;
@@ -58,7 +58,7 @@ public class ModSwConExtrasIOCtrl implements Initializable {
     @FXML    private Button btnElimTodos;
     @FXML    private Button btnFinalizar;
     @FXML    private Label lblTituloSw1;
-    private ConsMasivaSwIOCtrl consMas;
+    private IOCtrlConsMasivaSw consMas;
     private SoftwareCtrl swCtrl;
     private int codigoSw;
     private Software s;
@@ -93,6 +93,14 @@ public class ModSwConExtrasIOCtrl implements Initializable {
 //                    s.getSistOp().remove(i);
 //            lstSistemasOp.getItems().remove(so);
         }
+    }
+
+    @FXML
+    private void ComboBoxActivo(ActionEvent event) {
+    }
+
+    @FXML
+    private void cancelar(ActionEvent event) {
     }
 
     public boolean popUpWarning(String texto){
@@ -534,7 +542,7 @@ public class ModSwConExtrasIOCtrl implements Initializable {
         this.exCtrl = exCtrl;
     }
 
-    public void setConsMas(ConsMasivaSwIOCtrl consMas) {
+    public void setConsMas(IOCtrlConsMasivaSw consMas) {
         this.consMas = consMas;
     }
 
