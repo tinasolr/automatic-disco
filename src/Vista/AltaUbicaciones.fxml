@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="257.0" prefWidth="469.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Label fx:id="lblTituloUb" alignment="CENTER" layoutX="175.0" layoutY="14.0" text="Alta Ubicaciones">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblCodId" layoutX="33.0" layoutY="61.0" text="Código ID:" />
+      <Label fx:id="lblDescripcionId" layoutX="33.0" layoutY="93.0" text="Descripción:" />
+      <TextField fx:id="txtCodId" layoutX="122.0" layoutY="57.0" prefHeight="25.0" prefWidth="101.0" />
+      <Button fx:id="btnAgregarUb" layoutX="122.0" layoutY="200.0" mnemonicParsing="false" onAction="#AgregarUbicacion" text="Agregar" />
+      <Button fx:id="btnCancelarUb" layoutX="214.0" layoutY="200.0" mnemonicParsing="false" text="Cancelar" />
+      <TextArea fx:id="txtDescripcionId" layoutX="123.0" layoutY="93.0" prefHeight="84.0" prefWidth="303.0" />
+   </children>
+</AnchorPane>
