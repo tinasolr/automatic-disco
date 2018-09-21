@@ -19,7 +19,7 @@ import javafx.scene.layout.*;
  *
  * @author Nico
  */
-public class MenuIOCtrl implements Initializable {
+public class IOCtrlMenu implements Initializable {
 
     @FXML    private MenuBar mnuPpal;
     @FXML    private Menu mArchivo;
@@ -61,7 +61,7 @@ public class MenuIOCtrl implements Initializable {
 
     public void changeScene(String url){
         try {
-            FXMLLoader loader = new FXMLLoader(MenuIOCtrl.class.getResource("/Vista/Menu.fxml"));
+            FXMLLoader loader = new FXMLLoader(IOCtrlMenu.class.getResource("/Vista/Menu.fxml"));
 
             Scene scene = new Scene(loader.load(getClass().getResource(url)));
             swteca.SWTeca.primaryStage.setScene(scene);
@@ -88,7 +88,7 @@ public class MenuIOCtrl implements Initializable {
 
             Node x = loader.load();
             if(menuItemID.equalsIgnoreCase("AltaSoftware")){
-                AltaSwConExtrasIOCtrl aw = (AltaSwConExtrasIOCtrl)loader.getController();
+                IOCtrlAltaSwConExtras aw = (IOCtrlAltaSwConExtras)loader.getController();
                 System.out.println(aw);
                 aw.setMainWindow(mainWindow);
             }

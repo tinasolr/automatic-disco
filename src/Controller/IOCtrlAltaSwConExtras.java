@@ -19,7 +19,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
 
-public class AltaSwConExtrasIOCtrl  implements Initializable {
+public class IOCtrlAltaSwConExtras  implements Initializable {
 
     @FXML  private Label lblNombre;
     @FXML  private Label lblVersion;
@@ -60,12 +60,14 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
     private final ExtrasCtrl exCtrl = new ExtrasCtrl();
     private final SoftwareDB swDB = new SoftwareDB();
     private List<String> sistOperativos = new ArrayList<>();
-    private ConsMasivaSwIOCtrl consMas;
+    private IOCtrlConsMasivaSw consMas;
+    @FXML
+    private Button btnCancelar;
 
-    public AltaSwConExtrasIOCtrl(){
+    public IOCtrlAltaSwConExtras(){
         swCtrl.cargarSoftware();
     }
-    public AltaSwConExtrasIOCtrl(int codigo){
+    public IOCtrlAltaSwConExtras(int codigo){
         swCtrl.cargarSoftware();
         this.codigoSW = codigo;
         this.sw = swCtrl.findSoftware(codigo);
@@ -104,6 +106,10 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
 
 
         return false;
+    }
+
+    @FXML
+    private void cancelar(ActionEvent event) {
     }
 
     public void popUp(String texto){
@@ -244,7 +250,7 @@ public class AltaSwConExtrasIOCtrl  implements Initializable {
             Node x = loader.load();
             mainWindow.setCenter(x);
         } catch (IOException ex) {
-            Logger.getLogger(AltaSwConExtrasIOCtrl.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(IOCtrlAltaSwConExtras.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
