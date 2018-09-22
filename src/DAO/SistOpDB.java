@@ -111,7 +111,8 @@ public class SistOpDB extends DBObject{
 
         } catch (SQLException ex) {
             System.err.println("Problema en la modificación de una fila de la tabla SistOperativos :: " + ex.getLocalizedMessage());
-        }    }
+        }
+    }
 
     @Override
     public String executeSearch() {

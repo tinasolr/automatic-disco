@@ -18,8 +18,18 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.layout.*;
+import javafx.stage.*;
 
 public class IOCtrlAltaSwConExtras  implements Initializable {
+
+    private BorderPane mainWindow;
+    private int codigoSW;
+    private Software sw;
+    private final SoftwareCtrl swCtrl = new SoftwareCtrl();
+    private final ExtrasCtrl exCtrl = new ExtrasCtrl();
+    private final SoftwareDB swDB = new SoftwareDB();
+    private List<String> sistOperativos = new ArrayList<>();
+    private IOCtrlConsMasivaSw consMas;
 
     @FXML  private Label lblNombre;
     @FXML  private Label lblVersion;
@@ -33,36 +43,27 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
     @FXML  private Button btnElimTodos;
     @FXML  private Tooltip toolTipPartes;
     @FXML  private Button btnQuitar;
-    @FXML    private TableView<Extras> tblExtras;
-    @FXML    private TableColumn<Extras, String> colNombre;
-    @FXML    private TableColumn<Extras, String> colVersion;
-    @FXML    private TableColumn<Extras, String> colPartes;
-    @FXML    private TableColumn<Extras, String> colDescrip;
-    @FXML    private Button btnFinalizar;
-    @FXML    private Label lblTituloSw;
-    @FXML    private Label lblNombreSw;
-    @FXML    private Label lblVersionSw;
-    @FXML    private Label lblSistOpSw;
-    @FXML    private TextField txtNombreSw;
-    @FXML    private TextField txtVersionSw;
-    @FXML    private ComboBox<String> cmbSos;
-    @FXML    private ListView<String> lstSistemasOp;
-    @FXML    private Button btnAgregarSo;
-    @FXML    private Button btnQuitarSo;
-    @FXML    private Label lblTituloSw1;
-    @FXML    private AnchorPane panelSuperior;
-    @FXML    private AnchorPane panelInferior;
-
-    private BorderPane mainWindow;
-    private int codigoSW;
-    private Software sw;
-    private final SoftwareCtrl swCtrl = new SoftwareCtrl();
-    private final ExtrasCtrl exCtrl = new ExtrasCtrl();
-    private final SoftwareDB swDB = new SoftwareDB();
-    private List<String> sistOperativos = new ArrayList<>();
-    private IOCtrlConsMasivaSw consMas;
-    @FXML
-    private Button btnCancelar;
+    @FXML  private TableView<Extras> tblExtras;
+    @FXML  private TableColumn<Extras, String> colNombre;
+    @FXML  private TableColumn<Extras, String> colVersion;
+    @FXML  private TableColumn<Extras, String> colPartes;
+    @FXML  private TableColumn<Extras, String> colDescrip;
+    @FXML  private Button btnFinalizar;
+    @FXML  private Label lblTituloSw;
+    @FXML  private Label lblNombreSw;
+    @FXML  private Label lblVersionSw;
+    @FXML  private Label lblSistOpSw;
+    @FXML  private TextField txtNombreSw;
+    @FXML  private TextField txtVersionSw;
+    @FXML  private ComboBox<String> cmbSos;
+    @FXML  private ListView<String> lstSistemasOp;
+    @FXML  private Button btnAgregarSo;
+    @FXML  private Button btnQuitarSo;
+    @FXML  private Label lblTituloSw1;
+    @FXML  private AnchorPane panelSuperior;
+    @FXML  private AnchorPane panelInferior;
+    @FXML  private Button btnCancelar;
+    @FXML  private VBox vboxSw;
 
     public IOCtrlAltaSwConExtras(){
         swCtrl.cargarSoftware();
@@ -110,6 +111,8 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
 
     @FXML
     private void cancelar(ActionEvent event) {
+        Stage x = (Stage) vboxSw.getScene().getWindow();
+        x.close();
     }
 
     public void popUp(String texto){
@@ -264,6 +267,7 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
         if(!cmbSos.getItems().isEmpty())
             cmbSos.getItems().clear();
         sos.forEach((x) -> { cmbSos.getItems().add(x.getNombre()); });
+        new AutoCompleteComboBoxListener<>(cmbSos);
         loadTable();
 
     }

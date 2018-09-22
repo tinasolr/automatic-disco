@@ -8,11 +8,13 @@ package Controller;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
+import javafx.stage.*;
 
 /**
  * FXML Controller class
@@ -20,6 +22,8 @@ import javafx.scene.layout.*;
  * @author Nico
  */
 public class IOCtrlMenu implements Initializable {
+
+    private BorderPane borderPane;
 
     @FXML    private MenuBar mnuPpal;
     @FXML    private Menu mArchivo;
@@ -38,18 +42,71 @@ public class IOCtrlMenu implements Initializable {
     @FXML    private RadioButton rdbSistOp;
     @FXML    private RadioButton rdbNombre;
     @FXML    private RadioButton rdbVersion;
-    private BorderPane borderPane;
     @FXML    private MenuItem AltaSoftware;
     @FXML    private MenuItem AltaMedio;
     @FXML    private MenuItem AltaCopia;
-    @FXML    private MenuItem ModFormatos;
-    @FXML    private MenuItem ModUbicaciones;
-    @FXML    private MenuItem ModSistOp;
     @FXML    private MenuItem ConsultaMedios;
     @FXML    private MenuItem ConsultaCopias;
     @FXML    private TextField txtFiltrar;
     @FXML    private Button btnFiltrar;
     @FXML    private BorderPane mainWindow;
+    @FXML
+    private MenuItem ABMFormatos;
+    @FXML
+    private MenuItem ABMUbicaciones;
+    @FXML
+    private MenuItem ABMSistemaOperat;
+
+    @FXML
+    private void editarFormato(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMFormato.fxml"));
+
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Formatos");
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void editarUbicaciones(ActionEvent event) { try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMUbicaciones.fxml"));
+
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Ubicaciones");
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    @FXML
+    private void editarSistOperativos(ActionEvent event) {
+         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMSistemaOperat.fxml"));
+
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Sistemas Operativos");
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     /**
      * Initializes the controller class.
@@ -85,16 +142,14 @@ public class IOCtrlMenu implements Initializable {
             FXMLLoader loader = new FXMLLoader();
 
             loader.setLocation(getClass().getResource("/Vista/" + menuItemID + ".fxml"));
-            
+
             Node x = loader.load();
             if(menuItemID.equalsIgnoreCase("AltaSoftware")){
                 IOCtrlAltaSwConExtras aw = (IOCtrlAltaSwConExtras)loader.getController();
                 System.out.println(aw);
                 aw.setMainWindow(mainWindow);
             }
-            
 
-            
             mainWindow.setCenter(x);
 
         } catch (IOException e) {

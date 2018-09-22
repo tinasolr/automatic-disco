@@ -18,9 +18,9 @@
          <contextMenu>
             <ContextMenu fx:id="mnuDerecho">
               <items>
-                  <MenuItem fx:id="derVer" mnemonicParsing="false" onAction="#consIndividual" text="Ver" />
-                <MenuItem fx:id="derModificar" mnemonicParsing="false" onAction="#modSoftware" text="Modificar" />
-                  <MenuItem fx:id="derEliminar" mnemonicParsing="false" onAction="#elimSoftware" text="Eliminar" />
+                  <MenuItem fx:id="derVer" onAction="#consIndividual" text="_Ver" />
+                <MenuItem fx:id="derModificar" onAction="#modSoftware" text="_Modificar" />
+                  <MenuItem fx:id="derEliminar" onAction="#elimSoftware" text="_Eliminar" />
               </items>
             </ContextMenu>
          </contextMenu>

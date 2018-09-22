@@ -1,0 +1,106 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package DAO;
+
+import java.sql.*;
+
+/**
+ *
+ * @author tinar
+ */
+public class FormatoDB extends DBObject {
+
+    private String formato;
+    private String newFormat;
+
+    public FormatoDB(String nombre) {
+        this.formato = nombre;
+    }
+
+    public FormatoDB(){connect();}
+
+    @Override
+    public String readResultSet(ResultSet res) {
+        String obj = null;
+
+        try {
+
+            this.formato = res.getString("form_nom");
+            obj = formato;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            System.err.println("Error >> la lectura >> tabla Formato :: " + ex.getLocalizedMessage());
+        }
+
+        return obj;
+    }
+
+    @Override
+    public void executeWrite() {
+        try {
+            CallableStatement sp = conn.prepareCall("{call alta_formato(?)}");
+
+            sp.setString(1, formato);
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Problema en la escritura de una fila de la tabla Formato :: " + ex.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void executeUpdate() {
+        try {
+
+            CallableStatement sp = conn.prepareCall("{call mod_formato(?, ?)}");
+
+            sp.setString(1, newFormat);
+            sp.setString(2, formato);
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Problema en la modificación de una fila de la tabla Formato :: " + ex.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public void executeDelete() {
+        try {
+            CallableStatement sp = conn.prepareCall("{call elim_formato(?)}");
+
+            sp.setString(1, formato);
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Problema en la modificación de una fila de la tabla Formato :: " + ex.getLocalizedMessage());
+        }
+    }
+
+    @Override
+    public String executeSearch() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String getFormato() {
+        return formato;
+    }
+
+    public void setFormato(String formato) {
+        this.formato = formato;
+    }
+
+    public String getNewFormat() {
+        return newFormat;
+    }
+
+    public void setNewFormat(String newFormat) {
+        this.newFormat = newFormat;
+    }
+
+
+}

@@ -17,37 +17,37 @@
    <children>
       <MenuBar fx:id="mnuPpal" layoutX="-8.0" layoutY="2.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="934.0" AnchorPane.bottomAnchor="615.6666666666666" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
-          <Menu fx:id="mArchivo" mnemonicParsing="false" text="Archivo">
+          <Menu fx:id="mArchivo" text="_Archivo">
             <items>
-                  <Menu fx:id="arcNuevo" mnemonicParsing="false" text="Nuevo">
+                  <Menu fx:id="arcNuevo" text="_Nuevo">
                     <items>
-                      <MenuItem fx:id="AltaSoftware" mnemonicParsing="false" onAction="#handleChangeView" text="Software" />
-                        <MenuItem fx:id="AltaMedio" mnemonicParsing="false" text="Medio" />
-                        <MenuItem fx:id="AltaCopia" mnemonicParsing="false" text="Copia" />
+                      <MenuItem fx:id="AltaSoftware" onAction="#handleChangeView" text="So_ftware" />
+                        <MenuItem fx:id="AltaMedio" text="Me_dio" />
+                        <MenuItem fx:id="AltaCopia" text="Co_pia" />
                     </items>
                   </Menu>
-                  <MenuItem fx:id="arcImportar" mnemonicParsing="false" text="Importar..." />
-                  <MenuItem fx:id="arcExportar" mnemonicParsing="false" text="Exportar..." />
-                  <MenuItem fx:id="arcSalir" mnemonicParsing="false" text="Salir" />
+                  <MenuItem fx:id="arcImportar" text="_Importar..." />
+                  <MenuItem fx:id="arcExportar" text="_Exportar..." />
+                  <MenuItem fx:id="arcSalir" text="_Salir" />
             </items>
           </Menu>
-          <Menu fx:id="mEditar" mnemonicParsing="false" text="Editar">
+          <Menu fx:id="mEditar" text="_Editar">
             <items>
-                  <MenuItem fx:id="ModFormatos" mnemonicParsing="false" text="Formatos" />
-              <MenuItem fx:id="ModUbicaciones" mnemonicParsing="false" text="Ubicaciones" />
-                  <MenuItem fx:id="ModSistOp" mnemonicParsing="false" text="Sistemas Operativos" />
+                  <MenuItem fx:id="ABMFormatos" onAction="#editarFormato" text="_Formatos" />
+              <MenuItem fx:id="ABMUbicaciones" onAction="#editarUbicaciones" text="_Ubicaciones" />
+                  <MenuItem fx:id="ABMSistemaOperat" onAction="#editarSistOperativos" text="Sistemas _Operativos" />
             </items>
           </Menu>
-            <Menu fx:id="mVer" mnemonicParsing="false" text="Ver">
+            <Menu fx:id="mVer" text="_Ver">
               <items>
-                <MenuItem fx:id="ConsultaSoftware" mnemonicParsing="false" onAction="#handleChangeView" text="Software" />
-                  <MenuItem fx:id="ConsultaMedios" mnemonicParsing="false" text="Medios" />
-                  <MenuItem fx:id="ConsultaCopias" mnemonicParsing="false" text="Copias" />
+                <MenuItem fx:id="ConsultaSoftware" onAction="#handleChangeView" text="S_oftware" />
+                  <MenuItem fx:id="ConsultaMedios" text="M_edios" />
+                  <MenuItem fx:id="ConsultaCopias" text="_Copias" />
               </items>
             </Menu>
-          <Menu fx:id="mAyuda" mnemonicParsing="false" text="Ayuda">
+          <Menu fx:id="mAyuda" text="A_yuda">
             <items>
-              <MenuItem fx:id="ayAbout" mnemonicParsing="false" text="About" />
+              <MenuItem fx:id="ayAbout" text="A_bout" />
             </items>
           </Menu>
         </menus>
@@ -63,7 +63,7 @@
                               <AnchorPane prefHeight="260.0" prefWidth="245.0">
                                  <children>
                                     <TextField fx:id="txtFiltrar" prefHeight="25.0" prefWidth="213.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="18.0" />
-                                    <RadioButton fx:id="rdbTodos" layoutX="14.0" layoutY="105.0" mnemonicParsing="false" prefHeight="20.0" selected="true" text="Todos los campos" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="105.0">
+                                    <RadioButton fx:id="rdbTodos" layoutX="14.0" layoutY="105.0" mnemonicParsing="true" prefHeight="20.0" selected="true" text="_Todos los campos" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="105.0">
                                        <toggleGroup>
                                           <ToggleGroup fx:id="groupFiltrar" />
                                        </toggleGroup>
@@ -71,14 +71,10 @@
                                           <Insets top="3.0" />
                                        </padding>
                                     </RadioButton>
-                                    <RadioButton fx:id="rdbCodigo" layoutX="14.0" layoutY="130.0" mnemonicParsing="false" prefHeight="20.0" text="Código" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="130.0" />
-                                    <RadioButton fx:id="rdbSistOp" layoutX="14.0" layoutY="155.0" mnemonicParsing="false" prefHeight="20.0" text="Sistema Operativo" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="155.0">
-                                       <padding>
-                                          <Insets top="3.0" />
-                                       </padding>
-                                    </RadioButton>
-                                    <RadioButton fx:id="rdbNombre" layoutX="14.0" layoutY="180.0" mnemonicParsing="false" prefHeight="20.0" text="Nombre" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="180.0" />
-                                    <RadioButton fx:id="rdbVersion" layoutX="14.0" layoutY="205.0" mnemonicParsing="false" text="Versión" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="205.0" />
+                                    <RadioButton fx:id="rdbCodigo" layoutX="14.0" layoutY="130.0" mnemonicParsing="true" prefHeight="20.0" text="_Código" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="130.0" />
+                                    <RadioButton fx:id="rdbSistOp" layoutX="14.0" layoutY="155.0" mnemonicParsing="true" prefHeight="20.0" text="Sistema _Operativo" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="155.0" />
+                                    <RadioButton fx:id="rdbNombre" layoutX="14.0" layoutY="180.0" mnemonicParsing="true" prefHeight="20.0" text="_Nombre" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="180.0" />
+                                    <RadioButton fx:id="rdbVersion" layoutX="14.0" layoutY="205.0" mnemonicParsing="true" text="_Versión" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="205.0" />
                                     <Button fx:id="btnFiltrar" mnemonicParsing="false" snapToPixel="false" text="Filtrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="63.0" />
                                  </children>
                               </AnchorPane>
@@ -88,7 +84,7 @@
                   </AnchorPane>
                   <BorderPane fx:id="mainWindow" prefHeight="200.0" prefWidth="200.0">
                     <center>
-                        <fx:include source="/Vista/ConsultaSoftware.fxml"/>
+                        <!--<fx:include source="/Vista/ConsultaSoftware.fxml"/>-->
                     </center>
                   </BorderPane>
               </items>

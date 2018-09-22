@@ -101,6 +101,7 @@ public class IOCtrlModSwConExtras implements Initializable {
 
     @FXML
     private void cancelar(ActionEvent event) {
+
     }
 
     public boolean popUpWarning(String texto){
@@ -253,6 +254,7 @@ public class IOCtrlModSwConExtras implements Initializable {
         sos.forEach((x) -> { cmbSos.getItems().add(x.getNombre()); });
         List<SistOpDB> sos1 = so.sistopDeSoftware(codigoSw);
         sos1.forEach((x) -> { lstSistemasOp.getItems().add(x.getNombre());});
+        new AutoCompleteComboBoxListener<>(cmbSos);
         loadTable();
     }
 
