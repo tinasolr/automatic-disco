@@ -41,7 +41,7 @@ public class CopiasDB extends DBObject {
             sp.executeUpdate();
 
         } catch (SQLException ex) {
-            System.err.println("Escritura >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+            System.err.println("Write >> tabla Copia_Ubic :: " + ex.getLocalizedMessage());
         }
     }
 
@@ -55,7 +55,7 @@ public class CopiasDB extends DBObject {
             sp.executeUpdate();
 
         } catch (SQLException ex) {
-            System.err.println("Eliminar >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+            System.err.println("Delete >> tabla Copia_Ubic :: " + ex.getLocalizedMessage());
         }
     }
 
@@ -79,7 +79,7 @@ public class CopiasDB extends DBObject {
             conn.close();
 
         } catch (SQLException e) {
-            System.err.println("Error >> copias de software " + sw_id + " :: " + e.getLocalizedMessage());
+            System.err.println("Read >> Copias >> Software " + sw_id + " :: " + e.getLocalizedMessage());
         }
         return objDB;
     }
@@ -98,7 +98,7 @@ public class CopiasDB extends DBObject {
             obj = new CopiasDB(id, obs, formid, swid);
 
         } catch (SQLException ex) {
-            System.err.println("Error >> lectura >> tabla Copias :: " + ex.getLocalizedMessage());
+            System.err.println("Read >> Copias :: " + ex.getLocalizedMessage());
         }
 
         return obj;
@@ -106,22 +106,68 @@ public class CopiasDB extends DBObject {
 
     @Override
     public void executeWrite() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL alta_copia(?, ?, ?)}");
+
+            sp.setInt(1, swid);
+            sp.setInt(2, formid);
+            sp.setString(3, obs);
+
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Write >> Copias :: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override
     public void executeUpdate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       try {
+            CallableStatement sp = conn.prepareCall("{CALL mod_copia (?, ?, ?, ?)}");
+
+            sp.setInt(1, id);
+            sp.setInt(2, swid);
+            sp.setInt(3, formid);
+            sp.setString(4, obs);
+
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Update >> Copias :: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override
     public void executeDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL elim_copia (?)}");
+
+            sp.setInt(1, swid);
+            sp.setInt(2, formid);
+            sp.setString(3, obs);
+
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Delete >> Copias :: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override
     public String executeSearch() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL get_idcopia (?, ?)}");
 
+            sp.setInt(1, swid);
+            sp.setInt(2, formid);
+
+            ResultSet r = sp.executeQuery();
+            r.first();
+            int id = r.getInt(1);
+            return String.valueOf(id);
+        } catch (SQLException ex) {
+            System.err.println("Search ID >> Copias :: " + ex.getLocalizedMessage());
+        }
+        return null;
+    }
 }

@@ -51,9 +51,15 @@ public class SoftwareDB extends DBObject{
     @Override
     public void executeWrite() {
         try {
-            CallableStatement sp = conn.prepareCall("{call alta_software(?,?)}");
-            sp.setString(1, nombre);
-            sp.setString(2, version);
+            CallableStatement sp = conn.prepareCall("{call alta_software_conID(?,?,?)}");
+            instr = conn.createStatement();
+            ResultSet r = instr.executeQuery("select max(sw_id) from Software");
+            r.first();
+            int id = r.getInt(1);
+            id++;
+            sp.setInt(1, id);
+            sp.setString(2, nombre);
+            sp.setString(3, version);
 
             sp.executeUpdate();
 
@@ -117,7 +123,7 @@ public class SoftwareDB extends DBObject{
         }
         return result;
     }
-  
+
     public void deleteSOSw(){
         ResultSet res = null;
         try {

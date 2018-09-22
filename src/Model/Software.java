@@ -18,7 +18,6 @@ public class Software {
     private List<String> sistOp = new ArrayList<>();
     private String version;
     private List<Extras> extras = new ArrayList<>();
-    private List<Copias> copias = new ArrayList<>();
     private List<Medios> medios;
 
     public Software(){}
@@ -59,17 +58,12 @@ public class Software {
         this.extras.set(pos, new Extras(nombre, version, descrip, partes));
     }
 
-    public List<Copias> getCopias() {return copias;}
-    public void setCopias(String formato, String observ, Ubicaciones ubiDepos) {
-        this.copias.add(new Copias(formato, observ, ubiDepos));
-    }
-
     public List<Medios> getMedios() {return medios;}
     public void setMedios(List<Medios> medios) {this.medios = medios;}
 
     @Override
     public String toString() {
-        return "Software{" + "codigo=" + codigo + ", nombre=" + nombre + ", sistOp=" + sistOp + ", version=" + version + ", extras=" + extras + ", copias=" + copias + ", medios=" + medios + '}';
+        return "Software{" + "codigo=" + codigo + ", nombre=" + nombre + ", sistOp=" + sistOp + ", version=" + version + ", extras=" + extras + ", medios=" + medios + '}';
     }
 
 }

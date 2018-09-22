@@ -52,7 +52,7 @@ public class SistOpDB extends DBObject{
             conn.close();
 
         } catch (SQLException e) {
-            System.err.println("Error >> so de software " + sw_id + " :: " + e.getLocalizedMessage());
+            System.err.println("GET >> so de software " + sw_id + " :: " + e.getLocalizedMessage());
         }
         return objDB;
     }
@@ -68,7 +68,7 @@ public class SistOpDB extends DBObject{
 
         } catch (SQLException ex) {
             ex.printStackTrace();
-            System.err.println("Error >> la lectura >> tabla SistOperativos :: " + ex.getLocalizedMessage());
+            System.err.println("Read >> SistOperativos :: " + ex.getLocalizedMessage());
         }
 
         return obj;
@@ -83,7 +83,7 @@ public class SistOpDB extends DBObject{
             sp.executeUpdate();
 
         } catch (SQLException ex) {
-            System.err.println("Problema en la escritura de una fila de la tabla SistOperativos :: " + ex.getLocalizedMessage());
+            System.err.println("Write >> SistOperativos :: " + ex.getLocalizedMessage());
         }
     }
 
@@ -97,7 +97,7 @@ public class SistOpDB extends DBObject{
             sp.executeUpdate();
 
         } catch (SQLException ex) {
-            System.err.println("Problema en la modificación de una fila de la tabla SistOperativos :: " + ex.getLocalizedMessage());
+            System.err.println("Update >> SistOperativos :: " + ex.getLocalizedMessage());
         }
     }
 
@@ -110,13 +110,25 @@ public class SistOpDB extends DBObject{
             sp.executeUpdate();
 
         } catch (SQLException ex) {
-            System.err.println("Problema en la modificación de una fila de la tabla SistOperativos :: " + ex.getLocalizedMessage());
+            System.err.println("Delete >> SistOperativos :: " + ex.getLocalizedMessage());
         }
     }
 
     @Override
     public String executeSearch() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            CallableStatement sp = conn.prepareCall("{call get_idSo(?)}");
+
+            sp.setString(1, nombre);
+            ResultSet r = sp.executeQuery();
+            r.first();
+            int id = r.getInt(1);
+            return String.valueOf(id);
+
+        } catch (SQLException ex) {
+            System.err.println("Search ID >> SistOperativos :: " + ex.getLocalizedMessage());
+        }
+        return null;
     }
 
     public String getNombre() {
