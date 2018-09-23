@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IOCtrlAltaMedio">
+   <children>
+      <Accordion AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <panes>
+          <TitledPane fx:id="tpaneDatosMedio" animated="false" text="Datos del Medio de Almacenamiento">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="txtCodigo" layoutX="184.0" layoutY="372.0" prefHeight="25.0" prefWidth="200.0" />
+                        <TextField fx:id="txtNombre" layoutX="186.0" layoutY="419.0" prefHeight="25.0" prefWidth="200.0" />
+                        <Label fx:id="lblCodigo" layoutX="89.0" layoutY="372.0" text="Codigo:" />
+                        <Label fx:id="lblNombre" layoutX="90.0" layoutY="419.0" text="Nombre:" />
+                        <CheckBox layoutX="134.0" layoutY="469.0" mnemonicParsing="false" text="Original" />
+                        <Label fx:id="lblImagen" layoutX="89.0" layoutY="29.0" text="Imagen" />
+                        <CheckBox layoutX="233.0" layoutY="469.0" mnemonicParsing="false" text="Mixto" />
+                        <ImageView fx:id="image" fitHeight="300.0" fitWidth="300.0" layoutX="134.0" layoutY="47.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/no-image-available.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </TitledPane>
+          <TitledPane animated="false" text="untitled 2">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="lblFormato" layoutX="46.0" layoutY="35.0" text="Formato:" />
+                        <Label fx:id="lblUbicacion" layoutX="46.0" layoutY="92.0" text="Ubicación:" />
+                        <Label fx:id="lblObservaciones" layoutX="46.0" layoutY="203.0" text="Observaciones:" />
+                        <Label fx:id="lblPartes" layoutX="46.0" layoutY="137.0" text="Partes:" />
+                        <ComboBox fx:id="cmbFormato" layoutX="133.0" layoutY="31.0" prefHeight="25.0" prefWidth="210.0" />
+                        <ComboBox layoutX="133.0" layoutY="88.0" prefHeight="25.0" prefWidth="210.0" />
+                        <Label fx:id="lblEmpaque" text="Empaque:" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </TitledPane>
+          <TitledPane animated="false" text="untitled 3">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label fx:id="lblSoftware" text="Software:" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </TitledPane>
+        </panes>
+      </Accordion>
+   </children>
+</AnchorPane>

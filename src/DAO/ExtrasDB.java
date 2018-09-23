@@ -22,7 +22,7 @@ public class ExtrasDB extends DBObject{
     private int swid;
     private int id;
 
-    public ExtrasDB() {connect();}
+    public ExtrasDB() {}
 
     public ExtrasDB(String nombre, String version, String descrip, int partes) {
         this.nombre = nombre;
@@ -57,9 +57,6 @@ public class ExtrasDB extends DBObject{
     public void executeWrite() {
         try {
             CallableStatement sp = conn.prepareCall("{call alta_extra(?,?,?,?,?)}");
-//            PreparedStatement ps = conn.prepareStatement("INSERT INTO "
-//                    + "Extras(extra_nom,extra_vers,extra_descr,extra_partes,sw_id) "
-//                    + "VALUES (?,?,?,?,?)");
             sp.setString(1, nombre);
             sp.setString(2, version);
             sp.setString(3, descrip);
@@ -72,7 +69,6 @@ public class ExtrasDB extends DBObject{
             System.err.println("Write >> Extras :: " + ex.getLocalizedMessage());
         }
     }
-
 
     @Override
     public String executeSearch() {
@@ -138,7 +134,7 @@ public class ExtrasDB extends DBObject{
         return exDB;
     }
 
-        @Override
+    @Override
     public void executeDelete() {
         try {
 
@@ -155,7 +151,7 @@ public class ExtrasDB extends DBObject{
     public void deleteAllExtras(){
         try {
 
-            if(conn.isClosed())
+            if(conn == null || conn.isClosed())
                 connect();
 
             executeDeleteAll();

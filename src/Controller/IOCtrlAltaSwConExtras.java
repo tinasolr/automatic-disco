@@ -29,7 +29,6 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
     private final ExtrasCtrl exCtrl = new ExtrasCtrl();
     private final SoftwareDB swDB = new SoftwareDB();
     private List<String> sistOperativos = new ArrayList<>();
-    private IOCtrlConsMasivaSw consMas;
 
     @FXML  private Label lblNombre;
     @FXML  private Label lblVersion;
@@ -49,7 +48,6 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
     @FXML  private TableColumn<Extras, String> colPartes;
     @FXML  private TableColumn<Extras, String> colDescrip;
     @FXML  private Button btnFinalizar;
-    @FXML  private Label lblTituloSw;
     @FXML  private Label lblNombreSw;
     @FXML  private Label lblVersionSw;
     @FXML  private Label lblSistOpSw;
@@ -59,21 +57,31 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
     @FXML  private ListView<String> lstSistemasOp;
     @FXML  private Button btnAgregarSo;
     @FXML  private Button btnQuitarSo;
-    @FXML  private Label lblTituloSw1;
-    @FXML  private AnchorPane panelSuperior;
-    @FXML  private AnchorPane panelInferior;
+    @FXML  private Pane panelSuperior;
+    @FXML  private Pane panelInferior;
     @FXML  private Button btnCancelar;
     @FXML  private VBox vboxSw;
+    @FXML  private TitledPane swPane;
+    @FXML  private TitledPane extrasPane;
+    @FXML  private ScrollPane scrollPane;
+    @FXML  private BorderPane bpSoftware;
+    @FXML  private BorderPane bpExtras;
 
-    public IOCtrlAltaSwConExtras(){
-        swCtrl.cargarSoftware();
-    }
-    public IOCtrlAltaSwConExtras(int codigo){
-        swCtrl.cargarSoftware();
-        this.codigoSW = codigo;
-        this.sw = swCtrl.findSoftware(codigo);
+    /*********************Initialize Controller******************************/
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+        SistOpDB so = new SistOpDB();
+        List<SistOpDB> sos = so.read("SistOperativos");
+        if(!cmbSos.getItems().isEmpty())
+            cmbSos.getItems().clear();
+        sos.forEach((x) -> { cmbSos.getItems().add(x.getNombre()); });
+        new AutoCompleteComboBoxListener<>(cmbSos);
+        loadTable();
     }
 
+    /********************JAVA FX FUNCTIONS**********************************/
     @FXML
     private void agregarExtra(ActionEvent event) {
         //VALIDAR INGRESO POR PANTALLA
@@ -90,54 +98,18 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
                     if(!duplicateEx(nuevo)){
                         tblExtras.getItems().add(nuevo);
                         clearFields();
-                    }else {popUp("Ya se encuentra ingresado.");}
-                }else{ popUp("Ingrese un número de partes.");}
-            }else{ popUp("Ingresar un número de versión válido.");}
-        }else{ popUp("Rellenar espacios vacios y volver a intentar. ");}
+                    }else {popUpError("Ya se encuentra ingresado.");}
+                }else{ popUpError("Ingrese un número de partes.");}
+            }else{ popUpError("Ingresar un número de versión válido.");}
+        }else{ popUpError("Rellenar espacios vacios y volver a intentar. ");}
 
-    }
-
-     private boolean duplicateEx(Extras xx){
-        if (tblExtras.getItems().stream().anyMatch((e) -> (e.getNombre().equalsIgnoreCase(xx.getNombre())
-                && e.getVersion().equalsIgnoreCase(xx.getVersion())
-                && e.getPartes()==xx.getPartes()
-                && e.getDescrip().equalsIgnoreCase(xx.getDescrip())))) {
-            return true;
-        }
-
-
-        return false;
-    }
-
-    @FXML
-    private void cancelar(ActionEvent event) {
-        Stage x = (Stage) vboxSw.getScene().getWindow();
-        x.close();
-    }
-
-    public void popUp(String texto){
-        Alert alert = new Alert(AlertType.ERROR, texto);
-            alert.showAndWait();
-
-            if (alert.getResult() == ButtonType.OK) {
-                alert.close();
-            }
-    }
-
-    public void popUpExito(String texto){
-        Alert alert = new Alert(AlertType.INFORMATION, texto);
-            alert.showAndWait();
-
-            if (alert.getResult() == ButtonType.OK) {
-                alert.close();
-            }
     }
 
     @FXML
     private void quitarExtra(ActionEvent event) {
         Extras eliminar = tblExtras.getSelectionModel().getSelectedItem();
         if(eliminar==null)
-            popUp("Seleccione un extra a eliminar");
+            popUpError("Seleccione un extra a eliminar");
         else{
             tblExtras.getItems().remove(eliminar);
         }
@@ -149,21 +121,39 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
     }
 
     @FXML
+    private void agregarSistemaOperativo(ActionEvent event) {
+
+        boolean agregarEnLista = true;
+        if(lstSistemasOp.getItems().isEmpty())
+            lstSistemasOp.getItems().add(cmbSos.getSelectionModel().getSelectedItem());
+        else {
+            for(int x=0;x<lstSistemasOp.getItems().size();x++)
+                if(cmbSos.getSelectionModel().getSelectedItem().equals((String)lstSistemasOp.getItems().get(x)))
+                    agregarEnLista=false;
+
+            if(agregarEnLista==true)
+                lstSistemasOp.getItems().add(cmbSos.getSelectionModel().getSelectedItem());
+        }
+    }
+
+    @FXML
+    private void quitarSistemaOperativo(ActionEvent event) {
+        if(lstSistemasOp.getItems().size()>0)
+            lstSistemasOp.getItems().removeAll(lstSistemasOp.getSelectionModel().getSelectedItems());
+    }
+
+    @FXML
     private void finalizar(ActionEvent event) {
 
-        //Verificar que los datos ingresados sean válidos o mandar popUp(textoError)
-        //Armar un objeto software con el nombre, versión y la lista de sistOperativos
         String nombre = txtNombreSw.getText();
         String version = txtVersionSw.getText();
         Software soft = new Software();
 
         int cantSO = lstSistemasOp.getItems().size(), cod;
 
-
         if(valIngresoSoft(nombre, version,cantSO)){
             if(version.matches("[0-9]+(\\.[0-9]+)*")){
                     if(cantSO>0){
-
 
                         //GuardaSW en BD
                         swCtrl.altaSoftware(nombre, version);
@@ -172,10 +162,11 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
                         //GuardaSO en BD
                         swDB.setNombre(nombre);
                         swDB.setVersion(version);
-                        cod= Integer.parseInt(swDB.executeSearch());
+                        swDB.connect();
+                        cod = Integer.parseInt(swDB.executeSearch());
                         List<String> sistOp = new ArrayList<>();
                         for(String x : lstSistemasOp.getItems()){
-                            swCtrl.agregarSoDeSw(cod, x);
+                           swCtrl.agregarSoDeSw(cod, x);
                            sistOp.add(x);
                         }
                         soft.setSistOp(sistOp);
@@ -183,7 +174,6 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
                         List<Extras> a = tblExtras.getItems();
                         for(Extras e : a)
                         {
-                            //sw.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
                             exCtrl.altaExtra(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes(), cod);
                             soft.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
                          }
@@ -193,57 +183,53 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
                         popUpExito("Software ingresado con éxito.");
                         changeBackToConsultaSw();
 
-                    }else{ popUp("Ingrese el sistema operativo.");}
-                }else{ popUp("Ingresar un número de versión válido.");}
-            }else{ popUp("Rellenar espacios vacios y volver a intentar. ");}
+                    }else{ popUpError("Ingrese el sistema operativo.");}
+                }else{ popUpError("Ingresar un número de versión válido.");}
+            }else{ popUpError("Rellenar espacios vacios y volver a intentar. ");}
 
     }
 
-    /*FALTA AGREGAR SISTEMA OPERATIVO A PARTIR DE LA SELECCION DE LA COMBOBOX*/
     @FXML
-    private void agregarSistemaOperativo(ActionEvent event) {
-        //Tomar selección de la combobox
-        //agregar selección a la ListView
-        //agregar selección a sistOperativos para poder después cargarlo con el software. Esto se soluciono agregando los items de la lista en un array de String cuando se apreta el boton finalizar. Mas Optimo
-
-        //String aux = cmbSos.getSelectionModel().getSelectedItem();
-        boolean agregarEnLista = true;
-
-
-
-        //if(cmbSos.getSelectionModel().getSelectedItem().toString()!="null")
-        //{
-            if(lstSistemasOp.getItems().size()==0) lstSistemasOp.getItems().add(cmbSos.getSelectionModel().getSelectedItem());
-            else
-            {
-                //Averiguo si el SO a agregar no se encuentra en lista
-                for(int x=0;x<lstSistemasOp.getItems().size();x++)
-                {
-                    if(cmbSos.getSelectionModel().getSelectedItem().equals((String)lstSistemasOp.getItems().get(x))) agregarEnLista=false;
-                    System.out.println(""+cmbSos.getSelectionModel().getSelectedItem()+"-"+(String)lstSistemasOp.getItems().get(x)+"");
-                }
-                //Si no esta en la lista, lo agrego
-                if(agregarEnLista==true) lstSistemasOp.getItems().add(cmbSos.getSelectionModel().getSelectedItem());
-            }
-        //}
+    private void cancelar(ActionEvent event) {
+        Stage x = (Stage) vboxSw.getScene().getWindow();
+        x.close();
     }
 
-    /*FALTA AGREGAR SISTEMA OPERATIVO A PARTIR DE LA SELECCION DE LA COMBOBOX*/
-    @FXML
-    private void quitarSistemaOperativo(ActionEvent event) {
-        //Tomar selección de la ListView
-        //Removerla de la listview
-        //remover selección de sistOperativos ---- Esto se soluciono agregando los items de la lista en un array de String cuando se apreta el boton finalizar. Mas Optimo
-
-        //lstSistemasOp.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
-        if(lstSistemasOp.getItems().size()>0) lstSistemasOp.getItems().removeAll(lstSistemasOp.getSelectionModel().getSelectedItems());
-
-    }
     @FXML
     private void ComboBoxActivo(ActionEvent event)
     {
-        if(cmbSos.getSelectionModel().getSelectedItem()!=null) btnAgregarSo.setDisable(false);
+        if(cmbSos.getSelectionModel().getSelectedItem()!=null)
+            btnAgregarSo.setDisable(false);
+    }
+
+    /********************OTHER FUNCTIONS**********************************/
+
+     private boolean duplicateEx(Extras xx){
+        if (tblExtras.getItems().stream().anyMatch((e) -> (e.getNombre().equalsIgnoreCase(xx.getNombre())
+                && e.getVersion().equalsIgnoreCase(xx.getVersion())
+                && e.getPartes()==xx.getPartes()
+                && e.getDescrip().equalsIgnoreCase(xx.getDescrip())))) {
+            return true;
+        }
+        return false;
+    }
+
+    public void popUpError(String texto){
+        Alert alert = new Alert(AlertType.ERROR, texto);
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+            alert.close();
+        }
+    }
+
+    public void popUpExito(String texto){
+        Alert alert = new Alert(AlertType.INFORMATION, texto);
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+            alert.close();
+        }
     }
 
     public void changeBackToConsultaSw(){
@@ -257,28 +243,11 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
         }
     }
 
-    @Override
-
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-
-        SistOpDB so = new SistOpDB();
-        List<SistOpDB> sos = so.read("SistOperativos");
-        if(!cmbSos.getItems().isEmpty())
-            cmbSos.getItems().clear();
-        sos.forEach((x) -> { cmbSos.getItems().add(x.getNombre()); });
-        new AutoCompleteComboBoxListener<>(cmbSos);
-        loadTable();
-
-    }
-
     public void loadTable(){
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colVersion.setCellValueFactory(new PropertyValueFactory<>("version"));
         colPartes.setCellValueFactory(new PropertyValueFactory<>("partes"));
         colDescrip.setCellValueFactory(new PropertyValueFactory<>("descrip"));
-        if(sw!=null && !sw.getExtras().isEmpty())
-            tblExtras.getItems().setAll(sw.getExtras());
     }
 
     public void clearFields(){
@@ -304,6 +273,16 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
         return res;
     }
 
+    public void adjustHeightAndWidth(double height, double width){
+        vboxSw.setPrefWidth(width);
+        vboxSw.setPrefHeight(height);
+        bpSoftware.setPrefSize(swPane.getWidth(), swPane.getHeight());
+        bpExtras.setPrefSize(extrasPane.getWidth(), extrasPane.getHeight());
+        panelSuperior.setPrefSize(bpSoftware.getWidth(), bpSoftware.getHeight());
+        panelInferior.setPrefSize(bpExtras.getWidth(), bpExtras.getHeight());
+    }
+
+    /*******************Getters & Setters**********************************/
 
     public Label getLblNombre() {
         return lblNombre;
@@ -449,14 +428,6 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
         this.btnFinalizar = btnFinalizar;
     }
 
-    public Label getLblTituloSw() {
-        return lblTituloSw;
-    }
-
-    public void setLblTituloSw(Label lblTituloSw) {
-        this.lblTituloSw = lblTituloSw;
-    }
-
     public Label getLblNombreSw() {
         return lblNombreSw;
     }
@@ -529,27 +500,19 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
         this.btnQuitarSo = btnQuitarSo;
     }
 
-    public Label getLblTituloSw1() {
-        return lblTituloSw1;
-    }
-
-    public void setLblTituloSw1(Label lblTituloSw1) {
-        this.lblTituloSw1 = lblTituloSw1;
-    }
-
-    public AnchorPane getPanelSuperior() {
+    public Pane getPanelSuperior() {
         return panelSuperior;
     }
 
-    public void setPanelSuperior(AnchorPane panelSuperior) {
+    public void setPanelSuperior(Pane panelSuperior) {
         this.panelSuperior = panelSuperior;
     }
 
-    public AnchorPane getPanelInferior() {
+    public Pane getPanelInferior() {
         return panelInferior;
     }
 
-    public void setPanelInferior(AnchorPane panelInferior) {
+    public void setPanelInferior(Pane panelInferior) {
         this.panelInferior = panelInferior;
     }
 
@@ -584,4 +547,62 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
     public void setMainWindow(BorderPane mainWindow) {
         this.mainWindow = mainWindow;
     }
+
+    public Button getBtnCancelar() {
+        return btnCancelar;
+    }
+
+    public void setBtnCancelar(Button btnCancelar) {
+        this.btnCancelar = btnCancelar;
+    }
+
+    public VBox getVboxSw() {
+        return vboxSw;
+    }
+
+    public void setVboxSw(VBox vboxSw) {
+        this.vboxSw = vboxSw;
+    }
+
+    public TitledPane getSwPane() {
+        return swPane;
+    }
+
+    public void setSwPane(TitledPane swPane) {
+        this.swPane = swPane;
+    }
+
+    public TitledPane getExtrasPane() {
+        return extrasPane;
+    }
+
+    public void setExtrasPane(TitledPane extrasPane) {
+        this.extrasPane = extrasPane;
+    }
+
+    public ScrollPane getScrollPane() {
+        return scrollPane;
+    }
+
+    public void setScrollPane(ScrollPane scrollPane) {
+        this.scrollPane = scrollPane;
+    }
+
+    public BorderPane getBpSoftware() {
+        return bpSoftware;
+    }
+
+    public void setBpSoftware(BorderPane bpSoftware) {
+        this.bpSoftware = bpSoftware;
+    }
+
+    public BorderPane getBpExtras() {
+        return bpExtras;
+    }
+
+    public void setBpExtras(BorderPane bpExtras) {
+        this.bpExtras = bpExtras;
+    }
+
+
 }

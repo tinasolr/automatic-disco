@@ -28,7 +28,7 @@ public class MediosDB extends DBObject{
     private String ubic;
     private boolean enDepo;
 
-    public MediosDB() { connect(); }
+    public MediosDB() { }
 
     public MediosDB(String id, int formid, boolean caja, String imagen, boolean manual, String nombre, String observ, int partes, int origen) {
         this.id = id;
@@ -47,8 +47,7 @@ public class MediosDB extends DBObject{
         List<MediosDB> objDB = new ArrayList<>();
         List<String> ids = new ArrayList<>();
         try {
-
-            if(conn.isClosed())
+            if(conn == null || conn.isClosed())
                 connect();
 
             res = instr.executeQuery("Select medio_id from `medios_software` AS s WHERE s.sw_id = " + sw_id);

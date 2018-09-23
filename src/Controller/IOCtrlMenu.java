@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 import java.util.logging.*;
+import javafx.beans.value.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -50,12 +51,16 @@ public class IOCtrlMenu implements Initializable {
     @FXML    private TextField txtFiltrar;
     @FXML    private Button btnFiltrar;
     @FXML    private BorderPane mainWindow;
-    @FXML
-    private MenuItem ABMFormatos;
-    @FXML
-    private MenuItem ABMUbicaciones;
-    @FXML
-    private MenuItem ABMSistemaOperat;
+    @FXML    private MenuItem ABMFormatos;
+    @FXML    private MenuItem ABMUbicaciones;
+    @FXML    private MenuItem ABMSistemaOperat;
+
+    /*** Initializes the controller class.************************************/
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
+    }
+    /***************JAVAFX FUNCTIONS*******************************************/
 
     @FXML
     private void editarFormato(ActionEvent event) {
@@ -108,27 +113,6 @@ public class IOCtrlMenu implements Initializable {
         }
     }
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-
-    }
-
-    public void changeScene(String url){
-        try {
-            FXMLLoader loader = new FXMLLoader(IOCtrlMenu.class.getResource("/Vista/Menu.fxml"));
-
-            Scene scene = new Scene(loader.load(getClass().getResource(url)));
-            swteca.SWTeca.primaryStage.setScene(scene);
-            swteca.SWTeca.primaryStage.show();
-
-        } catch (IOException iOException) {
-            System.err.println(iOException.getLocalizedMessage());
-        }
-    }
-
     @FXML
     private void handleChangeView(ActionEvent event) {
         try {
@@ -146,15 +130,45 @@ public class IOCtrlMenu implements Initializable {
             Node x = loader.load();
             if(menuItemID.equalsIgnoreCase("AltaSoftware")){
                 IOCtrlAltaSwConExtras aw = (IOCtrlAltaSwConExtras)loader.getController();
-                System.out.println(aw);
                 aw.setMainWindow(mainWindow);
-            }
 
+                mainWindow.getScene().widthProperty().addListener(new ChangeListener<Number>() {
+                    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth, Number newSceneWidth) {
+                        System.out.println("Width: " + newSceneWidth);
+                        aw.adjustHeightAndWidth(aw.getVboxSw().getHeight(), newSceneWidth.doubleValue());
+                        aw.getVboxSw().autosize();
+                    }
+                });
+                 mainWindow.getScene().heightProperty().addListener(new ChangeListener<Number>() {
+                    @Override public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+                        System.out.println("Height: " + newSceneHeight);
+                        aw.adjustHeightAndWidth(newSceneHeight.doubleValue(), aw.getVboxSw().getWidth());
+                        aw.getVboxSw().autosize();
+                    }
+                });
+            }else if(menuItemID.equalsIgnoreCase("AltaMedio")){
+                IOCtrlAltaMedio a = (IOCtrlAltaMedio)loader.getController();
+                a.setMainWindow(mainWindow);
+            }
             mainWindow.setCenter(x);
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println(e.getLocalizedMessage());
+        }
+    }
+
+    /************************OTHER FUNCTIONS*********************************/
+
+    public void changeScene(String url){
+        try {
+            FXMLLoader loader = new FXMLLoader(IOCtrlMenu.class.getResource("/Vista/Menu.fxml"));
+
+            Scene scene = new Scene(loader.load(getClass().getResource(url)));
+            swteca.SWTeca.primaryStage.setScene(scene);
+            swteca.SWTeca.primaryStage.show();
+
+        } catch (IOException iOException) {
+            System.err.println(iOException.getLocalizedMessage());
         }
     }
 

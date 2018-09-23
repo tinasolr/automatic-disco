@@ -11,14 +11,14 @@
 <AnchorPane id="AnchorPane" fx:id="abmUbicaciones" prefHeight="511.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IOCtrlABMUbicaciones">
    <children>
       <Button fx:id="btnQuitar" disable="true" layoutX="351.0" layoutY="392.0" mnemonicParsing="false" onAction="#quitar" prefHeight="25.0" prefWidth="103.0" text="Quitar" />
-      <TextField fx:id="txtCodigo" layoutX="116.0" layoutY="270.0" onKeyTyped="#keyTyped" prefHeight="25.0" prefWidth="233.0" promptText="Ingresar código..." />
+      <TextField fx:id="txtCodigo" layoutX="116.0" layoutY="270.0" prefHeight="25.0" prefWidth="233.0" promptText="Ej. AA02-320, AJ04" />
       <Button fx:id="btnAgregar" disable="true" layoutX="141.0" layoutY="392.0" mnemonicParsing="false" onAction="#agregar" prefHeight="25.0" prefWidth="103.0" text="Agregar" />
       <Button fx:id="btnAceptar" layoutX="240.0" layoutY="452.0" mnemonicParsing="false" onAction="#aceptar" prefHeight="25.0" prefWidth="114.0" text="Aceptar" />
       <TextArea fx:id="txtDescripcion" layoutX="25.0" layoutY="312.0" prefHeight="65.0" prefWidth="547.0" promptText="Escriba una corta descripción" />
       <TableView fx:id="tblUbicaciones" layoutX="27.0" layoutY="26.0" prefHeight="227.0" prefWidth="547.0">
         <columns>
-          <TableColumn prefWidth="123.9999942779541" text="Codigo" />
-          <TableColumn prefWidth="406.66661071777344" text="Descripcion" />
+          <TableColumn fx:id="colCodigo" prefWidth="123.9999942779541" text="Codigo" />
+          <TableColumn fx:id="colDescripcion" prefWidth="406.66661071777344" text="Descripcion" />
         </columns>
       </TableView>
       <Label fx:id="lblCodigo" layoutX="32.0" layoutY="274.0" prefHeight="17.0" prefWidth="73.0" text="Codigo:" />

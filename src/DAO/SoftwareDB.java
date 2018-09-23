@@ -21,7 +21,7 @@ public class SoftwareDB extends DBObject{
     private String nuevoVers;
     private String soNom;
 
-    public SoftwareDB() { connect();  }
+    public SoftwareDB() { }
 
     public SoftwareDB(int codigo, String nombre, String version) {
         this.codigo = codigo;
@@ -42,7 +42,7 @@ public class SoftwareDB extends DBObject{
             soft = new SoftwareDB(codigo, nombre, version);
 
         } catch (SQLException ex) {
-            System.err.println("Problema en la lectura de una fila de la tabla Software :: " + ex.getLocalizedMessage());
+            System.err.println("Read >> Software :: " + ex.getLocalizedMessage());
         }
 
         return soft;
@@ -64,7 +64,7 @@ public class SoftwareDB extends DBObject{
             sp.executeUpdate();
 
         } catch (SQLException ex) {
-            System.err.println("Problema en la escritura de una fila de la tabla Software :: " + ex.getLocalizedMessage());
+            System.err.println("Write >> Software :: " + ex.getLocalizedMessage());
         }
     }
 
@@ -80,7 +80,7 @@ public class SoftwareDB extends DBObject{
             sp.executeUpdate();
 
         } catch (SQLException ex) {
-            System.err.println("Problema en la modificacion de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
+            System.err.println("Update >> Software :: " + ex.getLocalizedMessage());
         }
     }
 
@@ -96,8 +96,7 @@ public class SoftwareDB extends DBObject{
             sp.executeUpdate();
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
-            System.err.println("Problema en la eliminación de una fila de la tabla Extras :: " + ex.getLocalizedMessage());
+            System.err.println("Delete >> Software :: " + ex.getLocalizedMessage());
         }
     }
 
@@ -107,8 +106,7 @@ public class SoftwareDB extends DBObject{
         ResultSet res = null;
         try {
 
-            //CallableStatement storedProc = conn.prepareCall("{call find_softwareid(<nombre de software>, <version de software>)}");
-            CallableStatement storedProc = conn.prepareCall("{call find_softwareid(?,?)}");
+            CallableStatement storedProc = conn.prepareCall("{call get_idsoftware(?,?)}");
             storedProc.setString(1, nombre);
             storedProc.setString(2, version);
             res = storedProc.executeQuery();
@@ -118,8 +116,7 @@ public class SoftwareDB extends DBObject{
 
               res.close();
         } catch (SQLException ex) {
-            System.err.println("Problema en la busqueda de la tabla Software :: " + ex.getLocalizedMessage());
-            ex.printStackTrace();
+            System.err.println("Search ID >> Software :: " + ex.getLocalizedMessage());
         }
         return result;
 
@@ -129,7 +126,7 @@ public class SoftwareDB extends DBObject{
         ResultSet res = null;
         try {
 
-            if(conn.isClosed())
+            if(conn == null || conn.isClosed())
                 connect();
 
             res = instr.executeQuery("SELECT so_id FROM sistoperativos WHERE `so_nom` = '" + soNom + "'");
@@ -144,7 +141,7 @@ public class SoftwareDB extends DBObject{
             System.out.println("Connection closed.");
 
         } catch (SQLException e) {
-            System.out.println("BDObject delete() :: " + e.getMessage());
+            System.out.println("deleteSOSw() :: " + e.getMessage());
         }
     }
 
@@ -152,7 +149,7 @@ public class SoftwareDB extends DBObject{
         ResultSet res = null;
         try {
 
-            if(conn.isClosed())
+            if(conn == null || conn.isClosed())
                 connect();
 
 //            CallableStatement ps = conn.prepareCall("{call search_soid_byname(?)}");
@@ -173,8 +170,7 @@ public class SoftwareDB extends DBObject{
             System.out.println("Connection closed.");
 
         } catch (SQLException e) {
-            System.out.println("BDObject inserSOSw() :: " + e.getMessage());
-            e.printStackTrace();
+            System.out.println("insertSOSw() :: " + e.getMessage());
         }
     }
 

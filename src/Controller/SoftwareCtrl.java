@@ -19,8 +19,8 @@ public class SoftwareCtrl {
     private Software sw;
     private SoftwareDB swDB;
     private MediosCtrl medCtrl = new MediosCtrl();
-    private MediosDB medDB = new MediosDB();
-    private SistOpDB soDB = new SistOpDB();
+    private MediosDB medDB;
+    private SistOpDB soDB;
     private ExtrasCtrl exCtrl = new ExtrasCtrl();
     private ExtrasDB extrasDB;
 
@@ -29,6 +29,7 @@ public class SoftwareCtrl {
     //INGRESO DE SOFTWARE
     public void cargarSoftware(){
         swDB  = new SoftwareDB();
+        swDB.connect();
         sws.clear();
         List<SoftwareDB> swdb = swDB.read("Software");
 
@@ -38,6 +39,8 @@ public class SoftwareCtrl {
             String nombre = s.getNombre();
             String version = s.getVersion();
             //BUSCAR SO
+            soDB = new SistOpDB();
+            soDB.connect();
             List<SistOpDB> sistOp = soDB.sistopDeSoftware(codigo);
             List<String> so = new ArrayList<>();
             if(!sistOp.isEmpty()){
@@ -45,6 +48,8 @@ public class SoftwareCtrl {
                     so.add(si.getNombre());
             }
             //BUSCAR MEDIOS
+            medDB = new MediosDB();
+            medDB.connect();
             List<MediosDB> m = medDB.mediosDeSoftware(codigo);
             List<Medios> medios = new ArrayList<>();
             if(!m.isEmpty()){
@@ -52,10 +57,10 @@ public class SoftwareCtrl {
                 medios = medCtrl.getMedSw();
             }
             //CREAR SOFTWARE
-//            List<Medios> medios = new ArrayList<>();
             Software soft = new Software(codigo, nombre, so, version, medios);
             //AGREGAR EXTRAS
             extrasDB = new ExtrasDB();
+            extrasDB.connect();
             List<ExtrasDB> ex = extrasDB.extrasDeSoftware(codigo);
             for(ExtrasDB x : ex){
                 soft.setExtras(x.getNombre(),x.getVersion(),x.getDescrip(),x.getPartes());
@@ -75,6 +80,7 @@ public class SoftwareCtrl {
 
     public void eliminarSoDeSw(int codigo, String sistOp){
         swDB  = new SoftwareDB();
+        swDB.connect();
         swDB.setCodigo(codigo);
         swDB.setSoNom(sistOp);
         swDB.deleteSOSw();
@@ -82,6 +88,7 @@ public class SoftwareCtrl {
 
     public void agregarSoDeSw(int codigo, String sistOp){
         swDB  = new SoftwareDB();
+        swDB.connect();
         swDB.setCodigo(codigo);
         swDB.setSoNom(sistOp);
         swDB.insertSOSw();
@@ -89,6 +96,7 @@ public class SoftwareCtrl {
 
      public void altaSoftware(String nombre, String version){
         swDB  = new SoftwareDB();
+        swDB.connect();
         swDB.setNombre(nombre);
         swDB.setVersion(version);
         swDB.write();
@@ -96,6 +104,7 @@ public class SoftwareCtrl {
 
      public void modSoftware(String nombre, String version, String newNom, String newVers){
         swDB  = new SoftwareDB();
+        swDB.connect();
         swDB.setNombre(nombre);
         swDB.setNuevoNom(newNom);
         swDB.setVersion(version);
@@ -105,6 +114,7 @@ public class SoftwareCtrl {
 
      public void elimSoftware(int codigo){
         swDB  = new SoftwareDB();
+        swDB.connect();
         swDB.setCodigo(codigo);
         swDB.delete();
     }

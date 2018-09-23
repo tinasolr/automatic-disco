@@ -22,7 +22,7 @@ public class SistOpDB extends DBObject{
         this.nombre = nombre;
     }
 
-    public SistOpDB(){connect();}
+    public SistOpDB(){}
 
     public List<SistOpDB> sistopDeSoftware(int sw_id){
         ResultSet res = null;
@@ -31,7 +31,7 @@ public class SistOpDB extends DBObject{
 
         try {
 
-            if(conn.isClosed())
+            if(conn == null || conn.isClosed())
                 connect();
 
             res = instr.executeQuery("Select so_id from `SistOperativos_Software` AS s WHERE s.sw_id = " + sw_id);

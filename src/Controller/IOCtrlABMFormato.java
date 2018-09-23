@@ -22,9 +22,9 @@ import javafx.stage.*;
  *
  * @author tinar
  */
-public class IOCtrlABMFormato implements Initializable {
+public class IOCtrlABMFormato implements Initializable, EventHandler<KeyEvent> {
 
-    private boolean moveCaretToPos = false;
+    private List<String> formatosDB = new ArrayList<>();
     @FXML    private ListView<String> lstFormato;
     @FXML    private Button btnQuitar;
     @FXML    private Button btnAgregar;
@@ -32,44 +32,63 @@ public class IOCtrlABMFormato implements Initializable {
     @FXML    private TextField txtFormato;
     @FXML    private AnchorPane abmFormato;
 
-    @FXML
+    /*******Initializes the controller class.**********************************/
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        loadList();
+
+        txtFormato.setOnKeyPressed((KeyEvent t) -> {
+            if(txtFormato.getText().isEmpty())
+                btnAgregar.setDisable(true);
+            else
+                btnAgregar.setDisable(false);});
+        txtFormato.setOnKeyReleased(this);
+        lstFormato.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+    }
+
+    /****************************JAVAFX FUNCTIONS******************************/
+
+        @FXML
     private void quitar(ActionEvent event) {
-        if(!lstFormato.getSelectionModel().getSelectedItem().isEmpty()){
-            FormatoDB f = new FormatoDB();
-            f.setFormato(lstFormato.getSelectionModel().getSelectedItem());
-            f.delete();
-            loadList();
-            txtFormato.clear();
+        if(lstFormato.getSelectionModel().getSelectedItem()!=null){
+            if(popUpWarning("Está seguro de que desea eliminar el formato '" + lstFormato.getSelectionModel().getSelectedItem() + "'?")){
+
+                FormatoDB f = new FormatoDB();
+                f.connect();
+                f.setFormato(lstFormato.getSelectionModel().getSelectedItem());
+                f.delete();
+                formatosDB.remove(lstFormato.getSelectionModel().getSelectedItem());
+                loadList();
+                txtFormato.clear();
+
+            }
+        }else{
+            popUpError("Por favor, seleccione un formato a eliminar.");
         }
     }
 
     @FXML
-    private void keyTyped(KeyEvent event) {
-        if(txtFormato.getText().isEmpty()){
-            loadList();
-            btnAgregar.setDisable(true);
-        }else
-            btnAgregar.setDisable(false);
-
-        ObservableList<String> list = FXCollections.observableArrayList();
-        ObservableList<String> data = lstFormato.getItems();
-
-        for (int i=0; i< data.size(); i++)
-            if(data.get(i).toLowerCase().startsWith(txtFormato.getText().toLowerCase())
-                    || data.get(i).toLowerCase().contains(txtFormato.getText().toLowerCase()))
-                list.add(data.get(i));
-
-        lstFormato.setItems(list);
-        lstFormato.getSelectionModel().selectFirst();
-    }
-
-    @FXML
     private void agregar(ActionEvent event) {
-        FormatoDB f = new FormatoDB();
-        f.setFormato(txtFormato.getText());
-        f.write();
-        loadList();
-        txtFormato.clear();
+        if(txtFormato.getText().matches("[a-zA-Z][0-9a-zA-Z\\s]*")){
+            boolean dup = false;
+            for (String fo : formatosDB) {
+                if(fo.equalsIgnoreCase(txtFormato.getText())){
+                    dup=true;
+                    break;
+                }
+            }
+            if(!dup){
+                FormatoDB f = new FormatoDB();
+                f.connect();
+                f.setFormato(txtFormato.getText());
+                f.write();
+                formatosDB.add(txtFormato.getText());
+                txtFormato.clear();
+                btnAgregar.setDisable(true);
+                loadList();
+            }else{popUpError("Ese formato ya se encuenta ingresado. Por favor, ingrese otro.");}
+        }else{popUpError("Por favor, ingrese un formato válido.");}
     }
 
     @FXML
@@ -78,49 +97,98 @@ public class IOCtrlABMFormato implements Initializable {
         x.close();
     }
 
-    @FXML
-    private void keyReleased(KeyEvent event) {
-        if(null != event.getCode())
-            switch (event.getCode()) {
-                case UP:
-                    lstFormato.getSelectionModel().selectPrevious();
-                    return;
-                case DOWN:
-                    lstFormato.getSelectionModel().selectNext();
-                    return;
-                default:
-                    break;
-            }
+    /*********************OTHER FUNCTIONS*************************************/
 
-        if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT
-                || event.isControlDown() || event.getCode() == KeyCode.HOME
-                || event.getCode() == KeyCode.END || event.getCode() == KeyCode.TAB) {
-            return;
-        }
-
-    }
-
-    @FXML
-    private void enter(KeyEvent event) {
-        if(event.getCode() == KeyCode.ENTER)
-            agregar(new ActionEvent());
-    }
-
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        loadList();
+    public void getFormatosFromDB(){
+        FormatoDB fo = new FormatoDB();
+        fo.connect();
+        formatosDB = fo.read("Formatos");
     }
 
     public void loadList(){
-        FormatoDB fo = new FormatoDB();
-        List<String> formatos = fo.read("Formatos");
+        if(formatosDB.isEmpty())
+            getFormatosFromDB();
         if(!lstFormato.getItems().isEmpty())
             lstFormato.getItems().clear();
-        formatos.forEach((x) -> { lstFormato.getItems().add(x); });
-        if(formatos.size()>0)
+        lstFormato.getItems().setAll(formatosDB);
+        if(lstFormato.getItems().size()>0)
             btnQuitar.setDisable(false);
     }
+
+    public void loadList(String x){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        List<String> data = formatosDB;
+
+        for (String f : data)
+            if(f.toLowerCase().contains(x.toLowerCase()))
+                list.add(f);
+
+        lstFormato.getItems().setAll(list);
+        lstFormato.getSelectionModel().selectFirst();
+        if(lstFormato.getItems().size()>0)
+            btnQuitar.setDisable(false);
+        else
+           btnQuitar.setDisable(true);
+    }
+
+    public void popUpError(String texto){
+        Alert alert = new Alert(Alert.AlertType.ERROR, texto);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.OK) {
+                alert.close();
+            }
+    }
+
+    public boolean popUpWarning(String texto){
+        Alert alert = new Alert(Alert.AlertType.WARNING, texto, ButtonType.YES, ButtonType.NO);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                alert.close();
+                return true;
+            }
+        alert.close();
+        return false;
+    }
+
+    /**************EVENT HANDLERS*********************************************/
+
+    @Override
+    public void handle(KeyEvent event) {
+        if(event.getEventType().equals(KeyEvent.KEY_RELEASED) && event.getSource().equals(txtFormato)){
+            if(null == event.getCode()) {
+                if(txtFormato.getText().isEmpty()){
+                    loadList();
+                    btnAgregar.setDisable(true);
+                }else{
+                    loadList(txtFormato.getText());
+                    btnAgregar.setDisable(false);
+                }
+            } else switch (event.getCode()) {
+                case ENTER:
+                    agregar(new ActionEvent());
+                    break;
+                case BACK_SPACE:
+                case DELETE:
+                    if(txtFormato.getText().isEmpty()){
+                        loadList();
+                        btnAgregar.setDisable(true);
+                    }else{
+                        loadList(txtFormato.getText());
+                        btnAgregar.setDisable(false);
+                    }   break;
+                default:
+                    if(txtFormato.getText().isEmpty()){
+                        loadList();
+                        btnAgregar.setDisable(true);
+                    }else{
+                        loadList(txtFormato.getText());
+                        btnAgregar.setDisable(false);
+                    }   break;
+            }
+        }
+    }
+
 }
+

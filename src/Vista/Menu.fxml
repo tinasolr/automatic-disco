@@ -22,8 +22,8 @@
                   <Menu fx:id="arcNuevo" text="_Nuevo">
                     <items>
                       <MenuItem fx:id="AltaSoftware" onAction="#handleChangeView" text="So_ftware" />
-                        <MenuItem fx:id="AltaMedio" text="Me_dio" />
-                        <MenuItem fx:id="AltaCopia" text="Co_pia" />
+                        <MenuItem fx:id="AltaMedio" onAction="#handleChangeView" text="Me_dio" />
+                        <MenuItem fx:id="AltaCopia" onAction="#handleChangeView" text="Co_pia" />
                     </items>
                   </Menu>
                   <MenuItem fx:id="arcImportar" text="_Importar..." />
@@ -41,8 +41,8 @@
             <Menu fx:id="mVer" text="_Ver">
               <items>
                 <MenuItem fx:id="ConsultaSoftware" onAction="#handleChangeView" text="S_oftware" />
-                  <MenuItem fx:id="ConsultaMedios" text="M_edios" />
-                  <MenuItem fx:id="ConsultaCopias" text="_Copias" />
+                  <MenuItem fx:id="ConsultaMedios" onAction="#handleChangeView" text="M_edios" />
+                  <MenuItem fx:id="ConsultaCopias" onAction="#handleChangeView" text="_Copias" />
               </items>
             </Menu>
           <Menu fx:id="mAyuda" text="A_yuda">

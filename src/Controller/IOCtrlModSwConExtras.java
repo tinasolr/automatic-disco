@@ -58,12 +58,38 @@ public class IOCtrlModSwConExtras implements Initializable {
     @FXML    private Button btnElimTodos;
     @FXML    private Button btnFinalizar;
     @FXML    private Label lblTituloSw1;
+    @FXML    private VBox vboxSw;
+
     private IOCtrlConsMasivaSw consMas;
     private SoftwareCtrl swCtrl;
     private int codigoSw;
     private Software s;
     private ExtrasCtrl exCtrl;
 
+    /*********************Initialize Controller******************************/
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        swCtrl = new SoftwareCtrl();
+        if(swCtrl.getSws().isEmpty())
+            swCtrl.cargarSoftware();
+
+        s = swCtrl.findSoftware(codigoSw);
+        txtNombreSw.setText(s.getNombre());
+        txtVersionSw.setText(s.getVersion());
+        SistOpDB so = new SistOpDB();
+        List<SistOpDB> sos = so.read("SistOperativos");
+        if(!cmbSos.getItems().isEmpty())
+            cmbSos.getItems().clear();
+        if(!lstSistemasOp.getItems().isEmpty())
+            lstSistemasOp.getItems().clear();
+        sos.forEach((x) -> { cmbSos.getItems().add(x.getNombre()); });
+        List<SistOpDB> sos1 = so.sistopDeSoftware(codigoSw);
+        sos1.forEach((x) -> { lstSistemasOp.getItems().add(x.getNombre());});
+        new AutoCompleteComboBoxListener<>(cmbSos);
+        loadTable();
+    }
+
+    /***************************JAVAFX FUNCTIONS*******************************/
     @FXML
     private void agregarSistemaOperativo(ActionEvent event) {
         String so = cmbSos.getSelectionModel().getSelectedItem();
@@ -74,12 +100,6 @@ public class IOCtrlModSwConExtras implements Initializable {
         }
     }
 
-    private boolean duplicate(String sist){
-        if (lstSistemasOp.getItems().stream().anyMatch((x) -> (x.equalsIgnoreCase(sist)))) {
-            return true;
-        }
-        return false;
-    }
     @FXML
     private void quitarSistemaOperativo(ActionEvent event) {
         String so = lstSistemasOp.getSelectionModel().getSelectedItem();
@@ -87,33 +107,21 @@ public class IOCtrlModSwConExtras implements Initializable {
             swCtrl  = new SoftwareCtrl();
             swCtrl.eliminarSoDeSw(codigoSw, so);
             Software s = swCtrl.findSoftware(codigoSw);
-            if(lstSistemasOp.getItems().size()>0) lstSistemasOp.getItems().removeAll(lstSistemasOp.getSelectionModel().getSelectedItems());
-//            for(int i = 0 ; i < s.getSistOp().size(); i++)
-//                if(s.getSistOp().get(i).equalsIgnoreCase(so))
-//                    s.getSistOp().remove(i);
-//            lstSistemasOp.getItems().remove(so);
+            if(lstSistemasOp.getItems().size()>0)
+                lstSistemasOp.getItems().removeAll(lstSistemasOp.getSelectionModel().getSelectedItems());
         }
     }
 
     @FXML
     private void ComboBoxActivo(ActionEvent event) {
+        if(cmbSos.getSelectionModel().getSelectedItem()!=null)
+            btnAgregarSo.setDisable(false);
     }
 
     @FXML
     private void cancelar(ActionEvent event) {
-
-    }
-
-    public boolean popUpWarning(String texto){
-        Alert alert = new Alert(Alert.AlertType.WARNING, texto, ButtonType.YES, ButtonType.NO);
-            alert.showAndWait();
-
-            if (alert.getResult() == ButtonType.YES) {
-                alert.close();
-                return true;
-            }
-        alert.close();
-        return false;
+        Stage x = (Stage) vboxSw.getScene().getWindow();
+        x.close();
     }
 
     @FXML
@@ -134,53 +142,18 @@ public class IOCtrlModSwConExtras implements Initializable {
                         exCtrl = new ExtrasCtrl();
                         exCtrl.altaExtra(nombre, descrip, version, partes, codigoSw);
                         clearFields();
-                    }else {popUp("Ya se encuentra ingresado.");}
-                }else{ popUp("Ingrese un número de partes.");}
-            }else{ popUp("Ingresar un número de versión válido.");}
-        }else{ popUp("Rellenar espacios vacios y volver a intentar. ");}
+                    }else {popUpError("Ya se encuentra ingresado.");}
+                }else{ popUpError("Ingrese un número de partes.");}
+            }else{ popUpError("Ingresar un número de versión válido.");}
+        }else{ popUpError("Rellenar espacios vacios y volver a intentar. ");}
 
-    }
-
-    private boolean duplicateEx(Extras xx){
-        if (tblExtras.getItems().stream().anyMatch((e) -> (e.getNombre().equalsIgnoreCase(xx.getNombre())
-                && e.getVersion().equalsIgnoreCase(xx.getVersion())
-                && e.getPartes()==xx.getPartes()
-                && e.getDescrip().equalsIgnoreCase(xx.getDescrip()))))
-            return true;
-
-        return false;
-    }
-
-    public void popUp(String texto){
-        Alert alert = new Alert(Alert.AlertType.ERROR, texto);
-            alert.showAndWait();
-
-            if (alert.getResult() == ButtonType.OK) {
-                alert.close();
-            }
-    }
-
-    public boolean valIngresoExtra(String nombre, String version, String partes)
-    {
-        boolean res= true;
-
-        if(nombre.equals("")|| version.equals("")|| partes.equals(""))
-            res= false;
-        return res;
-    }
-
-    public void clearFields(){
-        txtNombre.setText("");
-        txtVersion.setText("");
-        txtDescripcion.setText("");
-        txtPartes.setText("");
     }
 
     @FXML
     private void quitarExtra(ActionEvent event) {
         Extras eliminar = tblExtras.getSelectionModel().getSelectedItem();
         if(eliminar==null)
-            popUp("Seleccione un extra a eliminar");
+            popUpError("Seleccione un extra a eliminar");
         else{
             if(popUpWarning("Está seguro de que desea eliminar: " + eliminar.getNombre() + "?")){
                 exCtrl = new ExtrasCtrl();
@@ -236,28 +209,8 @@ public class IOCtrlModSwConExtras implements Initializable {
         consMas.loadTable();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        swCtrl = new SoftwareCtrl();
-        if(swCtrl.getSws().isEmpty())
-            swCtrl.cargarSoftware();
-
-        s = swCtrl.findSoftware(codigoSw);
-        txtNombreSw.setText(s.getNombre());
-        txtVersionSw.setText(s.getVersion());
-        SistOpDB so = new SistOpDB();
-        List<SistOpDB> sos = so.read("SistOperativos");
-        if(!cmbSos.getItems().isEmpty())
-            cmbSos.getItems().clear();
-        if(!lstSistemasOp.getItems().isEmpty())
-            lstSistemasOp.getItems().clear();
-        sos.forEach((x) -> { cmbSos.getItems().add(x.getNombre()); });
-        List<SistOpDB> sos1 = so.sistopDeSoftware(codigoSw);
-        sos1.forEach((x) -> { lstSistemasOp.getItems().add(x.getNombre());});
-        new AutoCompleteComboBoxListener<>(cmbSos);
-        loadTable();
-    }
-
+    /***************************OTHER FUNCTIONS*****************************/
+    
     public void loadTable(){
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colVersion.setCellValueFactory(new PropertyValueFactory<>("version"));
@@ -267,6 +220,61 @@ public class IOCtrlModSwConExtras implements Initializable {
             tblExtras.getItems().setAll(s.getExtras());
     }
 
+    private boolean duplicate(String sist){
+        if (lstSistemasOp.getItems().stream().anyMatch((x) -> (x.equalsIgnoreCase(sist)))) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean duplicateEx(Extras xx){
+        if (tblExtras.getItems().stream().anyMatch((e) -> (e.getNombre().equalsIgnoreCase(xx.getNombre())
+                && e.getVersion().equalsIgnoreCase(xx.getVersion())
+                && e.getPartes()==xx.getPartes()
+                && e.getDescrip().equalsIgnoreCase(xx.getDescrip()))))
+            return true;
+
+        return false;
+    }
+
+    public void popUpError(String texto){
+        Alert alert = new Alert(Alert.AlertType.ERROR, texto);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.OK) {
+                alert.close();
+            }
+    }
+
+    public boolean popUpWarning(String texto){
+        Alert alert = new Alert(Alert.AlertType.WARNING, texto, ButtonType.YES, ButtonType.NO);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                alert.close();
+                return true;
+            }
+        alert.close();
+        return false;
+    }
+
+    public boolean valIngresoExtra(String nombre, String version, String partes)
+    {
+        boolean res= true;
+
+        if(nombre.equals("")|| version.equals("")|| partes.equals(""))
+            res= false;
+        return res;
+    }
+
+    public void clearFields(){
+        txtNombre.setText("");
+        txtVersion.setText("");
+        txtDescripcion.setText("");
+        txtPartes.setText("");
+    }
+
+    /*******************Getters & Setters************************************/
 
     public void setCodigoSw(int codigo) {
         this.codigoSw = codigo;

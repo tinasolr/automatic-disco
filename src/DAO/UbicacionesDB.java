@@ -7,6 +7,7 @@
 package DAO;
 
 import java.sql.*;
+import java.util.logging.*;
 
 /**
  *
@@ -93,6 +94,36 @@ public class UbicacionesDB extends DBObject {
     @Override
     public String executeSearch() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public boolean isDuplicate(String id){
+        try {
+
+            if(conn == null || conn.isClosed())
+                connect();
+
+            CallableStatement sp = conn.prepareCall("{CALL check_ubi_duplicates(?)}");
+
+            sp.setString(1, codUbi);
+
+            ResultSet r = sp.executeQuery();
+            r.first();
+
+            int q = r.getInt(1);
+            if(q>1)
+                return true;
+
+        } catch (SQLException e) {
+            System.out.println("BDObject write() :: " + e.getMessage());
+        }  finally{
+            try {
+                conn.close();
+                System.out.println("Connection closed.");
+            } catch (SQLException ex) {
+                Logger.getLogger(UbicacionesDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return false;
     }
 
     public String getCodUbi() {
