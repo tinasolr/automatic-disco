@@ -112,7 +112,7 @@ public class SoftwareDB extends DBObject{
             storedProc.setString(1, nombre);
             storedProc.setString(2, version);
             res = storedProc.executeQuery();
-            res.next();
+            res.first();
             int r = res.getInt(1);
             result = String.valueOf(r);
 
@@ -122,6 +122,7 @@ public class SoftwareDB extends DBObject{
             ex.printStackTrace();
         }
         return result;
+
     }
 
     public void deleteSOSw(){

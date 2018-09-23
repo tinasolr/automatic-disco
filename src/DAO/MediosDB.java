@@ -158,22 +158,77 @@ public class MediosDB extends DBObject{
 
     @Override
     public void executeWrite() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            CallableStatement sp = conn.prepareCall("{ call alta_medio (<{IN `medioID` VARCHAR(20)}>, <{IN `nombre` VARCHAR(30)}>, <{IN `partes` TINYINT}>, <{IN `manual` BOOLEAN}>, <{IN `caja` BOOLEAN}>, <{IN `imagen` VARCHAR(50)}>, <{IN `observ` VARCHAR(50)}>, <{IN `formID` TINYINT}>, <{IN `origenID` TINYINT}>);  }");
+            sp.setString(1, id);
+            sp.setString(2, nombre);
+            sp.setInt(3,partes);
+            sp.setBoolean(4,manual);
+            sp.setBoolean(5,caja);
+            sp.setString(6, imagen);
+            sp.setString(7, observ);
+            sp.setInt(8,formid);
+            sp.setInt(9,origen);
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Problema en la escritura de una fila de la tabla Medios :: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override
     public void executeUpdate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+
+            CallableStatement sp = conn.prepareCall("{call mod_medio (<{IN id VARCHAR(20)}>, <{IN nom VARCHAR(30)}>, <{IN partes TINYINT}>, <{IN manual BOOLEAN}>, <{IN caja BOOLEAN}>, <{IN imagen VARCHAR(50)}>, <{IN observ VARCHAR(50)}>, <{IN formid TINYINT}>, <{IN origenid TINYINT}>)}");
+            sp.setString(1, id);
+            sp.setString(2, nombre);
+            sp.setInt(3,partes);
+            sp.setBoolean(4,manual);
+            sp.setBoolean(5,caja);
+            sp.setString(6, imagen);
+            sp.setString(7, observ);
+            sp.setInt(8,formid);
+            sp.setInt(9,origen);
+            sp.executeUpdate();
+
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Update >> Medios :: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override
     public void executeDelete() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+     
+        try {
+            CallableStatement sp = conn.prepareCall("{call elim_medio (<{IN `id` VARCHAR(20)}>)    }");
+            sp.setString(1, id);
+            sp.executeUpdate();
+  
+        } catch (SQLException ex) {
+            System.err.println("Delete >> Medios :: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override
     public String executeSearch() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String result = null;
+        ResultSet res = null;
+        try {
+            CallableStatement sp = conn.prepareCall("{call find_medioid(?,?)}");
+            sp.setString(1, nombre);
+            res = sp.executeQuery();
+            res.first();
+            int r = res.getInt(1);
+            result = String.valueOf(r);
+            res.close();
+        } catch (SQLException ex) {
+            System.err.println("Problema en la busqueda de la tabla Medios :: " + ex.getLocalizedMessage());
+            ex.printStackTrace();
+        }
+        return result;
     }
 
 }
