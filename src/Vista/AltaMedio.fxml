@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IOCtrlAltaMedio">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IOCtrlAltaMedio">
    <children>
       <Accordion AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <panes>
@@ -34,9 +34,9 @@
                            <image>
                               <Image url="@/no-image-available.png" />
                            </image></ImageView>
-                        <RadioButton layoutX="97.0" layoutY="472.0" mnemonicParsing="false" text="Original" />
-                        <RadioButton layoutX="188.0" layoutY="472.0" mnemonicParsing="false" text="Mixto" />
-                        <RadioButton layoutX="260.0" layoutY="472.0" mnemonicParsing="false" text="Otros" />
+                        <RadioButton layoutX="140.0" layoutY="467.0" mnemonicParsing="false" text="Original" />
+                        <RadioButton layoutX="221.0" layoutY="467.0" mnemonicParsing="false" text="Mixto" />
+                        <RadioButton layoutX="291.0" layoutY="467.0" mnemonicParsing="false" text="Otros" />
                      </children>
                   </AnchorPane>
             </content>
