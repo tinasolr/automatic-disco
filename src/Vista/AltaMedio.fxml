@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -16,7 +17,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IOCtrlAltaMedio">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IOCtrlAltaMedio">
    <children>
       <Accordion AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <panes>
@@ -28,13 +29,14 @@
                         <TextField fx:id="txtNombre" layoutX="140.0" layoutY="419.0" prefHeight="25.0" prefWidth="200.0" />
                         <Label fx:id="lblCodigo" layoutX="50.0" layoutY="375.0" text="Codigo:" />
                         <Label fx:id="lblNombre" layoutX="50.0" layoutY="424.0" text="Nombre:" />
-                        <CheckBox layoutX="140.0" layoutY="470.0" mnemonicParsing="false" text="Original" />
                         <Label fx:id="lblImagen" layoutX="49.0" layoutY="29.0" text="Imagen" />
-                        <CheckBox layoutX="245.0" layoutY="470.0" mnemonicParsing="false" text="Mixto" />
                         <ImageView fx:id="image" fitHeight="300.0" fitWidth="300.0" layoutX="94.0" layoutY="47.0" onMouseClicked="#agregarImagen" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/no-image-available.png" />
                            </image></ImageView>
+                        <RadioButton layoutX="97.0" layoutY="472.0" mnemonicParsing="false" text="Original" />
+                        <RadioButton layoutX="188.0" layoutY="472.0" mnemonicParsing="false" text="Mixto" />
+                        <RadioButton layoutX="260.0" layoutY="472.0" mnemonicParsing="false" text="Otros" />
                      </children>
                   </AnchorPane>
             </content>
@@ -81,7 +83,7 @@
                         <Button fx:id="btnAgregar" layoutX="110.0" layoutY="240.0" mnemonicParsing="false" onMouseClicked="#agregar" prefHeight="27.0" prefWidth="80.0" text="Agregar v" />
                         <Button fx:id="btnQuitar" layoutX="258.0" layoutY="240.0" mnemonicParsing="false" onMouseClicked="#quitar" prefHeight="27.0" prefWidth="80.0" text="Quitar ^" />
                         <Label layoutX="28.0" layoutY="288.0" text="Software seleccionado:" />
-                        <Button fx:id="btnIngresar" layoutX="37.0" layoutY="467.0" mnemonicParsing="false" onMouseClicked="#ingresarMedio" prefHeight="27.0" prefWidth="161.0" text="Ingresar Medio" />
+                        <Button fx:id="btnIngresar" layoutX="37.0" layoutY="467.0" mnemonicParsing="false" onAction="#finalizar" onMouseClicked="#ingresarMedio" prefHeight="27.0" prefWidth="161.0" text="Ingresar Medio" />
                         <Button fx:id="btnCancelar" layoutX="243.0" layoutY="467.0" mnemonicParsing="false" onMouseClicked="#cancelar" prefHeight="27.0" prefWidth="161.0" text="Cancelar" />
                         <TextField fx:id="txtBusqueda" layoutX="108.0" layoutY="198.0" prefHeight="27.0" prefWidth="232.0" promptText="Ingresar software buscado" />
                      </children>

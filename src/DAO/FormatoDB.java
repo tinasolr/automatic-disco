@@ -82,7 +82,19 @@ public class FormatoDB extends DBObject {
 
     @Override
     public String executeSearch() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            CallableStatement sp = conn.prepareCall("{call find_formatoid(?)}");
+
+            sp.setString(1, formato);
+            ResultSet r = sp.executeQuery();
+            r.first();
+            int id = r.getInt(1);
+            return String.valueOf(id);
+
+        } catch (SQLException ex) {
+            System.err.println("Search ID >> Formatos :: " + ex.getLocalizedMessage());
+        }
+        return null;
     }
 
     public String getFormato() {
