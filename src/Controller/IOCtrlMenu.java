@@ -36,26 +36,58 @@ public class IOCtrlMenu implements Initializable {
     @FXML    private MenuItem ConsultaSoftware;
     @FXML    private Menu mAyuda;
     @FXML    private MenuItem ayAbout;
-    @FXML    private RadioButton rdbTodos;
-    @FXML    private ToggleGroup groupFiltrar;
-    @FXML    private RadioButton rdbCodigo;
-    @FXML    private RadioButton rdbSistOp;
-    @FXML    private RadioButton rdbNombre;
-    @FXML    private RadioButton rdbVersion;
     @FXML    private MenuItem AltaSoftware;
     @FXML    private MenuItem AltaMedio;
     @FXML    private MenuItem AltaCopia;
     @FXML    private MenuItem ConsultaMedios;
     @FXML    private MenuItem ConsultaCopias;
-    @FXML    private TextField txtFiltrar;
-    @FXML    private Button btnFiltrar;
     @FXML    private BorderPane mainWindow;
+    @FXML    private MenuItem ABMFormatos;
+    @FXML    private MenuItem ABMUbicaciones;
+    @FXML    private MenuItem ABMSistemaOperat;
+
+    /*** Initializes the controller class.************************************/
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+
+    }
+    /***************JAVAFX FUNCTIONS*******************************************/
+
     @FXML
-    private MenuItem ABMFormatos;
+    private void altaSoftware(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/AltaSoftware.fxml"));
+
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Software");
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     @FXML
-    private MenuItem ABMUbicaciones;
-    @FXML
-    private MenuItem ABMSistemaOperat;
+    private void altaMedio(ActionEvent event) {
+                try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/AltaMedio.fxml"));
+
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Medio de Almacenamiento");
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @FXML
     private void editarFormato(ActionEvent event) {
@@ -66,6 +98,7 @@ public class IOCtrlMenu implements Initializable {
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Formatos");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.sizeToScene();
             stage.show();
@@ -82,6 +115,7 @@ public class IOCtrlMenu implements Initializable {
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Ubicaciones");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.sizeToScene();
             stage.show();
@@ -100,6 +134,7 @@ public class IOCtrlMenu implements Initializable {
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Sistemas Operativos");
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.sizeToScene();
             stage.show();
@@ -108,13 +143,25 @@ public class IOCtrlMenu implements Initializable {
         }
     }
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    private void handleChangeView(ActionEvent event) {
+        try{
+            String menuItemID = ((MenuItem) event.getSource()).getId();
 
+            FXMLLoader loader = new FXMLLoader();
+
+            loader.setLocation(getClass().getResource("/Vista/" + menuItemID + ".fxml"));
+
+            Node x = loader.load();
+
+            mainWindow.setCenter(x);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    /************************OTHER FUNCTIONS*********************************/
 
     public void changeScene(String url){
         try {
@@ -127,44 +174,5 @@ public class IOCtrlMenu implements Initializable {
         } catch (IOException iOException) {
             System.err.println(iOException.getLocalizedMessage());
         }
-    }
-
-    @FXML
-    private void handleChangeView(ActionEvent event) {
-        try {
-            String menuItemID = ((MenuItem) event.getSource()).getId();
-
-            if(!menuItemID.matches("Consulta.*"))
-                disableSearchItems(true);
-            else
-                disableSearchItems(false);
-
-            FXMLLoader loader = new FXMLLoader();
-
-            loader.setLocation(getClass().getResource("/Vista/" + menuItemID + ".fxml"));
-
-            Node x = loader.load();
-            if(menuItemID.equalsIgnoreCase("AltaSoftware")){
-                IOCtrlAltaSwConExtras aw = (IOCtrlAltaSwConExtras)loader.getController();
-                System.out.println(aw);
-                aw.setMainWindow(mainWindow);
-            }
-
-            mainWindow.setCenter(x);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.err.println(e.getLocalizedMessage());
-        }
-    }
-
-    private void disableSearchItems(boolean x){
-        txtFiltrar.setDisable(x);
-        btnFiltrar.setDisable(x);
-        rdbCodigo.setDisable(x);
-        rdbNombre.setDisable(x);
-        rdbSistOp.setDisable(x);
-        rdbVersion.setDisable(x);
-        rdbTodos.setDisable(x);
     }
 }

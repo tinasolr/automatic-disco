@@ -29,13 +29,7 @@ public class AutoCompleteComboBoxListener<T> implements EventHandler<KeyEvent> {
         data = comboBox.getItems();
 
         this.comboBox.setEditable(true);
-        this.comboBox.setOnKeyPressed(new EventHandler<KeyEvent>() {
-
-            @Override
-            public void handle(KeyEvent t) {
-                comboBox.hide();
-            }
-        });
+        this.comboBox.setOnKeyPressed((KeyEvent t) -> {comboBox.hide(); });
         this.comboBox.setOnKeyReleased(AutoCompleteComboBoxListener.this);
     }
 

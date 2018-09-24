@@ -32,6 +32,24 @@ public class IOCtrlConsMasivaSw implements Initializable {
     @FXML    private MenuItem derEliminar;
 
     private SoftwareCtrl swCtrl;
+    @FXML
+    private TextField txtFiltrar;
+    @FXML
+    private RadioButton rdbTodos;
+    @FXML
+    private ToggleGroup groupFiltrar;
+    @FXML
+    private RadioButton rdbCodigo;
+    @FXML
+    private RadioButton rdbSistOp;
+    @FXML
+    private RadioButton rdbNombre;
+    @FXML
+    private RadioButton rdbVersion;
+    @FXML
+    private Button btnFiltrar;
+    @FXML
+    private BorderPane mainWindow;
 
     @FXML
     private void consIndividual(ActionEvent event) {
@@ -97,5 +115,15 @@ public class IOCtrlConsMasivaSw implements Initializable {
             }
         alert.close();
         return false;
+    }
+
+    private void disableSearchItems(boolean x){
+        txtFiltrar.setDisable(x);
+        btnFiltrar.setDisable(x);
+        rdbCodigo.setDisable(x);
+        rdbNombre.setDisable(x);
+        rdbSistOp.setDisable(x);
+        rdbVersion.setDisable(x);
+        rdbTodos.setDisable(x);
     }
 }

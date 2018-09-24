@@ -22,8 +22,9 @@ import javafx.stage.*;
  *
  * @author tinar
  */
-public class IOCtrlABMSistemaOperat implements Initializable {
+public class IOCtrlABMSistemaOperat implements Initializable, EventHandler<KeyEvent>  {
 
+    private List<String> soDB = new ArrayList<>();
     @FXML    private ListView<String> lstSistemaOperativo;
     @FXML    private Button btnQuitar;
     @FXML    private TextField txtSistOperativo;
@@ -31,65 +32,61 @@ public class IOCtrlABMSistemaOperat implements Initializable {
     @FXML    private Button btnAceptar;
     @FXML    private AnchorPane abmSistOperat;
 
-    @FXML
-    private void keyReleased(KeyEvent event) {
-        if(null != event.getCode())
-            switch (event.getCode()) {
-                case UP:
-                    lstSistemaOperativo.getSelectionModel().selectPrevious();
-                    return;
-                case DOWN:
-                    lstSistemaOperativo.getSelectionModel().selectNext();
-                    return;
-                default:
-                    break;
-            }
+    /****Initializes the controller class.**********************************/
 
-        if (event.getCode() == KeyCode.RIGHT || event.getCode() == KeyCode.LEFT
-                || event.isControlDown() || event.getCode() == KeyCode.HOME
-                || event.getCode() == KeyCode.END || event.getCode() == KeyCode.TAB) {
-            return;
-        }
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        loadList();
+        txtSistOperativo.setOnKeyPressed((KeyEvent t) -> {
+            if(txtSistOperativo.getText().isEmpty())
+                btnAgregar.setDisable(true);
+            else
+                btnAgregar.setDisable(false);
+        });
+        txtSistOperativo.setOnKeyReleased(this);
+        lstSistemaOperativo.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
+
+    /****************************JAVAFX FUNCTIONS******************************/
 
     @FXML
     private void quitar(ActionEvent event) {
-        if(!lstSistemaOperativo.getSelectionModel().getSelectedItem().isEmpty()){
-            SistOpDB f = new SistOpDB();
-            f.setNombre(lstSistemaOperativo.getSelectionModel().getSelectedItem());
-            f.delete();
-            loadList();
-            txtSistOperativo.clear();
-        }
-    }
-
-    @FXML
-    private void keyTyped(KeyEvent event) {
-         if(txtSistOperativo.getText().isEmpty()){
-            loadList();
-            btnAgregar.setDisable(true);
-        }else
-            btnAgregar.setDisable(false);
-
-          ObservableList<String> list = FXCollections.observableArrayList();
-        ObservableList<String> data = lstSistemaOperativo.getItems();
-
-        for (int i=0; i< data.size(); i++)
-            if(data.get(i).toLowerCase().startsWith(txtSistOperativo.getText().toLowerCase())
-                    || data.get(i).toLowerCase().contains(txtSistOperativo.getText().toLowerCase()))
-                list.add(data.get(i));
-
-        lstSistemaOperativo.setItems(list);
-        lstSistemaOperativo.getSelectionModel().selectFirst();
+        if(lstSistemaOperativo.getSelectionModel().getSelectedItem()!=null){
+            if(popUpWarning("Está seguro de que desea eliminar el sistema operativo '" + lstSistemaOperativo.getSelectionModel().getSelectedItem() + "'?")){
+                SistOpDB s = new SistOpDB();
+                s.connect();
+                s.setNombre(lstSistemaOperativo.getSelectionModel().getSelectedItem());
+                s.delete();
+                soDB.remove(lstSistemaOperativo.getSelectionModel().getSelectedItem());
+                loadList();
+                txtSistOperativo.clear();
+            }
+        }else{popUpError("Por favor, seleccione un sistema operativo a eliminar.");}
     }
 
     @FXML
     private void agregar(ActionEvent event) {
-        SistOpDB f = new SistOpDB();
-        f.setNombre(txtSistOperativo.getText());
-        f.write();
-        loadList();
-        txtSistOperativo.clear();
+        String sistemaOperativo = txtSistOperativo.getText();
+        if(sistemaOperativo.matches("[a-zA-Z][0-9a-zA-Z\\s]*")){
+            boolean dup = false;
+            if(soDB.isEmpty())
+                getSOFromDB();
+            for (String so : soDB)
+                if(so.equalsIgnoreCase(sistemaOperativo)){
+                    dup=true;
+                    break;
+                }
+            if(!dup){
+                SistOpDB s = new SistOpDB();
+                s.connect();
+                s.setNombre(sistemaOperativo);
+                s.write();
+                soDB.add(sistemaOperativo);
+                loadList();
+                txtSistOperativo.clear();
+                btnAgregar.setDisable(true);
+            }else{popUpError("Ese sistema operativo ya se encuenta ingresado. Por favor, ingrese otro.");}
+        }else{popUpError("Por favor, ingrese un sistema operativo válido.");}
     }
 
     @FXML
@@ -98,21 +95,82 @@ public class IOCtrlABMSistemaOperat implements Initializable {
         x.close();
     }
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        loadList();
+    /*********************OTHER FUNCTIONS*************************************/
+
+    public void getSOFromDB(){
+        SistOpDB so = new SistOpDB();
+        so.connect();
+        List<SistOpDB> sos = so.read("SistOperativos");
+        for(SistOpDB s : sos)
+            soDB.add(s.getNombre());
     }
 
     public void loadList(){
-        SistOpDB so = new SistOpDB();
-        List<SistOpDB> sos = so.read("SistOperativos");
+        if(soDB.isEmpty())
+            getSOFromDB();
         if(!lstSistemaOperativo.getItems().isEmpty())
             lstSistemaOperativo.getItems().clear();
-        sos.forEach((x) -> { lstSistemaOperativo.getItems().add(x.getNombre()); });
-        if(sos.size()>0)
+        lstSistemaOperativo.getItems().setAll(soDB);
+        if(lstSistemaOperativo.getItems().size()>0)
             btnQuitar.setDisable(false);
+    }
+
+    private void loadList(String x){
+        ObservableList<String> list = FXCollections.observableArrayList();
+        List<String> data = soDB;
+
+        for (String f : data)
+            if(f.toLowerCase().contains(x.toLowerCase()))
+                list.add(f);
+
+        lstSistemaOperativo.getItems().setAll(list);
+        lstSistemaOperativo.getSelectionModel().selectFirst();
+        if(lstSistemaOperativo.getItems().size()>0)
+            btnQuitar.setDisable(false);
+        else
+           btnQuitar.setDisable(true);
+    }
+
+    public void popUpError(String texto){
+        Alert alert = new Alert(Alert.AlertType.ERROR, texto);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.OK) {
+                alert.close();
+            }
+    }
+
+    public boolean popUpWarning(String texto){
+        Alert alert = new Alert(Alert.AlertType.WARNING, texto, ButtonType.YES, ButtonType.NO);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                alert.close();
+                return true;
+            }
+        alert.close();
+        return false;
+    }
+
+    /**************EVENT HANDLERS*********************************************/
+
+    @Override
+    public void handle(KeyEvent event) {
+        if(event.getEventType().equals(KeyEvent.KEY_RELEASED) && event.getSource().equals(txtSistOperativo)){
+            switch (event.getCode()) {
+                case ENTER:
+                    agregar(new ActionEvent());
+                    break;
+                default:
+                    if(txtSistOperativo.getText().isEmpty()){
+                        loadList();
+                        btnAgregar.setDisable(true);
+                    }else{
+                        loadList(txtSistOperativo.getText());
+                        btnAgregar.setDisable(false);
+                    }
+                    break;
+            }
+        }
     }
 }

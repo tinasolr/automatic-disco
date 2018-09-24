@@ -53,14 +53,10 @@ public abstract class DBObject {
         ResultSet rs = null;
         try {
 
-            if(conn.isClosed())
+            if(conn == null || conn.isClosed())
                 connect();
 
             rs = instr.executeQuery("SELECT * FROM " + table);
-//            printResultSet(rs);
-//            while(res.next()){
-//                objetos.add(readResultSet(res));
-//            }
 
             while (rs.next()) {
                 objetos.add(readResultSet(rs));
@@ -79,7 +75,7 @@ public abstract class DBObject {
     public void write() {
         try {
 
-            if(conn.isClosed())
+            if(conn == null || conn.isClosed())
                 connect();
 
             executeWrite();
@@ -97,7 +93,7 @@ public abstract class DBObject {
     public void update() {
         try {
 
-            if(conn.isClosed())
+            if(conn == null || conn.isClosed())
                 connect();
 
             executeUpdate();
@@ -115,7 +111,7 @@ public abstract class DBObject {
     public void delete(){
         try {
 
-            if(conn.isClosed())
+            if(conn == null || conn.isClosed())
                 connect();
 
             executeDelete();
@@ -135,7 +131,7 @@ public abstract class DBObject {
         String id = null;
         try {
 
-            if(conn.isClosed())
+            if(conn == null || conn.isClosed())
                 connect();
 
             id = executeSearch();

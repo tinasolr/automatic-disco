@@ -21,7 +21,8 @@ public class ExtrasCtrl {
     }
 
     public void modificarExtra(String nombre, String descrip, String version, int partes, Software soft){
-        extrasDB  = new ExtrasDB();
+        extrasDB = new ExtrasDB();
+        extrasDB.connect();
         extrasDB.setNombre(nombre);
         extrasDB.setSwid(soft.getCodigo());
         String id = extrasDB.searchTable();
@@ -35,6 +36,7 @@ public class ExtrasCtrl {
 
     public void eliminarExtra(String nombre, int soft){
         extrasDB = new ExtrasDB();
+        extrasDB.connect();
         extrasDB.setNombre(nombre);
         extrasDB.setSwid(soft);
         String id = extrasDB.searchTable();
@@ -45,12 +47,14 @@ public class ExtrasCtrl {
 
     public void eliminarExtras(Software soft){
         extrasDB = new ExtrasDB();
+        extrasDB.connect();
         extrasDB.setSwid(soft.getCodigo());
         extrasDB.deleteAllExtras();
     }
 
     public void altaExtra(String nombre, String descrip, String version, int partes, int sw){
         extrasDB = new ExtrasDB();
+        extrasDB.connect();
         extrasDB.setNombre(nombre);
         extrasDB.setDescrip(descrip);
         extrasDB.setVersion(version);

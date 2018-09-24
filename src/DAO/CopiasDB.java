@@ -59,7 +59,7 @@ public class CopiasDB extends DBObject {
         }
     }
 
-    public CopiasDB() { connect(); }
+    public CopiasDB() {}
 
     public List<CopiasDB> copiasDeSoftware(int sw_id){
         ResultSet res = null;
@@ -67,7 +67,7 @@ public class CopiasDB extends DBObject {
 
         try {
 
-            if(conn.isClosed())
+            if(conn == null || conn.isClosed())
                 connect();
 
             res = instr.executeQuery("SELECT * FROM `Copias` WHERE `sw_id` = " + sw_id);

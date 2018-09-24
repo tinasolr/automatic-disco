@@ -21,7 +21,7 @@ public class FormatoDB extends DBObject {
         this.formato = nombre;
     }
 
-    public FormatoDB(){connect();}
+    public FormatoDB(){}
 
     @Override
     public String readResultSet(ResultSet res) {
@@ -33,7 +33,6 @@ public class FormatoDB extends DBObject {
             obj = formato;
 
         } catch (SQLException ex) {
-            ex.printStackTrace();
             System.err.println("Error >> la lectura >> tabla Formato :: " + ex.getLocalizedMessage());
         }
 

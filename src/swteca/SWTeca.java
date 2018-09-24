@@ -34,7 +34,7 @@ public class SWTeca extends Application {
             FXMLLoader loader = new FXMLLoader();
             root = loader.load(getClass().getResource("/Vista/Menu.fxml"));
 
-            Scene scene = new Scene(root, 1250, 830);
+            Scene scene = new Scene(root, 1056, 824);
             primaryStage.setScene(scene);
             primaryStage.show();
 
