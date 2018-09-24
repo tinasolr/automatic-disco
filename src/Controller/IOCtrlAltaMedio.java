@@ -53,10 +53,11 @@ public class IOCtrlAltaMedio implements Initializable {
     @FXML    private Label lblUbicacion;
     @FXML    private Label lblObservaciones;
     @FXML    private Label lblPartes;
-    @FXML    private ComboBox<?> cmbFormato;
+    @FXML    private ComboBox<String> cmbFormato;
     @FXML    private Label lblEmpaque;
     @FXML    private TitledPane tpaneInfoFisica;
-    @FXML    private ComboBox<?> cmbUbicacion;
+    @FXML    private ComboBox<String> cmbUbicacion;
+    @FXML    private CheckBox cbEnDeposito;
     @FXML    private TextField txtPartes;
     @FXML    private CheckBox rdbCaja;
     @FXML    private CheckBox rdbManual;
@@ -71,7 +72,12 @@ public class IOCtrlAltaMedio implements Initializable {
     @FXML    private Button btnIngresar;
     @FXML    private Button btnCancelar;
     @FXML    private TextField txtBusqueda;
+    @FXML    private RadioButton rbOriginal;
+    @FXML    private RadioButton rbMixto;
+    @FXML    private RadioButton rbOtros;
     
+    private MediosCtrl meCtrl = new MediosCtrl();
+    private UbicacionesCtrl ubCtrl = new UbicacionesCtrl();
     private MediosDB meDB = new MediosDB();
     private FormatoDB foDB = new FormatoDB();
 
@@ -79,6 +85,25 @@ public class IOCtrlAltaMedio implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        //Carga de Combos
+        UbicacionesDB u = new UbicacionesDB();
+        List<UbicacionesDB> ub = u.read("Ubicaciones");
+        if(!cmbUbicacion.getItems().isEmpty())
+            cmbUbicacion.getItems().clear();
+        
+        ub.forEach((x) -> { cmbUbicacion.getItems().add(x.getObsUbi()); });
+        new AutoCompleteComboBoxListener<>(cmbUbicacion);
+        
+        FormatoDB f = new FormatoDB();
+        List<FormatoDB> fo = f.read("Formato");
+        if(!cmbFormato.getItems().isEmpty())
+            cmbFormato.getItems().clear();
+        
+        fo.forEach((x) -> { cmbFormato.getItems().add(x.getFormato()); });
+        new AutoCompleteComboBoxListener<>(cmbFormato);
+        
+  
     }
 
     /**********************JAVAFX FUNCTIONS**********************************/
@@ -102,63 +127,40 @@ public class IOCtrlAltaMedio implements Initializable {
         String nombre = txtNombre.getText();
         String formato = (String) cmbFormato.getSelectionModel().getSelectedItem();
         String ubicacion = (String) cmbUbicacion.getSelectionModel().getSelectedItem();
-        String imagen, observ = txtObservaciones.getText();
-        int partes = Integer.parseInt(txtPartes.getText()), formid, origen;
-        boolean manual=false, caja=false;
-        
+        String imagen="", observ = txtObservaciones.getText();
+        int partes = Integer.parseInt(txtPartes.getText()), formid=0, origen=1;
+        boolean manual=false, caja=false, endepo=false;
+        Ubicaciones ubaux=new Ubicaciones();
+        Medios medio;
 
         if(id.matches("[0-9]+(\\.[0-9]+)*")){
             if(nombre.matches("[0-9]+(\\.[0-9]+)*")){
                 if(formato!= null && ubicacion!=null){
-                   
+                    if(!rbOriginal.isSelected() && !rbMixto.isSelected() && !rbOtros.isSelected()){
                            
-                    if(rdbCaja.isSelected()) caja = true;
-                    if(rdbManual.isSelected()) manual = true;
-                    
-                    //formid= Integer.parseInt(foDB.se(formato));
-                    
-        /*            
-        meDB.setId(id);
-        meDB.setNombre(nombre);
-        meDB.setPartes(partes);
-        meDB.setManual(manual);
-        meDB.setCaja(caja);
-        meDB.setImagen(imagen);
-        meDB.setObserv(observ);
-        meDB.setFormid(formid);
-        meDB.setOrigen(origen); */
-                       
-        
-                        /* //GuardaSW en BD
-                        swCtrl.altaSoftware(nombre, version);
-                        soft.setNombre(nombre);
-                        soft.setVersion(version);
-                        //GuardaSO en BD
-                        swDB.setNombre(nombre);
-                        swDB.setVersion(version);
-                        swDB.connect();
-                        cod = Integer.parseInt(swDB.executeSearch());
-                        List<String> sistOp = new ArrayList<>();
-                        for(String x : lstSistemasOp.getItems()){
-                           swCtrl.agregarSoDeSw(cod, x);
-                           sistOp.add(x);
-                        }
-                        soft.setSistOp(sistOp);
-                        //GuardaExtras en BD
-                        List<Extras> a = tblExtras.getItems();
-                        for(Extras e : a)
-                        {
-                            exCtrl.altaExtra(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes(), cod);
-                            soft.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
-                         }
+                        
+                        if(rdbCaja.isSelected()) caja = true;
+                        if(rdbManual.isSelected()) manual = true;
+                        if(rbOriginal.isSelected()) origen =1;
+                        if(rbMixto.isSelected()) origen =2;
+                        if(rbOtros.isSelected()) origen =3;
+                        if(cbEnDeposito.isSelected()) endepo =true;
+                        formid = Integer.parseInt(foDB.executeSearch());
+                        //Se guarda en BD
+                        meCtrl.altaMedio(id, nombre, partes, manual, caja, imagen, observ, formid, origen);
 
-                        SoftwareCtrl swCtrl = new SoftwareCtrl();
-                        swCtrl.getSws().add(soft);
-                        popUpExito("Software ingresado con éxito.");
+                        //Se guarda en array de medio
+                        for(Ubicaciones u: ubCtrl.getUbis()) 
+                            if(u.getDescripcion().equals(ubicacion)) ubaux=u;
+                        
+                        medio = new Medios(id, nombre,formato,caja, manual,origen,ubaux,endepo,imagen, observ,origen);
+                        meCtrl.getMedSw().add(medio);
+   
+                        popUpExito("Medio ingresado con éxito.");
                         changeBackToConsultaSw();
-*/
-                }else{ popUpError("Ingrese el sistema operativo.");}
-            }else{ popUpError("Ingresar un número de versión válido.");}
+                  }else{ popUpError("Selecione el Origen del medio.");}
+                }else{ popUpError("Selecione el formato/ubicacion.");}
+            }else{ popUpError("Ingresar un nombre valido.");}
          }else{ popUpError("Rellenar espacios vacios y volver a intentar. ");}
         
         
@@ -194,6 +196,15 @@ public class IOCtrlAltaMedio implements Initializable {
 
     public void popUpError(String texto){
         Alert alert = new Alert(Alert.AlertType.ERROR, texto);
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+            alert.close();
+        }
+    }
+    
+     public void popUpExito(String texto){
+        Alert alert = new Alert(AlertType.INFORMATION, texto);
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {

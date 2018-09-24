@@ -34,9 +34,9 @@
                            <image>
                               <Image url="@/no-image-available.png" />
                            </image></ImageView>
-                        <RadioButton layoutX="140.0" layoutY="467.0" mnemonicParsing="false" text="Original" />
-                        <RadioButton layoutX="221.0" layoutY="467.0" mnemonicParsing="false" text="Mixto" />
-                        <RadioButton layoutX="291.0" layoutY="467.0" mnemonicParsing="false" text="Otros" />
+                        <RadioButton fx:id="rbOriginal" layoutX="97.0" layoutY="472.0" mnemonicParsing="false" text="Original" />
+                        <RadioButton fx:id="rbMixto" layoutX="188.0" layoutY="472.0" mnemonicParsing="false" text="Mixto" />
+                        <RadioButton fx:id="rbOtros" layoutX="260.0" layoutY="472.0" mnemonicParsing="false" text="Otros" />
                      </children>
                   </AnchorPane>
             </content>
@@ -50,15 +50,16 @@
                      <children>
                         <Label fx:id="lblFormato" layoutX="50.0" layoutY="47.0" text="Formato:" />
                         <Label fx:id="lblUbicacion" layoutX="51.0" layoutY="150.0" text="Ubicación:" />
-                        <Label fx:id="lblObservaciones" layoutX="50.0" layoutY="243.0" text="Observaciones:" />
+                        <Label fx:id="lblObservaciones" layoutX="51.0" layoutY="271.0" text="Observaciones:" />
                         <Label fx:id="lblPartes" layoutX="50.0" layoutY="93.0" text="Partes:" />
                         <ComboBox fx:id="cmbFormato" layoutX="150.0" layoutY="43.0" prefHeight="25.0" prefWidth="210.0" />
                         <ComboBox fx:id="cmbUbicacion" layoutX="151.0" layoutY="146.0" prefHeight="25.0" prefWidth="210.0" />
-                        <Label fx:id="lblEmpaque" layoutX="50.0" layoutY="197.0" text="Tiene:" />
+                        <Label fx:id="lblEmpaque" layoutX="50.0" layoutY="236.0" text="Tiene:" />
                         <TextField fx:id="txtPartes" layoutX="150.0" layoutY="89.0" prefHeight="27.0" prefWidth="59.0" />
-                        <CheckBox fx:id="rdbCaja" layoutX="150.0" layoutY="197.0" mnemonicParsing="false" text="Caja original" />
-                        <CheckBox fx:id="rdbManual" layoutX="266.0" layoutY="197.0" mnemonicParsing="false" text="Manual" />
-                        <TextArea fx:id="txtObservaciones" layoutX="52.0" layoutY="267.0" prefHeight="200.0" prefWidth="344.0" />
+                        <CheckBox fx:id="rdbCaja" layoutX="150.0" layoutY="236.0" mnemonicParsing="false" text="Caja original" />
+                        <CheckBox fx:id="rdbManual" layoutX="266.0" layoutY="236.0" mnemonicParsing="false" text="Manual" />
+                        <TextArea fx:id="txtObservaciones" layoutX="53.0" layoutY="295.0" prefHeight="187.0" prefWidth="344.0" />
+                        <CheckBox fx:id="cbEnDeposito" layoutX="150.0" layoutY="194.0" mnemonicParsing="false" text="En Depósito" />
                      </children>
                   </AnchorPane>
             </content>
