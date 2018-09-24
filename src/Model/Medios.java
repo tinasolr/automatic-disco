@@ -18,7 +18,7 @@ public class Medios {
     private String formato;
     private boolean caja;
     private boolean manual;
-    private Origen origen;
+    private int origen;
     private Ubicaciones ubiDepo;
     private boolean enDepo;
     private String imagen;
@@ -28,7 +28,7 @@ public class Medios {
 
     public Medios(){}
 
-    public Medios(String codigo, String nombre, String formato, boolean empaque, boolean manual, Origen origen, Ubicaciones ubiDepo, boolean enDepo, String imagen, String observ, int partes) {
+    public Medios(String codigo, String nombre, String formato, boolean empaque, boolean manual, int origen, Ubicaciones ubiDepo, boolean enDepo, String imagen, String observ, int partes) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.formato = formato;
@@ -51,8 +51,8 @@ public class Medios {
     public String getFormato() {return formato;}
     public void setFormato(String formato) {this.formato = formato;}
 
-    public Origen getOrigen() {return origen;}
-    public void setOrigen(Origen origen) {this.origen = origen;}
+    public int getOrigen() {return origen;}
+    public void setOrigen(int origen) {this.origen = origen;}
 
     public Ubicaciones getUbiDepo() {return ubiDepo;}
     public void setUbiDepo(Ubicaciones ubiDepo) {this.ubiDepo = ubiDepo;}
