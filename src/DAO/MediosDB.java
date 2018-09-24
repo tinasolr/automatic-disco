@@ -50,7 +50,7 @@ public class MediosDB extends DBObject{
             if(conn == null || conn.isClosed())
                 connect();
 
-            res = instr.executeQuery("Select medio_id from `medios_software` AS s WHERE s.sw_id = " + sw_id);
+            res = instr.executeQuery("Select medio_id from Medios_Software AS s WHERE s.sw_id = " + sw_id);
 
             while(res.next()){
                 ids.add(res.getString("medio_id"));
@@ -68,6 +68,7 @@ public class MediosDB extends DBObject{
             conn.close();
 
         } catch (SQLException e) {
+            e.printStackTrace();
             System.err.println("Error >> Lectura >> Medios de Software " + sw_id + " :: " + e.getLocalizedMessage());
         }
         return objDB;
@@ -200,12 +201,12 @@ public class MediosDB extends DBObject{
 
     @Override
     public void executeDelete() {
-     
+
         try {
             CallableStatement sp = conn.prepareCall("{call elim_medio (<{IN `id` VARCHAR(20)}>)    }");
             sp.setString(1, id);
             sp.executeUpdate();
-  
+
         } catch (SQLException ex) {
             System.err.println("Delete >> Medios :: " + ex.getLocalizedMessage());
         }
@@ -326,8 +327,8 @@ public class MediosDB extends DBObject{
         this.enDepo = enDepo;
     }
 
-    
-    
-    
-    
+
+
+
+
 }

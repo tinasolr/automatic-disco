@@ -17,7 +17,7 @@ public abstract class DBObject {
     private final String DRIVER = "com.mysql.cj.jdbc.Driver";
     private final String URL = "jdbc:mysql://db4free.net:3306/dbpruebaswt?autoReconnect=true&useSSL=false";
     private final String URLBDLOCAL = "jdbc:mysql://localhost/dbpruebaswt?autoReconnect=true&useSSL=false";
-    private boolean isRemote = true;
+    private boolean isRemote = false;
     private final String USER = "nicotina";
     private final String PASSW = "nicotina";
     protected Connection conn;
