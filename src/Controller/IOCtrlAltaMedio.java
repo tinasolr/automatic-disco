@@ -25,6 +25,7 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.image.*;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 
 /**
@@ -48,12 +49,49 @@ public class IOCtrlAltaMedio implements Initializable {
     @FXML    private Label lblPartes;
     @FXML    private ComboBox<?> cmbFormato;
     @FXML    private Label lblEmpaque;
-    @FXML    private Label lblSoftware;
+    @FXML    private TitledPane tpaneInfoFisica;
+    @FXML    private ComboBox<?> cmbUbicacion;
+    @FXML    private TextField txtPartes;
+    @FXML    private CheckBox rdbCaja;
+    @FXML    private CheckBox rdbManual;
+    @FXML    private TextArea txtObservaciones;
+    @FXML    private TitledPane tPaneSwMedio;
+    @FXML    private TableView<?> tblSoftwareDisp;
+    @FXML    private TableColumn<?, ?> colNombre;
+    @FXML    private TableColumn<?, ?> colVersion;
+    @FXML    private ListView<?> lstSwContenido;
+    @FXML    private Button btnAgregar;
+    @FXML    private Button btnQuitar;
+    @FXML    private Button btnIngresar;
+    @FXML    private Button btnCancelar;
+    @FXML    private TextField txtBusqueda;
 
     /********Initializes the controller class.*********************************/
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+    }
+
+    /**********************JAVAFX FUNCTIONS**********************************/
+
+        @FXML
+    private void agregarImagen(MouseEvent event) {
+    }
+
+    @FXML
+    private void agregar(MouseEvent event) {
+    }
+
+    @FXML
+    private void quitar(MouseEvent event) {
+    }
+
+    @FXML
+    private void ingresarMedio(MouseEvent event) {
+    }
+
+    @FXML
+    private void cancelar(MouseEvent event) {
     }
 
     /*********************OTHER FUNCTIONS*************************************/
