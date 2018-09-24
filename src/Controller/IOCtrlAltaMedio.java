@@ -17,6 +17,8 @@
 
 package Controller;
 
+import DAO.*;
+import Model.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -27,6 +29,10 @@ import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.*;
+import javafx.stage.*;
+
 
 /**
  * FXML Controller class
@@ -65,6 +71,9 @@ public class IOCtrlAltaMedio implements Initializable {
     @FXML    private Button btnIngresar;
     @FXML    private Button btnCancelar;
     @FXML    private TextField txtBusqueda;
+    
+    private MediosDB meDB = new MediosDB();
+    private FormatoDB foDB = new FormatoDB();
 
     /********Initializes the controller class.*********************************/
     @Override
@@ -88,12 +97,78 @@ public class IOCtrlAltaMedio implements Initializable {
 
     @FXML
     private void ingresarMedio(MouseEvent event) {
-    }
+        
+        String id = txtCodigo.getText();
+        String nombre = txtNombre.getText();
+        String formato = (String) cmbFormato.getSelectionModel().getSelectedItem();
+        String ubicacion = (String) cmbUbicacion.getSelectionModel().getSelectedItem();
+        String imagen, observ = txtObservaciones.getText();
+        int partes = Integer.parseInt(txtPartes.getText()), formid, origen;
+        boolean manual=false, caja=false;
+        
 
+        if(id.matches("[0-9]+(\\.[0-9]+)*")){
+            if(nombre.matches("[0-9]+(\\.[0-9]+)*")){
+                if(formato!= null && ubicacion!=null){
+                   
+                           
+                    if(rdbCaja.isSelected()) caja = true;
+                    if(rdbManual.isSelected()) manual = true;
+                    
+                    //formid= Integer.parseInt(foDB.se(formato));
+                    
+        /*            
+        meDB.setId(id);
+        meDB.setNombre(nombre);
+        meDB.setPartes(partes);
+        meDB.setManual(manual);
+        meDB.setCaja(caja);
+        meDB.setImagen(imagen);
+        meDB.setObserv(observ);
+        meDB.setFormid(formid);
+        meDB.setOrigen(origen); */
+                       
+        
+                        /* //GuardaSW en BD
+                        swCtrl.altaSoftware(nombre, version);
+                        soft.setNombre(nombre);
+                        soft.setVersion(version);
+                        //GuardaSO en BD
+                        swDB.setNombre(nombre);
+                        swDB.setVersion(version);
+                        swDB.connect();
+                        cod = Integer.parseInt(swDB.executeSearch());
+                        List<String> sistOp = new ArrayList<>();
+                        for(String x : lstSistemasOp.getItems()){
+                           swCtrl.agregarSoDeSw(cod, x);
+                           sistOp.add(x);
+                        }
+                        soft.setSistOp(sistOp);
+                        //GuardaExtras en BD
+                        List<Extras> a = tblExtras.getItems();
+                        for(Extras e : a)
+                        {
+                            exCtrl.altaExtra(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes(), cod);
+                            soft.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
+                         }
+
+                        SoftwareCtrl swCtrl = new SoftwareCtrl();
+                        swCtrl.getSws().add(soft);
+                        popUpExito("Software ingresado con éxito.");
+                        changeBackToConsultaSw();
+*/
+                }else{ popUpError("Ingrese el sistema operativo.");}
+            }else{ popUpError("Ingresar un número de versión válido.");}
+         }else{ popUpError("Rellenar espacios vacios y volver a intentar. ");}
+        
+        
+    }
+         
     @FXML
     private void cancelar(MouseEvent event) {
     }
-
+  
+    
     /*********************OTHER FUNCTIONS*************************************/
 
     public void changeBackToConsultaSw(){
@@ -116,4 +191,14 @@ public class IOCtrlAltaMedio implements Initializable {
     public void setMainWindow(BorderPane mainWindow) {
         this.mainWindow = mainWindow;
     }
+
+    public void popUpError(String texto){
+        Alert alert = new Alert(Alert.AlertType.ERROR, texto);
+        alert.showAndWait();
+
+        if (alert.getResult() == ButtonType.OK) {
+            alert.close();
+        }
+    }
+
 }

@@ -230,4 +230,104 @@ public class MediosDB extends DBObject{
         return result;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getFormid() {
+        return formid;
+    }
+
+    public void setFormid(int formid) {
+        this.formid = formid;
+    }
+
+    public boolean isCaja() {
+        return caja;
+    }
+
+    public void setCaja(boolean caja) {
+        this.caja = caja;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public boolean isManual() {
+        return manual;
+    }
+
+    public void setManual(boolean manual) {
+        this.manual = manual;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getObserv() {
+        return observ;
+    }
+
+    public void setObserv(String observ) {
+        this.observ = observ;
+    }
+
+    public int getPartes() {
+        return partes;
+    }
+
+    public void setPartes(int partes) {
+        this.partes = partes;
+    }
+
+    public int getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(int origen) {
+        this.origen = origen;
+    }
+
+    public int getSwid() {
+        return swid;
+    }
+
+    public void setSwid(int swid) {
+        this.swid = swid;
+    }
+
+    public String getUbic() {
+        return ubic;
+    }
+
+    public void setUbic(String ubic) {
+        this.ubic = ubic;
+    }
+
+    public boolean isEnDepo() {
+        return enDepo;
+    }
+
+    public void setEnDepo(boolean enDepo) {
+        this.enDepo = enDepo;
+    }
+
+    
+    
+    
+    
 }
