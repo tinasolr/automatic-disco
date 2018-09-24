@@ -276,10 +276,10 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
     public void adjustHeightAndWidth(double height, double width){
         vboxSw.setPrefWidth(width);
         vboxSw.setPrefHeight(height);
-        bpSoftware.setPrefSize(swPane.getWidth(), swPane.getHeight());
-        bpExtras.setPrefSize(extrasPane.getWidth(), extrasPane.getHeight());
-        panelSuperior.setPrefSize(bpSoftware.getWidth(), bpSoftware.getHeight());
-        panelInferior.setPrefSize(bpExtras.getWidth(), bpExtras.getHeight());
+        bpSoftware.resize(swPane.getWidth(), swPane.getHeight());
+        bpExtras.resize(extrasPane.getWidth(), extrasPane.getHeight());
+        panelSuperior.resize(bpSoftware.getWidth(), bpSoftware.getHeight());
+        panelInferior.resize(bpExtras.getWidth(), bpExtras.getHeight());
     }
 
     /*******************Getters & Setters**********************************/
