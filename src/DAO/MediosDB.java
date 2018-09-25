@@ -159,7 +159,7 @@ public class MediosDB extends DBObject{
     @Override
     public void executeWrite() {
         try {
-            CallableStatement sp = conn.prepareCall("{ call alta_medio (<{IN `medioID` VARCHAR(20)}>, <{IN `nombre` VARCHAR(30)}>, <{IN `partes` TINYINT}>, <{IN `manual` BOOLEAN}>, <{IN `caja` BOOLEAN}>, <{IN `imagen` VARCHAR(50)}>, <{IN `observ` VARCHAR(50)}>, <{IN `formID` TINYINT}>, <{IN `origenID` TINYINT}>);  }");
+            CallableStatement sp = conn.prepareCall("{call alta_medio (?, ?, ?, ?, ?, ?, ?, ?, ?)}");
             sp.setString(1, id);
             sp.setString(2, nombre);
             sp.setInt(3,partes);
@@ -180,7 +180,7 @@ public class MediosDB extends DBObject{
     public void executeUpdate() {
         try {
 
-            CallableStatement sp = conn.prepareCall("{call mod_medio (<{IN id VARCHAR(20)}>, <{IN nom VARCHAR(30)}>, <{IN partes TINYINT}>, <{IN manual BOOLEAN}>, <{IN caja BOOLEAN}>, <{IN imagen VARCHAR(50)}>, <{IN observ VARCHAR(50)}>, <{IN formid TINYINT}>, <{IN origenid TINYINT}>)}");
+            CallableStatement sp = conn.prepareCall("{call mod_medio (?, ?, ?, ?, ?, ?, ?, ?, ?)}");
             sp.setString(1, id);
             sp.setString(2, nombre);
             sp.setInt(3,partes);
@@ -203,7 +203,7 @@ public class MediosDB extends DBObject{
     public void executeDelete() {
 
         try {
-            CallableStatement sp = conn.prepareCall("{call elim_medio (<{IN `id` VARCHAR(20)}>)    }");
+            CallableStatement sp = conn.prepareCall("{call elim_medio (?)}");
             sp.setString(1, id);
             sp.executeUpdate();
 

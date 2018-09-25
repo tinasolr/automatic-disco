@@ -65,10 +65,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     @FXML    private Label lblEmpaque;
     @FXML    private TitledPane tpaneInfoFisica;
     @FXML    private ComboBox<String> cmbUbicacion;
-    @FXML    private CheckBox cbEnDeposito;
     @FXML    private TextField txtPartes;
-    @FXML    private CheckBox rdbCaja;
-    @FXML    private CheckBox rdbManual;
     @FXML    private TextArea txtObservaciones;
     @FXML    private TitledPane tPaneSwMedio;
     @FXML    private TableView<Software> tblSoftwareDisp;
@@ -83,6 +80,9 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     @FXML    private RadioButton rbOriginal;
     @FXML    private RadioButton rbMixto;
     @FXML    private RadioButton rbOtros;
+    @FXML    private CheckBox chkCaja;
+    @FXML    private CheckBox chkManual;
+    @FXML    private CheckBox chkEnDeposito;
 
     /********Initializes the controller class.*********************************/
     @Override
@@ -95,7 +95,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         if(!cmbUbicacion.getItems().isEmpty())
             cmbUbicacion.getItems().clear();
 
-        ub.forEach((x) -> { cmbUbicacion.getItems().add(x.getObsUbi()); });
+        ub.forEach((x) -> { cmbUbicacion.getItems().add(x.getCodUbi()); });
         new AutoCompleteComboBoxListener<>(cmbUbicacion);
 
         FormatoDB f = new FormatoDB();
@@ -160,33 +160,33 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
 
         String id = txtCodigo.getText();
         String nombre = txtNombre.getText();
-        String formato = (String) cmbFormato.getSelectionModel().getSelectedItem();
-        String ubicacion = (String) cmbUbicacion.getSelectionModel().getSelectedItem();
+        String formato = cmbFormato.getSelectionModel().getSelectedItem();
+        String ubicacion = cmbUbicacion.getSelectionModel().getSelectedItem();
         String imagen="";
         String observ = txtObservaciones.getText();
         int partes = Integer.parseInt(txtPartes.getText());
 
-        int origen=0;
+        int origen = 0;
         boolean manual = false;
         boolean caja = false;
         boolean endepo = false;
-        Ubicaciones ubaux=new Ubicaciones();
+        Ubicaciones ubaux = new Ubicaciones();
         Medios medio;
 
         if(id.matches("[0-9]+(\\.[0-9]+)*")){
-            if(nombre.matches("[0-9]+(\\.[0-9]+)*")){
+            if(nombre.matches("\\w(\\s\\w)*")){
                 if(formato!= null && ubicacion!=null){
                     if(!rbOriginal.isSelected() && !rbMixto.isSelected() && !rbOtros.isSelected()){
 
                         //EMPAQUE
-                        if(rdbCaja.isSelected()) caja = true;
-                        if(rdbManual.isSelected()) manual = true;
+                        if(chkCaja.isSelected()) caja = true;
+                        if(chkManual.isSelected()) manual = true;
                         //ORIGINAL-MIXTO-NO ORIGINAL
                         if(rbOriginal.isSelected()) origen = 1;
                         if(rbMixto.isSelected()) origen = 2;
                         if(rbOtros.isSelected()) origen = 3;
                         //EN DEPOSITO
-                        if(cbEnDeposito.isSelected()) endepo =true;
+                        if(chkEnDeposito.isSelected()) endepo =true;
                         //FORMATO
                         FormatoDB f = new FormatoDB();
                         f.connect();
@@ -194,19 +194,29 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
                         String fo = f.searchTable();
                         int formid = Integer.parseInt(fo);
 
-                        //Se guarda en BD
-                        meCtrl.altaMedio(id, nombre, partes, manual, caja, imagen, observ, formid, origen);
-
+                        //IMAGEN
                         if(archImagen!=null)
                             imagen=archImagen.getAbsolutePath();
-                        //Se guarda en array de medio
+
+                        //UBICACION
                         for(Ubicaciones u: ubCtrl.getUbis())
-                            if(u.getDescripcion().equals(ubicacion)){
+                            if(u.getId().equals(ubicacion)){
                                 ubaux=u;
                                 break;
                             }
 
-                        medio = new Medios(id, nombre,formato,caja, manual,origen,ubaux,endepo,imagen, observ,origen);
+                        //SOFTWARE CONTENIDO
+                        SoftwareCtrl sctr = new SoftwareCtrl();
+                        List<Software> contenido = new ArrayList<>();
+                        for(String x : lstSwContenido.getItems()){
+                            String[] soft = x.split(" - ");
+                            Software s = sctr.findSoftware(Integer.parseInt(soft[0]));
+                            contenido.add(s);
+                        }
+
+                        //Se guarda en BD
+                        medio = new Medios(id, nombre, formato, caja, manual,origen,ubaux,endepo,imagen, observ,origen);
+                        meCtrl.altaMedio(id, nombre, formid, caja, manual, origen, ubaux, endepo, imagen, observ, origen, contenido);
                         meCtrl.getMedSw().add(medio);
 
                         popUpExito("Medio ingresado con éxito.");
@@ -278,15 +288,6 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         else
             btnQuitar.setDisable(false);
     }
-    /********************GETTERS & SETTERS************************************/
-
-    public BorderPane getMainWindow() {
-        return mainWindow;
-    }
-
-    public void setMainWindow(BorderPane mainWindow) {
-        this.mainWindow = mainWindow;
-    }
 
     public void popUpError(String texto){
         Alert alert = new Alert(Alert.AlertType.ERROR, texto);
@@ -306,4 +307,13 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         }
     }
 
+    /********************GETTERS & SETTE**************************************/
+
+    public BorderPane getMainWindow() {
+        return mainWindow;
+    }
+
+    public void setMainWindow(BorderPane mainWindow) {
+        this.mainWindow = mainWindow;
+    }
 }

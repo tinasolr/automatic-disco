@@ -28,11 +28,11 @@ public class Medios {
 
     public Medios(){}
 
-    public Medios(String codigo, String nombre, String formato, boolean empaque, boolean manual, int origen, Ubicaciones ubiDepo, boolean enDepo, String imagen, String observ, int partes) {
+    public Medios(String codigo, String nombre, String formato, boolean caja, boolean manual, int origen, Ubicaciones ubiDepo, boolean enDepo, String imagen, String observ, int partes) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.formato = formato;
-        this.caja = empaque;
+        this.caja = caja;
         this.manual = manual;
         this.origen = origen;
         this.ubiDepo = ubiDepo;

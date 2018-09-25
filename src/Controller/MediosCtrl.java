@@ -22,23 +22,33 @@ public class MediosCtrl {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-     public void altaMedio(String id, String nombre, int partes, boolean manual, boolean caja, String imagen, String observ, int formid, int origen){
+     public void altaMedio(String codigo, String nombre, int formato, boolean caja,
+        boolean manual, int origen, Ubicaciones ubiDepo, boolean enDepo,
+        String imagen, String observ, int partes, List<Software> soft){
+
         MediosDB meDB = new MediosDB();
         meDB.connect();
-        meDB.setId(id);
+        meDB.setId(codigo);
         meDB.setNombre(nombre);
         meDB.setPartes(partes);
         meDB.setManual(manual);
         meDB.setCaja(caja);
         meDB.setImagen(imagen);
         meDB.setObserv(observ);
-        meDB.setFormid(formid);
+        meDB.setFormid(formato);
         meDB.setOrigen(origen);
         meDB.write();
+        for(Software s : soft){
+            meDB.setSwid(s.getCodigo());
+            meDB.asociarMedioASoftware();
+        }
+        meDB.setUbic(ubiDepo.getId());
+        meDB.setEnDepo(enDepo);
+        meDB.asociarUbicacionAMedio();
     }
 
      public void modMedio(String id, String nombre, int partes, boolean manual, boolean caja, String imagen, String observ, int formid, int origen){
-        MediosDB meDB = new MediosDB();        
+        MediosDB meDB = new MediosDB();
         meDB.connect();
         meDB.setNombre(nombre);
         meDB.setId(id);
@@ -59,7 +69,7 @@ public class MediosCtrl {
         meDB.setId(codigo);
         meDB.delete();
     }
-    
+
     public List<Medios> getMedSw() {        return medSw;    }
     public void setMedSw(List<Medios> medSw) {        this.medSw = medSw;    }
 
