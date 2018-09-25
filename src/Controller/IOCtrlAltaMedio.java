@@ -43,6 +43,13 @@ import javafx.stage.*;
 public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
 
     private BorderPane mainWindow;
+    private MediosCtrl meCtrl = new MediosCtrl();
+    private UbicacionesCtrl ubCtrl = new UbicacionesCtrl();
+    private MediosDB meDB = new MediosDB();
+    private FormatoDB foDB = new FormatoDB();
+    private File archImagen;
+
+    @FXML    private AnchorPane window;
     @FXML    private TitledPane tpaneDatosMedio;
     @FXML    private TextField txtCodigo;
     @FXML    private TextField txtNombre;
@@ -76,13 +83,6 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     @FXML    private RadioButton rbOriginal;
     @FXML    private RadioButton rbMixto;
     @FXML    private RadioButton rbOtros;
-
-    private MediosCtrl meCtrl = new MediosCtrl();
-    private UbicacionesCtrl ubCtrl = new UbicacionesCtrl();
-    private MediosDB meDB = new MediosDB();
-    private FormatoDB foDB = new FormatoDB();
-    @FXML
-    private AnchorPane window;
 
     /********Initializes the controller class.*********************************/
     @Override
@@ -118,6 +118,18 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
 
         @FXML
     private void agregarImagen(MouseEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        archImagen = fileChooser.showOpenDialog(new Stage());
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("All Images", "*.*"),
+            new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+            new FileChooser.ExtensionFilter("PNG", "*.png")
+        );
+        if(archImagen != null){
+            String url = archImagen.getAbsolutePath();
+            image.setImage(new Image("file:///" + url));
+        }
     }
 
     @FXML
@@ -150,9 +162,34 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         String nombre = txtNombre.getText();
         String formato = (String) cmbFormato.getSelectionModel().getSelectedItem();
         String ubicacion = (String) cmbUbicacion.getSelectionModel().getSelectedItem();
-        String imagen="", observ = txtObservaciones.getText();
-        int partes = Integer.parseInt(txtPartes.getText()), formid=0, origen=1;
-        boolean manual=false, caja=false, endepo=false;
+        String imagen="";
+        if(archImagen!=null)
+            imagen=archImagen.getAbsolutePath();
+        String observ = txtObservaciones.getText();
+        int partes = Integer.parseInt(txtPartes.getText());
+        FormatoDB f = new FormatoDB();
+        f.connect();
+        f.setFormato(cmbFormato.getSelectionModel().getSelectedItem());
+        String fo = f.searchTable();
+        int formid = Integer.parseInt(fo);
+        int origen=0;
+        if(rbOriginal.isSelected())
+            origen = 1;
+        else if(rbMixto.isSelected())
+            origen = 2;
+        else if(rbOtros.isSelected())
+            origen = 3;
+        else
+            popUpError("Seleccione si es original, mixto u otro.");
+        boolean manual = false;
+        if(rdbManual.isSelected())
+            manual = true;
+        boolean caja = false;
+        if(rdbCaja.isSelected())
+            caja = true;
+        boolean endepo = false;
+        if(cbEnDeposito.isSelected())
+            endepo = true;
         Ubicaciones ubaux=new Ubicaciones();
         Medios medio;
 
