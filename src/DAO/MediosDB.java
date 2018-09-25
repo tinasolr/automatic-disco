@@ -74,8 +74,11 @@ public class MediosDB extends DBObject{
         return objDB;
     }
 
-    public void asociarMedioASoftware(){
+    public boolean asociarMedioASoftware(){
         try {
+            if(conn == null || conn.isClosed())
+                connect();
+
             CallableStatement sp = conn.prepareCall("{CALL asociar_medio_software(?, ?)}");
 
             sp.setString(1, id);
@@ -83,13 +86,19 @@ public class MediosDB extends DBObject{
 
             sp.executeUpdate();
 
+            conn.close();
         } catch (SQLException ex) {
             System.err.println("Escritura >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+            return false;
         }
+        return true;
     }
 
-        public void desasociarMedioASoftware(){
+        public boolean desasociarMedioASoftware(){
         try {
+            if(conn == null || conn.isClosed())
+                connect();
+
             CallableStatement sp = conn.prepareCall("{CALL desasociar_medio_software(?, ?)}");
 
             sp.setString(1, id);
@@ -97,13 +106,19 @@ public class MediosDB extends DBObject{
 
             sp.executeUpdate();
 
+            conn.close();
         } catch (SQLException ex) {
             System.err.println("Eliminar >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+            return false;
         }
+        return true;
     }
 
-    public void asociarUbicacionAMedio(){
+    public boolean asociarUbicacionAMedio(){
         try {
+            if(conn == null || conn.isClosed())
+                connect();
+
             CallableStatement sp = conn.prepareCall("{CALL asociar_medio_ubicacion(?, ?, ?)}");
 
             sp.setString(1, id);
@@ -112,13 +127,19 @@ public class MediosDB extends DBObject{
 
             sp.executeUpdate();
 
+            conn.close();
         } catch (SQLException ex) {
             System.err.println("Escritura >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+            return false;
         }
+        return true;
     }
 
-    public void desasociarUbicacionAMedio(){
+    public boolean desasociarUbicacionAMedio(){
         try {
+            if(conn == null || conn.isClosed())
+                connect();
+
             CallableStatement sp = conn.prepareCall("{CALL desasociar_medio_ubicacion(?, ?)}");
 
             sp.setString(1, id);
@@ -126,10 +147,15 @@ public class MediosDB extends DBObject{
 
             sp.executeUpdate();
 
+            conn.close();
         } catch (SQLException ex) {
             System.err.println("Eliminar >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+            return false;
         }
+        return true;
     }
+
+
 
     @Override
     public MediosDB readResultSet(ResultSet res) {
@@ -154,6 +180,29 @@ public class MediosDB extends DBObject{
         }
 
         return obj;
+    }
+
+    public boolean isMedioEnDepo(String codigo) {
+
+        boolean esta = false;
+        ResultSet rs = null;
+        try {
+
+            if(conn == null || conn.isClosed())
+                connect();
+
+            rs = instr.executeQuery("SELECT ubi_id, medio_enDep FROM medio_ubic WHERE medio_id LIKE '" + id + "'");
+            rs.first();
+            this.ubic = rs.getString(1);
+            esta = rs.getBoolean(2);
+
+            conn.close();
+            System.out.println("Connection closed.");
+        } catch (SQLException e) {
+            System.out.println("MediosDB >> fetchUnMedio() :: " + e.getMessage());
+        }
+
+        return esta;
     }
 
     @Override

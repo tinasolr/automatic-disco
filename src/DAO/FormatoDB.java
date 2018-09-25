@@ -97,6 +97,28 @@ public class FormatoDB extends DBObject {
         return null;
     }
 
+    public String fetchFormatoByID(int id) {
+        try {
+
+            if(conn == null || conn.isClosed())
+                connect();
+
+            PreparedStatement sp = conn.prepareStatement("SELECT * FROM Formatos WHERE form_id=?");
+
+            sp.setInt(1, id);
+            ResultSet r = sp.executeQuery();
+            r.first();
+            String nombre = r.getString(1);
+
+            conn.close();
+            return nombre;
+
+        } catch (SQLException ex) {
+            System.err.println("Search ID >> Formatos :: " + ex.getLocalizedMessage());
+        }
+        return null;
+    }
+
     public String getFormato() {
         return formato;
     }
@@ -112,6 +134,5 @@ public class FormatoDB extends DBObject {
     public void setNewFormat(String newFormat) {
         this.newFormat = newFormat;
     }
-
 
 }

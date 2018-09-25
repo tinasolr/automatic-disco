@@ -96,6 +96,31 @@ public class UbicacionesDB extends DBObject {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    public UbicacionesDB searchUbicacionesByID(String id) {
+        try {
+
+            if(conn == null || conn.isClosed())
+                connect();
+
+            if(id==null)
+                throw new NullPointerException();
+            
+            PreparedStatement sp = conn.prepareStatement("SELECT * FROM Ubicaciones WHERE ubi_id LIKE ?");
+            sp.setString(1, id);
+            ResultSet r = sp.executeQuery();
+            r.first();
+            this.codUbi = r.getString(1);
+            this.obsUbi = r.getString(2);
+            printResultSet(r);
+            conn.close();
+            return this;
+
+        } catch (SQLException ex) {
+            System.err.println("searchUbicacionesByID >> Ubicaciones :: " + ex.getLocalizedMessage());
+        }
+        return null;
+    }
+
     public boolean isDuplicate(String id){
         try {
 

@@ -17,12 +17,25 @@ import java.util.*;
 public class MediosCtrl {
 
     List<Medios> medSw = new ArrayList<>();
+    MediosDB mdb = new MediosDB();
 
     public void buscarMedios(List<MediosDB> m) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        medSw.clear();
+        boolean nuevo = true;
+        for(MediosDB x : m){
+            FormatoDB f = new FormatoDB();
+
+            String formato = f.fetchFormatoByID(x.getFormid());
+            boolean estaEnDepo = x.isMedioEnDepo(x.getId());
+
+            Ubicaciones ubicacion = new UbicacionesCtrl().fetchUbicacion(x.getUbic());
+            medSw.add(new Medios(x.getId(), x.getNombre(), formato, x.isCaja(),
+                    x.isManual(), x.getOrigen(), ubicacion, estaEnDepo, x.getImagen(),
+                    x.getObserv(), x.getPartes()));
+        }
     }
 
-     public void altaMedio(String codigo, String nombre, int formato, boolean caja,
+     public boolean altaMedio(String codigo, String nombre, int formato, boolean caja,
         boolean manual, int origen, Ubicaciones ubiDepo, boolean enDepo,
         String imagen, String observ, int partes, List<Software> soft){
 
@@ -38,13 +51,18 @@ public class MediosCtrl {
         meDB.setFormid(formato);
         meDB.setOrigen(origen);
         meDB.write();
+        boolean todoOK = true;
         for(Software s : soft){
             meDB.setSwid(s.getCodigo());
-            meDB.asociarMedioASoftware();
+            todoOK = meDB.asociarMedioASoftware();
         }
+        if(ubiDepo==null)
+            ubiDepo = new UbicacionesCtrl().fetchUbicacion("NOASIG");
         meDB.setUbic(ubiDepo.getId());
         meDB.setEnDepo(enDepo);
-        meDB.asociarUbicacionAMedio();
+        todoOK = meDB.asociarUbicacionAMedio();
+
+        return todoOK;
     }
 
      public void modMedio(String id, String nombre, int partes, boolean manual, boolean caja, String imagen, String observ, int formid, int origen){

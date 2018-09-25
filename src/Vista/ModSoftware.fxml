@@ -55,6 +55,9 @@
                               <TableColumn fx:id="colPartes" prefWidth="70.00007629394531" text="Partes" />
                               <TableColumn fx:id="colDescrip" prefWidth="461.33331298828125" text="Descripción" />
                            </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
                         </TableView>
                         <Label fx:id="lblNombre" layoutX="55.0" layoutY="95.0" text="Nombre:" AnchorPane.bottomAnchor="415.6666666666667" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="898.3333333333334" AnchorPane.topAnchor="95.0" />
                         <Label fx:id="lblVersion" layoutX="54.0" layoutY="132.0" text="Version:" AnchorPane.bottomAnchor="378.6666666666667" AnchorPane.leftAnchor="55.0" AnchorPane.rightAnchor="902.3333333333334" AnchorPane.topAnchor="131.99999999999997" />

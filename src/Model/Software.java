@@ -18,7 +18,7 @@ public class Software {
     private List<String> sistOp = new ArrayList<>();
     private String version;
     private List<Extras> extras = new ArrayList<>();
-    private List<Medios> medios;
+    private List<Medios> medios = new ArrayList<>() ;
 
     public Software(){}
 

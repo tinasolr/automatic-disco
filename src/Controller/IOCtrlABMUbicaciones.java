@@ -54,17 +54,19 @@ public class IOCtrlABMUbicaciones implements Initializable, EventHandler<KeyEven
     @FXML
     private void quitar(ActionEvent event) {
         if(tblUbicaciones.getSelectionModel().getSelectedItem() != null){
-            if(popUpWarning("Está seguro de que desea eliminar la ubicación " + tblUbicaciones.getSelectionModel().getSelectedItem().getId() + "?")){
-                UbicacionesDB u = new UbicacionesDB();
-                u.connect();
-                u.setCodUbi(tblUbicaciones.getSelectionModel().getSelectedItem().getId());
-                u.delete();
-                UbicacionesCtrl ubictrl = new UbicacionesCtrl();
-                ubictrl.getUbis().remove(tblUbicaciones.getSelectionModel().getSelectedItem());
-                loadTable();
-                txtCodigo.clear();
-                txtDescripcion.clear();
-            }
+            if(!tblUbicaciones.getSelectionModel().getSelectedItem().getId().equalsIgnoreCase("NOASIG")){
+                if(popUpWarning("Está seguro de que desea eliminar la ubicación " + tblUbicaciones.getSelectionModel().getSelectedItem().getId() + "?")){
+                    UbicacionesDB u = new UbicacionesDB();
+                    u.connect();
+                    u.setCodUbi(tblUbicaciones.getSelectionModel().getSelectedItem().getId());
+                    u.delete();
+                    UbicacionesCtrl ubictrl = new UbicacionesCtrl();
+                    ubictrl.getUbis().remove(tblUbicaciones.getSelectionModel().getSelectedItem());
+                    loadTable();
+                    txtCodigo.clear();
+                    txtDescripcion.clear();
+                }
+            }else{popUpError("No puede eliminar este valor.");}
         }else{popUpError("Por favor, seleccione una ubicación a eliminar.");}
     }
 

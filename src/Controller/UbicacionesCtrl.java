@@ -32,6 +32,23 @@ public class UbicacionesCtrl {
         }
     }
 
+    public Ubicaciones fetchUbicacion(String codigo){
+        UbicacionesDB u = new UbicacionesDB();
+        u = u.searchUbicacionesByID(codigo);
+        Ubicaciones found = findUbicacion(u);
+        if(found == null){
+            found = new Ubicaciones(u.getCodUbi(), u.getObsUbi());
+            ubis.add(found);
+        }
+        return found;
+    }
+
+    public Ubicaciones findUbicacion(UbicacionesDB codigo){
+        for(Ubicaciones u : ubis)
+            if(u.getId().equalsIgnoreCase(codigo.getCodUbi()))
+                return u;
+        return null;
+    }
     public List<Ubicaciones> getUbis() {        return ubis;    }
     public void setUbis(List<Ubicaciones> ubis) {        this.ubis = ubis;   }
 

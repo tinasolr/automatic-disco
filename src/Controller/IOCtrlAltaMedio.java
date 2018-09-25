@@ -90,15 +90,18 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     /********Initializes the controller class.*********************************/
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+
+        chkCaja = new CheckBox();
+        chkEnDeposito = new CheckBox();
+        chkManual = new CheckBox();
 
         //Carga de Combos
-        UbicacionesDB u = new UbicacionesDB();
-        List<UbicacionesDB> ub = u.read("Ubicaciones");
+        if(ubCtrl.getUbis().isEmpty())
+            ubCtrl.cargarUbicaciones();
         if(!cmbUbicacion.getItems().isEmpty())
             cmbUbicacion.getItems().clear();
 
-        ub.forEach((x) -> { cmbUbicacion.getItems().add(x.getCodUbi()); });
+        ubCtrl.getUbis().forEach((x) -> { cmbUbicacion.getItems().add(x.getId());});
         new AutoCompleteComboBoxListener<>(cmbUbicacion);
 
         FormatoDB f = new FormatoDB();
@@ -110,9 +113,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         new AutoCompleteComboBoxListener<>(cmbFormato);
 
         loadTable();
-        txtBusqueda.setOnKeyPressed((KeyEvent event) -> {
-
-        });
+        txtBusqueda.setOnKeyPressed((KeyEvent event) -> {});
         txtBusqueda.setOnKeyReleased(this);
         tblSoftwareDisp.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
@@ -173,7 +174,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         boolean caja = false;
         boolean endepo = false;
         Ubicaciones ubaux = new Ubicaciones();
-        Medios medio;
+        Medios medio = null;
 
         try{
             int partes = Integer.parseInt(txtPartes.getText());
@@ -206,14 +207,18 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
                                 imagen=archImagen.getAbsolutePath();
 
                             //UBICACION
+                            if(ubCtrl.getUbis().isEmpty())
+                                ubCtrl.cargarUbicaciones();
                             for(Ubicaciones u: ubCtrl.getUbis())
                                 if(u.getId().equals(ubicacion)){
                                     ubaux=u;
                                     break;
                                 }
-
+                            
                             //SOFTWARE CONTENIDO
                             SoftwareCtrl sctr = new SoftwareCtrl();
+                            if(sctr.getSws().isEmpty())
+                                sctr.cargarSoftware();
                             List<Software> contenido = new ArrayList<>();
                             for(String x : lstSwContenido.getItems()){
                                 String[] soft = x.split(" - ");
@@ -228,15 +233,18 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
                                 s.getMedios().add(medio);
 
                             //Se guarda en BD
-                            meCtrl.altaMedio(id, nombre, formid, caja, manual, origen, ubaux, endepo, imagen, observ, origen, contenido);
+                            boolean todoOK = meCtrl.altaMedio(id, nombre, formid, caja, manual, origen, ubaux, endepo, imagen, observ, origen, contenido);
                             meCtrl.getMedSw().add(medio);
 
                             //RELOAD CONS MASIVA MEDIOS
+                            if(todoOK){
+                                boolean cont = popUpWarning("Medio ingresado con éxito. ¿Cargar otro?");
 
-                            boolean cont = popUpWarning("Medio ingresado con éxito. ¿Cargar otro?");
-
-                            Stage x = (Stage) window.getScene().getWindow();
-                            x.close();
+                                Stage x = (Stage) window.getScene().getWindow();
+                                x.close();
+                                if(cont)
+                                    controlMenu.altaMedio(new ActionEvent());
+                            }else{popUpError("Algo no se cargó correctamente a la base.");}
                       }else{ popUpError("Selecione el si el medio es original, mixto u otro.");}
                     }else{ popUpError("Selecione el formato y una ubicacion.");}
                 }else{ popUpError("Por favor, ingrese un nombre de al menos 3 caracteres");}
@@ -283,7 +291,8 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
 
     public void loadTable(){
         SoftwareCtrl swCtrl = new SoftwareCtrl();
-        swCtrl.cargarSoftware();
+        if(swCtrl.getSws().isEmpty())
+            swCtrl.cargarSoftware();
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colVersion.setCellValueFactory(new PropertyValueFactory<>("version"));
 

@@ -20,6 +20,9 @@
           <TableColumn fx:id="colCodigo" prefWidth="123.9999942779541" text="Codigo" />
           <TableColumn fx:id="colDescripcion" prefWidth="406.66661071777344" text="Descripcion" />
         </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
       <Label fx:id="lblCodigo" layoutX="32.0" layoutY="274.0" prefHeight="17.0" prefWidth="73.0" text="Codigo:" />
    </children>
