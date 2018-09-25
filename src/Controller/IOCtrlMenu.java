@@ -73,7 +73,7 @@ public class IOCtrlMenu implements Initializable {
 
     @FXML
     private void altaMedio(ActionEvent event) {
-                try {
+        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/AltaMedio.fxml"));
 
             Parent root = loader.load();

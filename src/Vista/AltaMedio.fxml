@@ -17,9 +17,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IOCtrlAltaMedio">
+<AnchorPane id="AnchorPane" fx:id="window" prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IOCtrlAltaMedio">
    <children>
-      <Accordion AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Accordion expandedPane="$tpaneDatosMedio" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <panes>
           <TitledPane fx:id="tpaneDatosMedio" animated="false" prefWidth="500.0" text="Datos del Medio">
             <content>
@@ -84,7 +84,7 @@
                         <Button fx:id="btnAgregar" layoutX="110.0" layoutY="240.0" mnemonicParsing="false" onMouseClicked="#agregar" prefHeight="27.0" prefWidth="80.0" text="Agregar v" />
                         <Button fx:id="btnQuitar" layoutX="258.0" layoutY="240.0" mnemonicParsing="false" onMouseClicked="#quitar" prefHeight="27.0" prefWidth="80.0" text="Quitar ^" />
                         <Label layoutX="28.0" layoutY="288.0" text="Software seleccionado:" />
-                        <Button fx:id="btnIngresar" layoutX="37.0" layoutY="467.0" mnemonicParsing="false" onAction="#finalizar" onMouseClicked="#ingresarMedio" prefHeight="27.0" prefWidth="161.0" text="Ingresar Medio" />
+                        <Button fx:id="btnIngresar" layoutX="37.0" layoutY="467.0" mnemonicParsing="false" onAction="#ingresarMedio" prefHeight="27.0" prefWidth="161.0" text="Ingresar Medio" />
                         <Button fx:id="btnCancelar" layoutX="243.0" layoutY="467.0" mnemonicParsing="false" onMouseClicked="#cancelar" prefHeight="27.0" prefWidth="161.0" text="Cancelar" />
                         <TextField fx:id="txtBusqueda" layoutX="108.0" layoutY="198.0" prefHeight="27.0" prefWidth="232.0" promptText="Ingresar software buscado" />
                      </children>
