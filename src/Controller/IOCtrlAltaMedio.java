@@ -48,6 +48,9 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     private MediosDB meDB = new MediosDB();
     private FormatoDB foDB = new FormatoDB();
     private File archImagen;
+    private IOCtrlConsMasivaSw consmasivasw;
+    private IOCtrlMenu controlMenu;
+
 
     @FXML    private AnchorPane window;
     @FXML    private TitledPane tpaneDatosMedio;
@@ -99,11 +102,11 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         new AutoCompleteComboBoxListener<>(cmbUbicacion);
 
         FormatoDB f = new FormatoDB();
-        List<FormatoDB> fo = f.read("Formato");
+        List<String> fo = f.read("Formatos");
         if(!cmbFormato.getItems().isEmpty())
             cmbFormato.getItems().clear();
 
-        fo.forEach((x) -> { cmbFormato.getItems().add(x.getFormato()); });
+        fo.forEach((x) -> { cmbFormato.getItems().add(x); });
         new AutoCompleteComboBoxListener<>(cmbFormato);
 
         loadTable();
@@ -164,7 +167,6 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         String ubicacion = cmbUbicacion.getSelectionModel().getSelectedItem();
         String imagen="";
         String observ = txtObservaciones.getText();
-        int partes = Integer.parseInt(txtPartes.getText());
 
         int origen = 0;
         boolean manual = false;
@@ -173,57 +175,76 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         Ubicaciones ubaux = new Ubicaciones();
         Medios medio;
 
-        if(id.matches("[0-9]+(\\.[0-9]+)*")){
-            if(nombre.matches("\\w(\\s\\w)*")){
-                if(formato!= null && ubicacion!=null){
-                    if(!rbOriginal.isSelected() && !rbMixto.isSelected() && !rbOtros.isSelected()){
+        try{
+            int partes = Integer.parseInt(txtPartes.getText());
+            if(id.matches(".+")){
+                if(nombre.matches(".{3,}")){
+                    if(formato!= null && ubicacion!=null){
+                        if(rbOriginal.isSelected() || rbMixto.isSelected() || rbOtros.isSelected()){
 
-                        //EMPAQUE
-                        if(chkCaja.isSelected()) caja = true;
-                        if(chkManual.isSelected()) manual = true;
-                        //ORIGINAL-MIXTO-NO ORIGINAL
-                        if(rbOriginal.isSelected()) origen = 1;
-                        if(rbMixto.isSelected()) origen = 2;
-                        if(rbOtros.isSelected()) origen = 3;
-                        //EN DEPOSITO
-                        if(chkEnDeposito.isSelected()) endepo =true;
-                        //FORMATO
-                        FormatoDB f = new FormatoDB();
-                        f.connect();
-                        f.setFormato(cmbFormato.getSelectionModel().getSelectedItem());
-                        String fo = f.searchTable();
-                        int formid = Integer.parseInt(fo);
+                            //EMPAQUE
+                            if(chkCaja.isSelected()) caja = true;
+                            if(chkManual.isSelected()) manual = true;
 
-                        //IMAGEN
-                        if(archImagen!=null)
-                            imagen=archImagen.getAbsolutePath();
+                            //ORIGINAL-MIXTO-NO ORIGINAL
+                            if(rbOriginal.isSelected()) origen = 1;
+                            if(rbMixto.isSelected()) origen = 2;
+                            if(rbOtros.isSelected()) origen = 3;
 
-                        //UBICACION
-                        for(Ubicaciones u: ubCtrl.getUbis())
-                            if(u.getId().equals(ubicacion)){
-                                ubaux=u;
-                                break;
+                            //EN DEPOSITO
+                            if(chkEnDeposito.isSelected()) endepo = true;
+
+                            //FORMATO
+                            FormatoDB f = new FormatoDB();
+                            f.connect();
+                            f.setFormato(cmbFormato.getSelectionModel().getSelectedItem());
+                            String fo = f.searchTable();
+                            int formid = Integer.parseInt(fo);
+
+                            //IMAGEN
+                            if(archImagen!=null)
+                                imagen=archImagen.getAbsolutePath();
+
+                            //UBICACION
+                            for(Ubicaciones u: ubCtrl.getUbis())
+                                if(u.getId().equals(ubicacion)){
+                                    ubaux=u;
+                                    break;
+                                }
+
+                            //SOFTWARE CONTENIDO
+                            SoftwareCtrl sctr = new SoftwareCtrl();
+                            List<Software> contenido = new ArrayList<>();
+                            for(String x : lstSwContenido.getItems()){
+                                String[] soft = x.split(" - ");
+                                Software s = sctr.findSoftware(Integer.parseInt(soft[0]));
+                                contenido.add(s);
                             }
 
-                        //SOFTWARE CONTENIDO
-                        SoftwareCtrl sctr = new SoftwareCtrl();
-                        List<Software> contenido = new ArrayList<>();
-                        for(String x : lstSwContenido.getItems()){
-                            String[] soft = x.split(" - ");
-                            Software s = sctr.findSoftware(Integer.parseInt(soft[0]));
-                            contenido.add(s);
-                        }
+                            medio = new Medios(id, nombre, formato, caja, manual,origen,ubaux,endepo,imagen, observ,origen);
 
-                        //Se guarda en BD
-                        medio = new Medios(id, nombre, formato, caja, manual,origen,ubaux,endepo,imagen, observ,origen);
-                        meCtrl.altaMedio(id, nombre, formid, caja, manual, origen, ubaux, endepo, imagen, observ, origen, contenido);
-                        meCtrl.getMedSw().add(medio);
+                            //ADD MEDIO TO EVERY SOFTWARE
+                            for(Software s : contenido)
+                                s.getMedios().add(medio);
 
-                        popUpExito("Medio ingresado con éxito.");
-                  }else{ popUpError("Selecione el si el medio es original, mixto u otro.");}
-                }else{ popUpError("Selecione el formato/ubicacion.");}
-            }else{ popUpError("Ingresar un nombre valido.");}
-         }else{ popUpError("Rellenar espacios vacios y volver a intentar. ");}
+                            //Se guarda en BD
+                            meCtrl.altaMedio(id, nombre, formid, caja, manual, origen, ubaux, endepo, imagen, observ, origen, contenido);
+                            meCtrl.getMedSw().add(medio);
+
+                            //RELOAD CONS MASIVA MEDIOS
+
+                            boolean cont = popUpWarning("Medio ingresado con éxito. ¿Cargar otro?");
+
+                            Stage x = (Stage) window.getScene().getWindow();
+                            x.close();
+                      }else{ popUpError("Selecione el si el medio es original, mixto u otro.");}
+                    }else{ popUpError("Selecione el formato y una ubicacion.");}
+                }else{ popUpError("Por favor, ingrese un nombre de al menos 3 caracteres");}
+            }else{ popUpError("Por favor, ingrese un identificador del medio. ");}
+
+        }catch(NumberFormatException e){
+            popUpError("Por favor, ingrese un numero de partes.");
+        }
     }
 
     @FXML
@@ -307,6 +328,17 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         }
     }
 
+     public boolean popUpWarning(String texto){
+        Alert alert = new Alert(Alert.AlertType.WARNING, texto, ButtonType.YES, ButtonType.NO);
+            alert.showAndWait();
+
+            if (alert.getResult() == ButtonType.YES) {
+                alert.close();
+                return true;
+            }
+        alert.close();
+        return false;
+    }
     /********************GETTERS & SETTE**************************************/
 
     public BorderPane getMainWindow() {
@@ -315,5 +347,21 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
 
     public void setMainWindow(BorderPane mainWindow) {
         this.mainWindow = mainWindow;
+    }
+
+    public IOCtrlConsMasivaSw getConsmasivasw() {
+        return consmasivasw;
+    }
+
+    public void setConsmasivasw(IOCtrlConsMasivaSw consmasivasw) {
+        this.consmasivasw = consmasivasw;
+    }
+
+    public IOCtrlMenu getControlMenu() {
+        return controlMenu;
+    }
+
+    public void setControlMenu(IOCtrlMenu controlMenu) {
+        this.controlMenu = controlMenu;
     }
 }

@@ -20,6 +20,9 @@ import javafx.stage.*;
 
 public class IOCtrlConsMasivaSw implements Initializable {
 
+    private SoftwareCtrl swCtrl;
+    private IOCtrlMenu controlMenu;
+
     @FXML    private AnchorPane showSw;
     @FXML    private TableView<Software> tblSoftware;
     @FXML    private TableColumn<Software, String> colCodigoSw;
@@ -30,26 +33,15 @@ public class IOCtrlConsMasivaSw implements Initializable {
     @FXML    private MenuItem derVer;
     @FXML    private MenuItem derModificar;
     @FXML    private MenuItem derEliminar;
-
-    private SoftwareCtrl swCtrl;
-    @FXML
-    private TextField txtFiltrar;
-    @FXML
-    private RadioButton rdbTodos;
-    @FXML
-    private ToggleGroup groupFiltrar;
-    @FXML
-    private RadioButton rdbCodigo;
-    @FXML
-    private RadioButton rdbSistOp;
-    @FXML
-    private RadioButton rdbNombre;
-    @FXML
-    private RadioButton rdbVersion;
-    @FXML
-    private Button btnFiltrar;
-    @FXML
-    private BorderPane mainWindow;
+    @FXML    private TextField txtFiltrar;
+    @FXML    private RadioButton rdbTodos;
+    @FXML    private ToggleGroup groupFiltrar;
+    @FXML    private RadioButton rdbCodigo;
+    @FXML    private RadioButton rdbSistOp;
+    @FXML    private RadioButton rdbNombre;
+    @FXML    private RadioButton rdbVersion;
+    @FXML    private Button btnFiltrar;
+    @FXML    private BorderPane mainWindow;
 
     @FXML
     private void consIndividual(ActionEvent event) {
@@ -125,5 +117,13 @@ public class IOCtrlConsMasivaSw implements Initializable {
         rdbSistOp.setDisable(x);
         rdbVersion.setDisable(x);
         rdbTodos.setDisable(x);
+    }
+
+    public IOCtrlMenu getControlMenu() {
+        return controlMenu;
+    }
+
+    public void setControlMenu(IOCtrlMenu controlMenu) {
+        this.controlMenu = controlMenu;
     }
 }

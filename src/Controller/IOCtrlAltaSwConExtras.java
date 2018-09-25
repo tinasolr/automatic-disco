@@ -7,13 +7,10 @@ package Controller;
 
 import DAO.*;
 import Model.*;
-import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.logging.*;
 import javafx.event.*;
 import javafx.fxml.*;
-import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
@@ -29,6 +26,8 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
     private final ExtrasCtrl exCtrl = new ExtrasCtrl();
     private final SoftwareDB swDB = new SoftwareDB();
     private List<String> sistOperativos = new ArrayList<>();
+    private IOCtrlConsMasivaSw consmasivasw;
+    private IOCtrlMenu controlMenu;
 
     @FXML  private Label lblNombre;
     @FXML  private Label lblVersion;
@@ -153,40 +152,39 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
 
         if(valIngresoSoft(nombre, version,cantSO)){
             if(version.matches("[0-9]+(\\.[0-9]+)*")){
-                    if(cantSO>0){
+                if(cantSO>0){
 
-                        //GuardaSW en BD
-                        swCtrl.altaSoftware(nombre, version);
-                        soft.setNombre(nombre);
-                        soft.setVersion(version);
-                        //GuardaSO en BD
-                        swDB.setNombre(nombre);
-                        swDB.setVersion(version);
-                        swDB.connect();
-                        cod = Integer.parseInt(swDB.executeSearch());
-                        List<String> sistOp = new ArrayList<>();
-                        for(String x : lstSistemasOp.getItems()){
-                           swCtrl.agregarSoDeSw(cod, x);
-                           sistOp.add(x);
-                        }
-                        soft.setSistOp(sistOp);
-                        //GuardaExtras en BD
-                        List<Extras> a = tblExtras.getItems();
-                        for(Extras e : a)
-                        {
-                            exCtrl.altaExtra(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes(), cod);
-                            soft.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
-                         }
+                    //GuardaSW en BD
+                    swCtrl.altaSoftware(nombre, version);
+                    soft.setNombre(nombre);
+                    soft.setVersion(version);
+                    //GuardaSO en BD
+                    swDB.setNombre(nombre);
+                    swDB.setVersion(version);
+                    swDB.connect();
+                    cod = Integer.parseInt(swDB.executeSearch());
+                    List<String> sistOp = new ArrayList<>();
+                    for(String x : lstSistemasOp.getItems()){
+                       swCtrl.agregarSoDeSw(cod, x);
+                       sistOp.add(x);
+                    }
+                    soft.setSistOp(sistOp);
+                    //GuardaExtras en BD
+                    List<Extras> a = tblExtras.getItems();
+                    for(Extras e : a)
+                    {
+                        exCtrl.altaExtra(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes(), cod);
+                        soft.setExtras(e.getNombre(), e.getVersion(), e.getDescrip(), e.getPartes());
+                     }
 
-                        SoftwareCtrl swCtrl = new SoftwareCtrl();
-                        swCtrl.getSws().add(soft);
-                        popUpExito("Software ingresado con éxito.");
-                        changeBackToConsultaSw();
+                    SoftwareCtrl swCtrl = new SoftwareCtrl();
+                    swCtrl.getSws().add(soft);
+                    popUpExito("Software ingresado con éxito.");
+                    reloadConsultaSw();
 
-                    }else{ popUpError("Ingrese el sistema operativo.");}
-                }else{ popUpError("Ingresar un número de versión válido.");}
-            }else{ popUpError("Rellenar espacios vacios y volver a intentar. ");}
-
+                }else{ popUpError("Ingrese el sistema operativo.");}
+            }else{ popUpError("Ingresar un número de versión válido.");}
+        }else{ popUpError("Rellenar espacios vacios y volver a intentar. ");}
     }
 
     @FXML
@@ -232,15 +230,8 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
         }
     }
 
-    public void changeBackToConsultaSw(){
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/Vista/ConsultaSoftware.fxml"));
-            Node x = loader.load();
-            mainWindow.setCenter(x);
-        } catch (IOException ex) {
-            Logger.getLogger(IOCtrlAltaSwConExtras.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void reloadConsultaSw(){
+        consmasivasw.loadTable();
     }
 
     public void loadTable(){
@@ -602,6 +593,22 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
 
     public void setBpExtras(BorderPane bpExtras) {
         this.bpExtras = bpExtras;
+    }
+
+    public IOCtrlConsMasivaSw getConsmasivasw() {
+        return consmasivasw;
+    }
+
+    public void setConsmasivasw(IOCtrlConsMasivaSw consmasivasw) {
+        this.consmasivasw = consmasivasw;
+    }
+
+    public IOCtrlMenu getControlMenu() {
+        return controlMenu;
+    }
+
+    public void setControlMenu(IOCtrlMenu controlMenu) {
+        this.controlMenu = controlMenu;
     }
 
 

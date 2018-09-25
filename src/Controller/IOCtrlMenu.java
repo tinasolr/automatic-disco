@@ -24,6 +24,13 @@ import javafx.stage.*;
 public class IOCtrlMenu implements Initializable {
 
     private BorderPane borderPane;
+    private IOCtrlABMFormato formato;
+    private IOCtrlABMSistemaOperat so;
+    private IOCtrlABMUbicaciones ubi;
+    private IOCtrlAltaMedio altamedio;
+    private IOCtrlAltaSwConExtras altasoftware;
+    private IOCtrlConsMasivaSw consmasivasw;
+    private IOCtrlModSwConExtras modsoftware;
 
     @FXML    private MenuBar mnuPpal;
     @FXML    private Menu mArchivo;
@@ -49,7 +56,15 @@ public class IOCtrlMenu implements Initializable {
     /*** Initializes the controller class.************************************/
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ConsultaSoftware.fxml"));
+            Node x = loader.load();
+            consmasivasw = loader.getController();
+            consmasivasw.setControlMenu(this);
+            mainWindow.setCenter(x);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
     /***************JAVAFX FUNCTIONS*******************************************/
 
@@ -59,6 +74,10 @@ public class IOCtrlMenu implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/AltaSoftware.fxml"));
 
             Parent root = loader.load();
+            altasoftware = loader.getController();
+            altasoftware.setConsmasivasw(consmasivasw);
+            altasoftware.setControlMenu(this);
+
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Software");
@@ -77,6 +96,9 @@ public class IOCtrlMenu implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/AltaMedio.fxml"));
 
             Parent root = loader.load();
+            altamedio = loader.getController();
+            altamedio.setConsmasivasw(consmasivasw);
+            altamedio.setControlMenu(this);
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Medio de Almacenamiento");

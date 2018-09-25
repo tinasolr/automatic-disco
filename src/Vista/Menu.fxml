@@ -47,7 +47,7 @@
       </MenuBar>
       <BorderPane fx:id="mainWindow" layoutY="24.0" prefHeight="616.0" prefWidth="927.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
         <center>
-            <fx:include source="/Vista/ConsultaSoftware.fxml"/>
+            <!--<fx:include source="/Vista/ConsultaSoftware.fxml"/>-->
         </center>
       </BorderPane>
    </children>
