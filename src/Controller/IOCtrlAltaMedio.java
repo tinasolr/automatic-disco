@@ -163,33 +163,13 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         String formato = (String) cmbFormato.getSelectionModel().getSelectedItem();
         String ubicacion = (String) cmbUbicacion.getSelectionModel().getSelectedItem();
         String imagen="";
-        if(archImagen!=null)
-            imagen=archImagen.getAbsolutePath();
         String observ = txtObservaciones.getText();
         int partes = Integer.parseInt(txtPartes.getText());
-        FormatoDB f = new FormatoDB();
-        f.connect();
-        f.setFormato(cmbFormato.getSelectionModel().getSelectedItem());
-        String fo = f.searchTable();
-        int formid = Integer.parseInt(fo);
+
         int origen=0;
-        if(rbOriginal.isSelected())
-            origen = 1;
-        else if(rbMixto.isSelected())
-            origen = 2;
-        else if(rbOtros.isSelected())
-            origen = 3;
-        else
-            popUpError("Seleccione si es original, mixto u otro.");
         boolean manual = false;
-        if(rdbManual.isSelected())
-            manual = true;
         boolean caja = false;
-        if(rdbCaja.isSelected())
-            caja = true;
         boolean endepo = false;
-        if(cbEnDeposito.isSelected())
-            endepo = true;
         Ubicaciones ubaux=new Ubicaciones();
         Medios medio;
 
@@ -198,27 +178,39 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
                 if(formato!= null && ubicacion!=null){
                     if(!rbOriginal.isSelected() && !rbMixto.isSelected() && !rbOtros.isSelected()){
 
-
+                        //EMPAQUE
                         if(rdbCaja.isSelected()) caja = true;
                         if(rdbManual.isSelected()) manual = true;
-                        if(rbOriginal.isSelected()) origen =1;
-                        if(rbMixto.isSelected()) origen =2;
-                        if(rbOtros.isSelected()) origen =3;
+                        //ORIGINAL-MIXTO-NO ORIGINAL
+                        if(rbOriginal.isSelected()) origen = 1;
+                        if(rbMixto.isSelected()) origen = 2;
+                        if(rbOtros.isSelected()) origen = 3;
+                        //EN DEPOSITO
                         if(cbEnDeposito.isSelected()) endepo =true;
-                        formid = Integer.parseInt(foDB.executeSearch());
+                        //FORMATO
+                        FormatoDB f = new FormatoDB();
+                        f.connect();
+                        f.setFormato(cmbFormato.getSelectionModel().getSelectedItem());
+                        String fo = f.searchTable();
+                        int formid = Integer.parseInt(fo);
+
                         //Se guarda en BD
                         meCtrl.altaMedio(id, nombre, partes, manual, caja, imagen, observ, formid, origen);
 
+                        if(archImagen!=null)
+                            imagen=archImagen.getAbsolutePath();
                         //Se guarda en array de medio
                         for(Ubicaciones u: ubCtrl.getUbis())
-                            if(u.getDescripcion().equals(ubicacion)) ubaux=u;
+                            if(u.getDescripcion().equals(ubicacion)){
+                                ubaux=u;
+                                break;
+                            }
 
                         medio = new Medios(id, nombre,formato,caja, manual,origen,ubaux,endepo,imagen, observ,origen);
                         meCtrl.getMedSw().add(medio);
 
                         popUpExito("Medio ingresado con éxito.");
- //                       changeBackToConsultaSw();
-                  }else{ popUpError("Selecione el Origen del medio.");}
+                  }else{ popUpError("Selecione el si el medio es original, mixto u otro.");}
                 }else{ popUpError("Selecione el formato/ubicacion.");}
             }else{ popUpError("Ingresar un nombre valido.");}
          }else{ popUpError("Rellenar espacios vacios y volver a intentar. ");}
