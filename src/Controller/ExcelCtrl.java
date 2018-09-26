@@ -17,44 +17,114 @@ public class ExcelCtrl {
     public void read(String url){
         try {
 
-            FileInputStream file = new FileInputStream(new File(url));
-
+            Workbook wb = WorkbookFactory.create(new File(url));
+//            OPCPackage pkg = OPCPackage.open(new File(url));
+//            XSSFWorkbook wb = new XSSFWorkbook(pkg);
+//            FileInputStream file = new FileInputStream(new File(url));
             //Get the workbook instance for XLS file
-            HSSFWorkbook workbook = new HSSFWorkbook(file);
+//            HSSFWorkbook workbook = new HSSFWorkbook(file);
 
             //Get first sheet from the workbook
-            HSSFSheet sheet = workbook.getSheetAt(0);
-
+//            HSSFSheet sheet = workbook.getSheetAt(0);
+            Sheet sheet = wb.getSheetAt(0);
             //Iterate through each rows from first sheet
             Iterator<Row> rowIterator = sheet.iterator();
+            Row row = rowIterator.next();
+
             while(rowIterator.hasNext()) {
-                    Row row = rowIterator.next();
+                    row = rowIterator.next();
 
-                    //For each row, iterate through each columns
-                    Iterator<Cell> cellIterator = row.cellIterator();
-                    while(cellIterator.hasNext()) {
+                    Cell col1 = row.getCell(1);
+                    double numReg = 0;
 
-                            Cell cell = cellIterator.next();
-
-                            switch(cell.getCellType()) {
-                                case BOOLEAN:
-                                    System.out.print(cell.getBooleanCellValue() + "\t\t");
-                                    break;
-                                case NUMERIC:
-                                    System.out.print(cell.getNumericCellValue() + "\t\t");
-                                    break;
-                                case STRING:
-                                    System.out.print(cell.getStringCellValue() + "\t\t");
-                                    break;
-                            }
+                    if (!isCellEmpty(col1)) {
+                        numReg = col1.getNumericCellValue();
                     }
-                    System.out.println("");
+                    Cell col2 = row.getCell(2);
+                    String titulo = "";
+                    if (!isCellEmpty(col2)) {
+                        titulo = col2.getStringCellValue();
+                    }
+                    Cell col3 = row.getCell(3);
+                    String formato = "";
+                    if (!isCellEmpty(col3)) {
+                        formato = col3.getStringCellValue();
+                    }
+                    Cell col4 = row.getCell(4);
+                    String original = "";
+                    boolean orig;
+                    if (!isCellEmpty(col4)) {
+                        original = col4.getStringCellValue();
+                        orig = original.equalsIgnoreCase("si");
+                    }
+                    Cell col5 = row.getCell(5);
+                    String tipoSoft = "";
+                    if (!isCellEmpty(col5)) {
+                        tipoSoft = col5.getStringCellValue();
+                    }
+                    Cell col6 = row.getCell(6);
+                    String man ="";
+                    boolean manual = false;
+                    if (!isCellEmpty(col6)) {
+                        man = col6.getStringCellValue();
+                        manual = man.equalsIgnoreCase("si");
+                    }
+                    Cell col7 = row.getCell(7);
+                    String ca ="";
+                    boolean caja = false;
+                    if (!isCellEmpty(col7)) {
+                        ca = col7.getStringCellValue();
+                        caja = ca.equalsIgnoreCase("si");
+                    }
+                    Cell col8 = row.getCell(8);
+                    String sistemaOperativo = "";
+                    String[] so = null;
+                    if (!isCellEmpty(col8)) {
+                        sistemaOperativo = col8.getStringCellValue();
+                        so = sistemaOperativo.split(",");
+                    }
+                    Cell col9 = row.getCell(9);
+                    double partes = 0;
+                    if (!isCellEmpty(col9)) {
+                        partes = col9.getNumericCellValue();
+                    }
+                    Cell col10 = row.getCell(10);
+                    String ubicacion = "";
+                    if (!isCellEmpty(col10)) {
+                        ubicacion = col10.getStringCellValue();
+                    }
+                    Cell col11 = row.getCell(11);
+                    double numcaja = 0;
+                    if (!isCellEmpty(col11)) {
+                        numcaja = col11.getNumericCellValue();
+                    }
+
+                    System.out.println(numReg + " " + titulo + " " + formato + " " + original + " " + tipoSoft + " " + manual + " " + caja + " " + sistemaOperativo + " " + partes + " " + ubicacion + " " + numcaja);
+//                    Iterator<Cell> cellIterator = row.cellIterator();
+//                    while(cellIterator.hasNext()) {
+//
+//                            Cell cell = cellIterator.next();
+//
+////                            switch(cell.getCellType()) {
+////                                case BOOLEAN:
+////                                    System.out.print(cell.getBooleanCellValue() + "\t\t");
+////                                    break;
+////                                case NUMERIC:
+////                                    System.out.print(cell.getNumericCellValue() + "\t\t");
+////                                    break;
+////                                case STRING:
+////                                    System.out.print(cell.getStringCellValue() + "\t\t");
+////                                    break;
+////                            }
+//                            System.out.print(cell.getColumnIndex());
+//                    }
+//                    System.out.println("");
             }
-            file.close();
-            FileOutputStream out =
-                    new FileOutputStream(new File("C:\\test.xls"));
-            workbook.write(out);
-            out.close();
+            wb.close();
+//            FileOutputStream out =
+//                    new FileOutputStream(new File("C:\\test.xls"));
+//            workbook.write(out);
+//            out.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -105,4 +175,16 @@ public class ExcelCtrl {
                 e.printStackTrace();
         }
     }
+
+    public static boolean isCellEmpty(final Cell cell) {
+    if (cell == null || cell.getCellType() == CellType.BLANK) {
+        return true;
+    }
+
+    if (cell.getCellType() == CellType.STRING && cell.getStringCellValue().isEmpty()) {
+        return true;
+    }
+
+    return false;
+}
 }

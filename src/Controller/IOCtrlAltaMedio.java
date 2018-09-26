@@ -21,6 +21,7 @@ import DAO.*;
 import Model.*;
 import java.io.*;
 import java.net.*;
+import java.nio.file.*;
 import java.util.*;
 import java.util.logging.*;
 import javafx.event.*;
@@ -50,7 +51,6 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     private File archImagen;
     private IOCtrlConsMasivaSw consmasivasw;
     private IOCtrlMenu controlMenu;
-
 
     @FXML    private AnchorPane window;
     @FXML    private TitledPane tpaneDatosMedio;
@@ -123,17 +123,31 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         @FXML
     private void agregarImagen(MouseEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
+        fileChooser.setTitle("Seleccionar imagen");
         archImagen = fileChooser.showOpenDialog(new Stage());
         fileChooser.getExtensionFilters().addAll(
             new FileChooser.ExtensionFilter("All Images", "*.*"),
             new FileChooser.ExtensionFilter("JPG", "*.jpg"),
             new FileChooser.ExtensionFilter("PNG", "*.png")
         );
+
         if(archImagen != null){
-            String url = archImagen.getAbsolutePath();
-            image.setImage(new Image("file:///" + url));
+            try {
+                Path from = Paths.get(archImagen.toURI());
+                Path to = Paths.get("./src/imagenes/" + archImagen.getName());
+                CopyOption[] options = new CopyOption[]{
+                    StandardCopyOption.REPLACE_EXISTING,
+                    StandardCopyOption.COPY_ATTRIBUTES
+                };
+                Files.copy(from, to, options);
+                File fi = new File("./src/imagenes/" + archImagen.getName());
+                image.setImage(new Image("file:///" + fi.getAbsolutePath()));
+                archImagen = fi;
+            } catch (IOException ex) {
+                Logger.getLogger(IOCtrlAltaMedio.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+
     }
 
     @FXML
@@ -204,7 +218,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
 
                             //IMAGEN
                             if(archImagen!=null)
-                                imagen=archImagen.getAbsolutePath();
+                                imagen=archImagen.getName();
 
                             //UBICACION
                             if(ubCtrl.getUbis().isEmpty())
@@ -214,7 +228,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
                                     ubaux=u;
                                     break;
                                 }
-                            
+
                             //SOFTWARE CONTENIDO
                             SoftwareCtrl sctr = new SoftwareCtrl();
                             if(sctr.getSws().isEmpty())

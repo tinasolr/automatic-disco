@@ -48,6 +48,8 @@ public class SWTeca extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+//       ExcelCtrl ex = new ExcelCtrl();
+//       ex.read("C:\\Users\\tinar\\Desktop\\Registro-de-software.xlsx");
     }
 
 }
