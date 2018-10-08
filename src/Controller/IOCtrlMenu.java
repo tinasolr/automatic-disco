@@ -32,6 +32,9 @@ public class IOCtrlMenu implements Initializable {
     private IOCtrlConsMasivaSw consmasivasw;
     private IOCtrlConsMasivaMedios consmasivamed;
     private IOCtrlModSwConExtras modsoftware;
+    private IOCtrlLogin login;
+
+    private int accesos = 0;
 
     @FXML    private MenuBar mnuPpal;
     @FXML    private Menu mArchivo;
@@ -48,7 +51,6 @@ public class IOCtrlMenu implements Initializable {
     @FXML    private MenuItem AltaMedio;
     @FXML    private MenuItem AltaCopia;
     @FXML    private MenuItem ConsultaMedios;
-    @FXML    private MenuItem ConsultaCopias;
     @FXML    private BorderPane mainWindow;
     @FXML    private MenuItem ABMFormatos;
     @FXML    private MenuItem ABMUbicaciones;
@@ -57,14 +59,36 @@ public class IOCtrlMenu implements Initializable {
     /*** Initializes the controller class.************************************/
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ConsultaMedios.fxml"));
             Node x = loader.load();
             consmasivamed = loader.getController();
             consmasivamed.setControlMenu(this);
             mainWindow.setCenter(x);
+            disableEverything(true);
         } catch (IOException ex) {
             ex.printStackTrace();
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Login.fxml"));
+
+            Parent root = loader.load();
+            login = loader.getController();
+            login.setConsMasivaMedios(consmasivamed);
+            login.setControlmenu(this);
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Login");
+            stage.setAlwaysOnTop(true);
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /***************JAVAFX FUNCTIONS*******************************************/
@@ -184,6 +208,10 @@ public class IOCtrlMenu implements Initializable {
         }
     }
 
+    @FXML
+    private void salir(ActionEvent event) {
+        System.exit(0);
+    }
     /************************OTHER FUNCTIONS*********************************/
 
     public void changeScene(String url){
@@ -198,4 +226,27 @@ public class IOCtrlMenu implements Initializable {
             System.err.println(iOException.getLocalizedMessage());
         }
     }
+
+    public void disableEverything(boolean x){
+
+        arcImportar.setDisable(x);
+        arcExportar.setDisable(x);
+        mEditar.setDisable(x);
+        mVer.setDisable(x);
+        arcNuevo.setDisable(x);
+        ConsultaMedios.setDisable(x);
+        ABMFormatos.setDisable(x);
+        ABMUbicaciones.setDisable(x);
+        ABMSistemaOperat.setDisable(x);
+    }
+
+    public int getAccesos() {
+        return accesos;
+    }
+
+    public void setAccesos(int accesos) {
+        this.accesos = accesos;
+    }
+
+
 }

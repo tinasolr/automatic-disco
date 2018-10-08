@@ -25,6 +25,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
 
     private MediosCtrl meCtrl;
     private IOCtrlMenu controlmenu;
+    private int acceso = 0;
 
     @FXML    private TextField txtFiltrar;
     @FXML    private RadioButton rdbTodos;
@@ -56,7 +57,9 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
     /************Initializes the controller class.*****************************/
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        loadTable();
+        disableSearchItems(true);
+        if(acceso>0)
+            loadTable();
         txtFiltrar.setOnKeyPressed((KeyEvent event) -> {  });
         txtFiltrar.setOnKeyReleased(this);
         rdbCodigo.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
@@ -70,7 +73,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
 
     /***************************JAVAFX FUNCTIONS*******************************/
         @FXML
-    private void loadTable() {
+    public void loadTable() {
         meCtrl = new MediosCtrl();
         meCtrl.formatMediosForTable();
 
@@ -222,14 +225,17 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
         return false;
     }
 
-    private void disableSearchItems(boolean x){
-//        txtFiltrar.setDisable(x);
-//        btnFiltrar.setDisable(x);
-//        rdbCodigo.setDisable(x);
-//        rdbNombre.setDisable(x);
-//        rdbSistOp.setDisable(x);
-//        rdbVersion.setDisable(x);
-//        rdbTodos.setDisable(x);
+    public void disableSearchItems(boolean x){
+        txtFiltrar.setDisable(x);
+        btnTodo.setDisable(x);
+        rdbCodigo.setDisable(x);
+        rdbNombre.setDisable(x);
+        rdbFormato.setDisable(x);
+        rdbUbicacion.setDisable(x);
+        rdbTodos.setDisable(x);
+        chkGuardado.setDisable(x);
+        chkOriginal.setDisable(x);
+        tblMedios.setDisable(x);
     }
 
 /*******************************EVENT HANDLER**********************************/

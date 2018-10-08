@@ -21,7 +21,7 @@
                   </Menu>
                   <MenuItem fx:id="arcImportar" text="_Importar..." />
                   <MenuItem fx:id="arcExportar" text="_Exportar..." />
-                  <MenuItem fx:id="arcSalir" text="_Salir" />
+                  <MenuItem fx:id="arcSalir" onAction="#salir" text="_Salir" />
             </items>
           </Menu>
           <Menu fx:id="mEditar" text="_Editar">
