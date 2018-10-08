@@ -23,7 +23,7 @@
                     <AnchorPane prefHeight="260.0" prefWidth="245.0">
                        <children>
                           <TextField fx:id="txtFiltrar" prefHeight="25.0" prefWidth="213.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="18.0" />
-                          <RadioButton fx:id="rdbTodos" layoutX="14.0" layoutY="105.0" mnemonicParsing="true" prefHeight="20.0" selected="true" text="_Todos los campos" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="105.0">
+                          <RadioButton fx:id="rdbTodos" layoutX="14.0" layoutY="73.0" mnemonicParsing="true" prefHeight="20.0" selected="true" text="_Todos los campos" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="73.0">
                              <toggleGroup>
                                 <ToggleGroup fx:id="groupFiltrar" />
                              </toggleGroup>
@@ -31,11 +31,11 @@
                                 <Insets top="3.0" />
                              </padding>
                           </RadioButton>
-                          <RadioButton fx:id="rdbCodigo" layoutX="14.0" layoutY="130.0" mnemonicParsing="true" prefHeight="20.0" text="_Código" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="130.0" />
-                          <RadioButton fx:id="rdbSistOp" layoutX="14.0" layoutY="155.0" mnemonicParsing="true" prefHeight="20.0" text="Sistema _Operativo" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="155.0" />
-                          <RadioButton fx:id="rdbNombre" layoutX="14.0" layoutY="180.0" mnemonicParsing="true" prefHeight="20.0" text="_Nombre" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="180.0" />
-                          <RadioButton fx:id="rdbVersion" layoutX="14.0" layoutY="205.0" mnemonicParsing="true" text="_Versión" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="205.0" />
-                          <Button fx:id="btnFiltrar" mnemonicParsing="false" snapToPixel="false" text="Filtrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="63.0" />
+                          <RadioButton fx:id="rdbCodigo" layoutX="14.0" layoutY="98.0" mnemonicParsing="true" prefHeight="20.0" text="_Código" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="98.0" />
+                          <RadioButton fx:id="rdbSistOp" layoutX="14.0" layoutY="168.0" mnemonicParsing="true" prefHeight="20.0" text="Sistema _Operativo" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="173.0" />
+                          <RadioButton fx:id="rdbNombre" layoutX="14.0" layoutY="122.0" mnemonicParsing="true" prefHeight="20.0" text="_Nombre" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="122.0" />
+                          <RadioButton fx:id="rdbVersion" layoutX="14.0" layoutY="148.0" mnemonicParsing="true" text="_Versión" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="148.0" />
+                          <Button fx:id="btnFiltrar" layoutX="157.0" layoutY="208.0" mnemonicParsing="false" onAction="#loadTable" snapToPixel="false" text="Ver Todos" AnchorPane.leftAnchor="157.0" AnchorPane.topAnchor="208.0" />
                        </children>
                     </AnchorPane>
                  </content>

@@ -18,7 +18,7 @@ public class Medios {
     private String formato;
     private boolean caja;
     private boolean manual;
-    private int origen;
+    private int origen; //1 = Original, 2 = Mixto, 3 = Otros
     private Ubicaciones ubiDepo;
     private boolean enDepo;
     private String imagen;

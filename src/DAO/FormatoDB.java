@@ -103,7 +103,7 @@ public class FormatoDB extends DBObject {
             if(conn == null || conn.isClosed())
                 connect();
 
-            PreparedStatement sp = conn.prepareStatement("SELECT * FROM Formatos WHERE form_id=?");
+            PreparedStatement sp = conn.prepareStatement("SELECT form_nom FROM Formatos WHERE form_id=?");
 
             sp.setInt(1, id);
             ResultSet r = sp.executeQuery();

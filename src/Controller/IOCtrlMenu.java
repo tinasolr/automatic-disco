@@ -30,6 +30,7 @@ public class IOCtrlMenu implements Initializable {
     private IOCtrlAltaMedio altamedio;
     private IOCtrlAltaSwConExtras altasoftware;
     private IOCtrlConsMasivaSw consmasivasw;
+    private IOCtrlConsMasivaMedios consmasivamed;
     private IOCtrlModSwConExtras modsoftware;
 
     @FXML    private MenuBar mnuPpal;
@@ -57,10 +58,10 @@ public class IOCtrlMenu implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ConsultaSoftware.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ConsultaMedios.fxml"));
             Node x = loader.load();
-            consmasivasw = loader.getController();
-            consmasivasw.setControlMenu(this);
+            consmasivamed = loader.getController();
+            consmasivamed.setControlMenu(this);
             mainWindow.setCenter(x);
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -69,7 +70,7 @@ public class IOCtrlMenu implements Initializable {
     /***************JAVAFX FUNCTIONS*******************************************/
 
     @FXML
-    private void altaSoftware(ActionEvent event) {
+    public void altaSoftware(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/AltaSoftware.fxml"));
 
@@ -112,7 +113,7 @@ public class IOCtrlMenu implements Initializable {
     }
 
     @FXML
-    private void editarFormato(ActionEvent event) {
+    public void editarFormato(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMFormato.fxml"));
 
@@ -130,7 +131,7 @@ public class IOCtrlMenu implements Initializable {
     }
 
     @FXML
-    private void editarUbicaciones(ActionEvent event) { try {
+    public void editarUbicaciones(ActionEvent event) { try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMUbicaciones.fxml"));
 
             Parent root = loader.load();
@@ -148,7 +149,7 @@ public class IOCtrlMenu implements Initializable {
     }
 
     @FXML
-    private void editarSistOperativos(ActionEvent event) {
+    public void editarSistOperativos(ActionEvent event) {
          try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMSistemaOperat.fxml"));
 

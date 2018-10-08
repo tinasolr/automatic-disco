@@ -83,9 +83,19 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     @FXML    private RadioButton rbOriginal;
     @FXML    private RadioButton rbMixto;
     @FXML    private RadioButton rbOtros;
-    @FXML    private CheckBox chkCaja;
-    @FXML    private CheckBox chkManual;
-    @FXML    private CheckBox chkEnDeposito;
+    private CheckBox chkCaja;
+    private CheckBox chkManual;
+    private CheckBox chkEnDeposito;
+    @FXML
+    private ToggleGroup grpOrigen;
+    @FXML
+    private CheckBox rdbCaja;
+    @FXML
+    private CheckBox rdbManual;
+    @FXML
+    private CheckBox cbEnDeposito;
+    @FXML
+    private Button btnReload;
 
     /********Initializes the controller class.*********************************/
     @Override
@@ -314,22 +324,37 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
             tblSoftwareDisp.getItems().setAll(swCtrl.getSws());
     }
 
+    @FXML
+    public void reloadTable(){
+        SoftwareCtrl swCtrl = new SoftwareCtrl();
+        swCtrl.cargarSoftware();
+        colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
+        colVersion.setCellValueFactory(new PropertyValueFactory<>("version"));
+
+        if(swCtrl.getSws()!=null)
+            tblSoftwareDisp.getItems().setAll(swCtrl.getSws());
+    }
+
     public void loadTable(String buscar){
-        SoftwareCtrl u = new SoftwareCtrl();
-        if(u.getSws().isEmpty())
-            u.cargarSoftware();
+        SoftwareCtrl s = new SoftwareCtrl();
+        if(s.getSws().isEmpty())
+            s.cargarSoftware();
         List<Software> sof = new ArrayList<>();
 
         if(!buscar.isEmpty())
-            for(Software x : u.getSws()){
+            for(Software x : s.getSws()){
                 if(x.getNombre().toLowerCase().contains(buscar.toLowerCase()))
                     sof.add(x);
             }
         tblSoftwareDisp.getItems().setAll(sof);
 
-        if(tblSoftwareDisp.getItems().isEmpty())
+        if(tblSoftwareDisp.getItems().isEmpty()){
+            boolean newSw = popUpWarning("El software que está buscando parece no existir. ¿Desea crearlo?");
+            if(newSw){
+                controlMenu.altaSoftware(new ActionEvent());
+            }
             btnQuitar.setDisable(true);
-        else
+        }else
             btnQuitar.setDisable(false);
     }
 

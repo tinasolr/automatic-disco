@@ -18,10 +18,6 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 
 /**
- *eventL*laimport javafx.fxml.*;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-ss
  *
  * @author tinar
  */
@@ -210,7 +206,7 @@ public class IOCtrlModSwConExtras implements Initializable {
     }
 
     /***************************OTHER FUNCTIONS*****************************/
-    
+
     public void loadTable(){
         colNombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
         colVersion.setCellValueFactory(new PropertyValueFactory<>("version"));

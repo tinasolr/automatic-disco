@@ -15,10 +15,11 @@ import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
-public class IOCtrlConsMasivaSw implements Initializable {
+public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
 
     private SoftwareCtrl swCtrl;
     private IOCtrlMenu controlMenu;
@@ -43,9 +44,25 @@ public class IOCtrlConsMasivaSw implements Initializable {
     @FXML    private Button btnFiltrar;
     @FXML    private BorderPane mainWindow;
 
-    @FXML
-    private void consIndividual(ActionEvent event) {
+/***********************INITIALIZE CONTROLLER CLASS***************************/
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+        loadTable();
+        txtFiltrar.setOnKeyPressed((KeyEvent event) -> {  });
+        txtFiltrar.setOnKeyReleased(this);
+        rdbCodigo.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
+        rdbTodos.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
+        rdbNombre.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
+        rdbVersion.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
+        rdbSistOp.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
+
     }
+
+/*******************RIGHT CLICK MENU*****************************************/
+
+    @FXML    private void consIndividual(ActionEvent event) {   }
 
     @FXML
     private void modSoftware(ActionEvent event) {
@@ -79,12 +96,9 @@ public class IOCtrlConsMasivaSw implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        loadTable();
-    }
+/************************OTHER FUNCTIONS**************************************/
 
+    @FXML
     public void loadTable(){
         swCtrl = new SoftwareCtrl();
         swCtrl.cargarSoftware();
@@ -95,6 +109,58 @@ public class IOCtrlConsMasivaSw implements Initializable {
 
         if(swCtrl.getSws()!=null)
             tblSoftware.getItems().setAll(swCtrl.getSws());
+        rdbTodos.setSelected(true);
+    }
+
+    public void loadTable(String searchTerm){
+        searchTerm = searchTerm.toLowerCase(Locale.ROOT);
+
+        SoftwareCtrl s = new SoftwareCtrl();
+        if(s.getSws().isEmpty())
+            s.cargarSoftware();
+
+        List<Software> soft = new ArrayList<>();
+
+        boolean searchAll = rdbTodos.isSelected();
+        boolean searchCodigo = rdbCodigo.isSelected();
+        boolean searchSistOperativo = rdbSistOp.isSelected();
+        boolean searchNombre = rdbNombre.isSelected();
+        boolean searchVersion = rdbVersion.isSelected();
+
+        for(Software x : s.getSws()){
+            String codigo = String.valueOf(x.getCodigo());
+            String nombre = x.getNombre().toLowerCase(Locale.ROOT);
+            String version = x.getVersion().toLowerCase(Locale.ROOT);
+
+            if(searchCodigo && codigo.contains(searchTerm))
+                soft.add(x);
+            else if(searchNombre && nombre.contains(searchTerm))
+                soft.add(x);
+            else if(searchVersion && version.contains(searchTerm))
+                soft.add(x);
+            else if(searchSistOperativo){
+                for(String y : x.getSistOp()){
+                    y = y.toLowerCase();
+                    if(y.contains(searchTerm)){
+                        soft.add(x);
+                        break;
+                    }
+                }
+            }else if(searchAll){
+                if(codigo.contains(searchTerm) || nombre.contains(searchTerm) || version.contains(searchTerm)){
+                    soft.add(x);
+                }else{
+                    for(String y : x.getSistOp()){
+                        y = y.toLowerCase();
+                        if(y.contains(searchTerm)){
+                            soft.add(x);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        tblSoftware.getItems().setAll(soft);
     }
 
     public boolean popUpWarning(String texto){
@@ -119,11 +185,20 @@ public class IOCtrlConsMasivaSw implements Initializable {
         rdbTodos.setDisable(x);
     }
 
-    public IOCtrlMenu getControlMenu() {
-        return controlMenu;
-    }
+/*******************************EVENT HANDLER**********************************/
 
-    public void setControlMenu(IOCtrlMenu controlMenu) {
-        this.controlMenu = controlMenu;
+    @Override
+    public void handle(Event event) {
+
+        if(event.getEventType().equals(KeyEvent.KEY_RELEASED) && event.getSource().equals(txtFiltrar))
+            if(txtFiltrar.getText().isEmpty() || txtFiltrar.getText() == null)
+                loadTable();
+            else
+                loadTable(txtFiltrar.getText());
     }
+/******************************GETTERS AND SETTERS*****************************/
+
+    public IOCtrlMenu getControlMenu() {     return controlMenu;   }
+    public void setControlMenu(IOCtrlMenu controlMenu) {     this.controlMenu = controlMenu;   }
+
 }
