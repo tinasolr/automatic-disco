@@ -7,14 +7,17 @@
 package Controller;
 
 import Vista.*;
+import java.io.*;
 import java.net.*;
 import java.util.*;
 import javafx.event.*;
 import javafx.fxml.*;
+import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
+import javafx.stage.*;
 
 /**
  * FXML Controller class
@@ -96,10 +99,34 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
 
     @FXML
     private void modMedio(ActionEvent event) {
+         try{
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ModMedio.fxml"));
+            IOCtrlModMedio msce = new IOCtrlModMedio();
+            msce.setCodigoMedio(tblMedios.getSelectionModel().getSelectedItem().getCodigo());
+            msce.setConsmasiva(this);
+            loader.setController(msce);
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Modificar Medio");
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
     private void elimMedio(ActionEvent event) {
+        if(popUpWarning("Está seguro de que desea eliminar el software?")){
+            meCtrl = new MediosCtrl();
+            String codigo = tblMedios.getSelectionModel().getSelectedItem().getCodigo();
+            meCtrl.elimMedio(codigo);
+            loadTable();
+        }
     }
 
     @FXML

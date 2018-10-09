@@ -1,18 +1,7 @@
 /*
- * Copyright (C) 2018 tinar
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
 
 package Controller;
@@ -27,7 +16,6 @@ import java.util.logging.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
 import javafx.scene.image.*;
@@ -35,13 +23,12 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
-
 /**
  * FXML Controller class
  *
  * @author tinar
  */
-public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
+public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
 
     private BorderPane mainWindow;
     private MediosCtrl meCtrl = new MediosCtrl();
@@ -49,8 +36,9 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     private MediosDB meDB = new MediosDB();
     private FormatoDB foDB = new FormatoDB();
     private File archImagen;
-    private IOCtrlConsMasivaSw consmasivasw;
+    private IOCtrlConsMasivaMedios consmasiva;
     private IOCtrlMenu controlMenu;
+    private String codigoMedio;
 
     @FXML    private AnchorPane window;
     @FXML    private TitledPane tpaneDatosMedio;
@@ -59,15 +47,18 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     @FXML    private Label lblCodigo;
     @FXML    private Label lblNombre;
     @FXML    private Label lblImagen;
-    @FXML    private ImageView image;
+    @FXML    private RadioButton rbOriginal;
+    @FXML    private ToggleGroup grpOrigen;
+    @FXML    private RadioButton rbMixto;
+    @FXML    private RadioButton rbOtros;
+    @FXML    private TitledPane tpaneInfoFisica;
     @FXML    private Label lblFormato;
     @FXML    private Label lblUbicacion;
     @FXML    private Label lblObservaciones;
     @FXML    private Label lblPartes;
     @FXML    private ComboBox<String> cmbFormato;
-    @FXML    private Label lblEmpaque;
-    @FXML    private TitledPane tpaneInfoFisica;
     @FXML    private ComboBox<String> cmbUbicacion;
+    @FXML    private Label lblEmpaque;
     @FXML    private TextField txtPartes;
     @FXML    private TextArea txtObservaciones;
     @FXML    private TitledPane tPaneSwMedio;
@@ -77,25 +68,63 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     @FXML    private ListView<String> lstSwContenido;
     @FXML    private Button btnAgregar;
     @FXML    private Button btnQuitar;
-    @FXML    private Button btnIngresar;
     @FXML    private Button btnCancelar;
     @FXML    private TextField txtBusqueda;
-    @FXML    private RadioButton rbOriginal;
-    @FXML    private RadioButton rbMixto;
-    @FXML    private RadioButton rbOtros;
+    @FXML    private Button btnReload;
+    @FXML    private ImageView image;
     @FXML    private CheckBox chkCaja;
     @FXML    private CheckBox chkManual;
     @FXML    private CheckBox chkEnDeposito;
-    @FXML    private ToggleGroup grpOrigen;
-    @FXML    private Button btnReload;
+    @FXML    private Button btnActualizar;
 
     /********Initializes the controller class.*********************************/
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-
         chkCaja = new CheckBox();
         chkEnDeposito = new CheckBox();
         chkManual = new CheckBox();
+
+        //LOAD Medio Values
+        meCtrl = new MediosCtrl();
+        if(meCtrl.getMedios().isEmpty())
+            meCtrl.cargarMedios();
+        Medios m = meCtrl.findMedio(codigoMedio);
+
+        if(m!=null){
+
+            if(m.getImagen()!=null){
+                File fi = new File("./src/imagenes/" + m.getImagen());
+                image.setImage(new Image("file:///" + fi.getAbsolutePath()));
+            }else if(m.getImagen()==null || m.getImagen().isEmpty()){
+                File fi = new File("./src/imagenes/no-image-available.png");
+                image.setImage(new Image("file:///" + fi.getAbsolutePath()));
+            }
+
+            txtCodigo.setText(m.getCodigo());
+            txtNombre.setText(m.getNombre());
+            txtObservaciones.setText(m.getObserv());
+            txtPartes.setText(String.valueOf(m.getPartes()));
+            chkCaja.setSelected(m.isCaja());
+            chkEnDeposito.setSelected(m.isEnDepo());
+            chkManual.setSelected(m.isManual());
+            rbOriginal.setSelected(m.getOrigen()==1);
+            rbMixto.setSelected(m.getOrigen()==2);
+            rbOtros.setSelected(m.getOrigen()==3);
+
+            for(String x : cmbFormato.getItems())
+                if(x.equalsIgnoreCase(m.getFormato())){
+                    cmbFormato.getSelectionModel().select(cmbFormato.getItems().indexOf(x));
+                    break;
+                }
+
+            for(String x : cmbUbicacion.getItems())
+                if(x.equalsIgnoreCase(m.getUbiDepo().getId())){
+                    cmbUbicacion.getSelectionModel().select(cmbUbicacion.getItems().indexOf(x));
+                    break;
+                }
+
+        }else{popUpError("Algo falló. No reconoce el código.");}
 
         //Carga de Combos
         if(ubCtrl.getUbis().isEmpty())
@@ -113,59 +142,33 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
 
         fo.forEach((x) -> { cmbFormato.getItems().add(x); });
         new AutoCompleteComboBoxListener<>(cmbFormato);
+        //FIN carga de combos
 
+        //CARGAR table de Software
         loadTable();
+
+        //KEY PRESS Handlers
         txtBusqueda.setOnKeyPressed((KeyEvent event) -> {});
         txtBusqueda.setOnKeyReleased(this);
         tblSoftwareDisp.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
 
-    /**********************JAVAFX FUNCTIONS**********************************/
-
-        @FXML
-    private void agregarImagen(MouseEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleccionar imagen");
-        archImagen = fileChooser.showOpenDialog(new Stage());
-        fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("All Images", "*.*"),
-            new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-            new FileChooser.ExtensionFilter("PNG", "*.png")
-        );
-
-        if(archImagen != null){
-            try {
-                Path from = Paths.get(archImagen.toURI());
-                Path to = Paths.get("./src/imagenes/" + archImagen.getName());
-                CopyOption[] options = new CopyOption[]{
-                    StandardCopyOption.REPLACE_EXISTING,
-                    StandardCopyOption.COPY_ATTRIBUTES
-                };
-                Files.copy(from, to, options);
-                File fi = new File("./src/imagenes/" + archImagen.getName());
-                image.setImage(new Image("file:///" + fi.getAbsolutePath()));
-                archImagen = fi;
-            } catch (IOException ex) {
-                Logger.getLogger(IOCtrlAltaMedio.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-    }
+    //***********************JAVAFX FUNCTIONS*********************************//
 
     @FXML
     private void agregar(MouseEvent event) {
         if(tblSoftwareDisp.getSelectionModel().getSelectedItem()!=null){
-            Software s = tblSoftwareDisp.getSelectionModel().getSelectedItem();
-            boolean add = true;
-            for(String x : lstSwContenido.getItems())
-                if(x.equalsIgnoreCase(s.getCodigo() + " - " + s.getNombre()))
-                    add = false;
-            if(add)
-                lstSwContenido.getItems().add(s.getCodigo() + " - " + s.getNombre());
-            else
-                popUpError("Ese software ya se agregó.");
-        }else{popUpError("Por favor, seleccione un software a agregar");}
-    }
+             Software s = tblSoftwareDisp.getSelectionModel().getSelectedItem();
+             boolean add = true;
+             for(String x : lstSwContenido.getItems())
+                 if(x.equalsIgnoreCase(s.getCodigo() + " - " + s.getNombre()))
+                     add = false;
+             if(add)
+                 lstSwContenido.getItems().add(s.getCodigo() + " - " + s.getNombre());
+             else
+                 popUpError("Ese software ya se agregó.");
+         }else{popUpError("Por favor, seleccione un software a agregar");}
+     }
 
     @FXML
     private void quitar(MouseEvent event) {
@@ -176,8 +179,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     }
 
     @FXML
-    private void ingresarMedio(ActionEvent event) {
-
+    private void actualizarMedio(ActionEvent event) {
         String id = txtCodigo.getText();
         String nombre = txtNombre.getText();
         String formato = cmbFormato.getSelectionModel().getSelectedItem();
@@ -266,7 +268,9 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
                 }else{ popUpError("Por favor, ingrese un nombre de al menos 3 caracteres");}
             }else{ popUpError("Por favor, ingrese un identificador del medio. ");}
 
-        }catch(NumberFormatException e){popUpError("Por favor, ingrese un numero de partes.");}
+        }catch(NumberFormatException e){
+            popUpError("Por favor, ingrese un numero de partes.");
+        }
     }
 
     @FXML
@@ -286,6 +290,36 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
             tblSoftwareDisp.getItems().setAll(swCtrl.getSws());
     }
 
+
+    @FXML
+    private void cambiarImagen(MouseEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar imagen");
+        archImagen = fileChooser.showOpenDialog(new Stage());
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("All Images", "*.*"),
+            new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+            new FileChooser.ExtensionFilter("PNG", "*.png")
+        );
+
+        if(archImagen != null){
+            try {
+                Path from = Paths.get(archImagen.toURI());
+                Path to = Paths.get("./src/imagenes/" + archImagen.getName());
+                CopyOption[] options = new CopyOption[]{
+                    StandardCopyOption.REPLACE_EXISTING,
+                    StandardCopyOption.COPY_ATTRIBUTES
+                };
+                Files.copy(from, to, options);
+                File fi = new File("./src/imagenes/" + archImagen.getName());
+                image.setImage(new Image("file:///" + fi.getAbsolutePath()));
+                archImagen = fi;
+            } catch (IOException ex) {
+                Logger.getLogger(IOCtrlAltaMedio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
     /******************LISTENERS**********************************************/
 
         @Override
@@ -303,10 +337,10 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
 
     /*********************OTHER FUNCTIONS*************************************/
 
-    public void changeBackToConsultaSw(){
+    public void changeBackToConsulta(){
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/Vista/ConsultaSoftware.fxml"));
+            loader.setLocation(getClass().getResource("/Vista/ConsulaMedios.fxml"));
             Node x = loader.load();
             mainWindow.setCenter(x);
         } catch (IOException ex) {
@@ -358,7 +392,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     }
 
      public void popUpExito(String texto){
-        Alert alert = new Alert(AlertType.INFORMATION, texto);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, texto);
         alert.showAndWait();
 
         if (alert.getResult() == ButtonType.OK) {
@@ -387,14 +421,6 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         this.mainWindow = mainWindow;
     }
 
-    public IOCtrlConsMasivaSw getConsmasivasw() {
-        return consmasivasw;
-    }
-
-    public void setConsmasivasw(IOCtrlConsMasivaSw consmasivasw) {
-        this.consmasivasw = consmasivasw;
-    }
-
     public IOCtrlMenu getControlMenu() {
         return controlMenu;
     }
@@ -402,4 +428,21 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     public void setControlMenu(IOCtrlMenu controlMenu) {
         this.controlMenu = controlMenu;
     }
+
+    public String getCodigoMedio() {
+        return codigoMedio;
+    }
+
+    public void setCodigoMedio(String codigo) {
+        this.codigoMedio = codigo;
+    }
+
+    public IOCtrlConsMasivaMedios getConsmasiva() {
+        return consmasiva;
+    }
+
+    public void setConsmasiva(IOCtrlConsMasivaMedios consmasiva) {
+        this.consmasiva = consmasiva;
+    }
+
 }

@@ -64,6 +64,7 @@ public class IOCtrlMenu implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ConsultaMedios.fxml"));
             Node x = loader.load();
             consmasivamed = loader.getController();
+            consmasivamed.setAccess(accesos);
             consmasivamed.setControlMenu(this);
             mainWindow.setCenter(x);
             disableEverything(true);

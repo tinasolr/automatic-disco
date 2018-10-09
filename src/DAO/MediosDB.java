@@ -155,8 +155,6 @@ public class MediosDB extends DBObject{
         return true;
     }
 
-
-
     @Override
     public MediosDB readResultSet(ResultSet res) {
         MediosDB obj = null;
