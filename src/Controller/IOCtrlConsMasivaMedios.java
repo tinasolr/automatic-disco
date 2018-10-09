@@ -25,7 +25,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
 
     private MediosCtrl meCtrl;
     private IOCtrlMenu controlmenu;
-    private int acceso = 0;
+    private int access;
 
     @FXML    private TextField txtFiltrar;
     @FXML    private RadioButton rdbTodos;
@@ -58,8 +58,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         disableSearchItems(true);
-        if(acceso>0)
-            loadTable();
+
         txtFiltrar.setOnKeyPressed((KeyEvent event) -> {  });
         txtFiltrar.setOnKeyReleased(this);
         rdbCodigo.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
@@ -238,6 +237,20 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
         tblMedios.setDisable(x);
     }
 
+    public void disableMenuItems(){
+        if(access==0){
+            derVer.setDisable(false);
+            derModificar.setDisable(true);
+            derEliminar.setDisable(true);
+            derAltaCopia.setDisable(true);
+        }else{
+            derVer.setDisable(false);
+            derModificar.setDisable(false);
+            derEliminar.setDisable(false);
+            derAltaCopia.setDisable(false);
+        }
+    }
+
 /*******************************EVENT HANDLER**********************************/
 
     @Override
@@ -256,4 +269,14 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
     public IOCtrlMenu setControlMenu() {
         return controlmenu;
     }
+
+    public int getAccess() {
+        return access;
+    }
+
+    public void setAccess(int access) {
+        this.access = access;
+    }
+
+
 }

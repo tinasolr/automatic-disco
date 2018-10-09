@@ -34,7 +34,7 @@ public class IOCtrlMenu implements Initializable {
     private IOCtrlModSwConExtras modsoftware;
     private IOCtrlLogin login;
 
-    private int accesos = 0;
+    private int accesos;
 
     @FXML    private MenuBar mnuPpal;
     @FXML    private Menu mArchivo;
@@ -49,12 +49,12 @@ public class IOCtrlMenu implements Initializable {
     @FXML    private MenuItem ayAbout;
     @FXML    private MenuItem AltaSoftware;
     @FXML    private MenuItem AltaMedio;
-    @FXML    private MenuItem AltaCopia;
     @FXML    private MenuItem ConsultaMedios;
     @FXML    private BorderPane mainWindow;
     @FXML    private MenuItem ABMFormatos;
     @FXML    private MenuItem ABMUbicaciones;
     @FXML    private MenuItem ABMSistemaOperat;
+    @FXML    private MenuItem arcOpciones;
 
     /*** Initializes the controller class.************************************/
     @Override
@@ -200,7 +200,17 @@ public class IOCtrlMenu implements Initializable {
             loader.setLocation(getClass().getResource("/Vista/" + menuItemID + ".fxml"));
 
             Node x = loader.load();
-
+            if(menuItemID.contains("ConsultaMedios")){
+                consmasivamed = loader.getController();
+                consmasivamed.setControlMenu(this);
+                consmasivamed.setAccess(accesos);
+                consmasivamed.disableMenuItems();
+            }else if(menuItemID.contains("ConsultaSoftware")){
+                consmasivasw = loader.getController();
+                consmasivasw.setControlMenu(this);
+                consmasivasw.setAccess(accesos);
+                consmasivasw.disableMenuItems();
+            }
             mainWindow.setCenter(x);
 
         } catch (IOException e) {
@@ -211,6 +221,10 @@ public class IOCtrlMenu implements Initializable {
     @FXML
     private void salir(ActionEvent event) {
         System.exit(0);
+    }
+
+    @FXML
+    private void openOptions(ActionEvent event) {
     }
     /************************OTHER FUNCTIONS*********************************/
 
@@ -234,10 +248,87 @@ public class IOCtrlMenu implements Initializable {
         mEditar.setDisable(x);
         mVer.setDisable(x);
         arcNuevo.setDisable(x);
+        AltaSoftware.setDisable(x);
+        AltaMedio.setDisable(x);
         ConsultaMedios.setDisable(x);
+        ConsultaSoftware.setDisable(x);
         ABMFormatos.setDisable(x);
         ABMUbicaciones.setDisable(x);
         ABMSistemaOperat.setDisable(x);
+    }
+
+    public void disableEverything(int access) {
+
+        switch(access){
+            case 0:
+                arcImportar.setDisable(true);
+                arcExportar.setDisable(true);
+                mEditar.setDisable(true);
+                mVer.setDisable(false);
+                arcNuevo.setDisable(true);
+                boolean ed = mEditar.isDisable();
+                boolean ver = mVer.isDisable();
+                boolean nu = arcNuevo.isDisable();
+                AltaSoftware.setDisable(nu);
+                AltaMedio.setDisable(nu);
+                ConsultaMedios.setDisable(ver);
+                ConsultaSoftware.setDisable(ver);
+                ABMFormatos.setDisable(ed);
+                ABMUbicaciones.setDisable(ed);
+                ABMSistemaOperat.setDisable(ed);
+                break;
+            case 1:
+                arcImportar.setDisable(true);
+                arcExportar.setDisable(true);
+                mEditar.setDisable(true);
+                mVer.setDisable(false);
+                arcNuevo.setDisable(false);
+                boolean ed1 = mEditar.isDisable();
+                boolean ver1 = mVer.isDisable();
+                boolean nu1 = arcNuevo.isDisable();
+                AltaSoftware.setDisable(nu1);
+                AltaMedio.setDisable(nu1);
+                ConsultaMedios.setDisable(ver1);
+                ConsultaSoftware.setDisable(ver1);
+                ABMFormatos.setDisable(ed1);
+                ABMUbicaciones.setDisable(ed1);
+                ABMSistemaOperat.setDisable(ed1);
+                break;
+            case 2:
+                arcImportar.setDisable(false);
+                arcExportar.setDisable(false);
+                mEditar.setDisable(false);
+                mVer.setDisable(false);
+                arcNuevo.setDisable(false);
+                boolean ed2 = mEditar.isDisable();
+                boolean ver2 = mVer.isDisable();
+                boolean nu2 = arcNuevo.isDisable();
+                AltaSoftware.setDisable(nu2);
+                AltaMedio.setDisable(nu2);
+                ConsultaMedios.setDisable(ver2);
+                ConsultaSoftware.setDisable(ver2);
+                ABMFormatos.setDisable(ed2);
+                ABMUbicaciones.setDisable(ed2);
+                ABMSistemaOperat.setDisable(ed2);
+                break;
+            case 3:
+                arcImportar.setDisable(false);
+                arcExportar.setDisable(false);
+                mEditar.setDisable(false);
+                mVer.setDisable(false);
+                arcNuevo.setDisable(false);
+                boolean ed3 = mEditar.isDisable();
+                boolean ver3 = mVer.isDisable();
+                boolean nu3 = arcNuevo.isDisable();
+                AltaSoftware.setDisable(nu3);
+                AltaMedio.setDisable(nu3);
+                ConsultaMedios.setDisable(ver3);
+                ConsultaSoftware.setDisable(ver3);
+                ABMFormatos.setDisable(ed3);
+                ABMUbicaciones.setDisable(ed3);
+                ABMSistemaOperat.setDisable(ed3);
+                break;
+        }
     }
 
     public int getAccesos() {
@@ -247,6 +338,5 @@ public class IOCtrlMenu implements Initializable {
     public void setAccesos(int accesos) {
         this.accesos = accesos;
     }
-
 
 }

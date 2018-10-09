@@ -23,6 +23,7 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
 
     private SoftwareCtrl swCtrl;
     private IOCtrlMenu controlMenu;
+    private int access;
 
     @FXML    private AnchorPane showSw;
     @FXML    private TableView<Software> tblSoftware;
@@ -50,14 +51,17 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         loadTable();
+
         txtFiltrar.setOnKeyPressed((KeyEvent event) -> {  });
         txtFiltrar.setOnKeyReleased(this);
+        derVer.setDisable(true);
+        derModificar.setDisable(true);
+        derEliminar.setDisable(true);
         rdbCodigo.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
         rdbTodos.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
         rdbNombre.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
         rdbVersion.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
         rdbSistOp.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
-
     }
 
 /*******************RIGHT CLICK MENU*****************************************/
@@ -175,7 +179,7 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
         return false;
     }
 
-    private void disableSearchItems(boolean x){
+    public void disableSearchItems(boolean x){
         txtFiltrar.setDisable(x);
         btnFiltrar.setDisable(x);
         rdbCodigo.setDisable(x);
@@ -183,6 +187,18 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
         rdbSistOp.setDisable(x);
         rdbVersion.setDisable(x);
         rdbTodos.setDisable(x);
+    }
+
+    public void disableMenuItems(){
+        if(access==0){
+            derVer.setDisable(false);
+            derModificar.setDisable(true);
+            derEliminar.setDisable(true);
+        }else{
+            derVer.setDisable(false);
+            derModificar.setDisable(false);
+            derEliminar.setDisable(false);
+        }
     }
 
 /*******************************EVENT HANDLER**********************************/
@@ -200,5 +216,14 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
 
     public IOCtrlMenu getControlMenu() {     return controlMenu;   }
     public void setControlMenu(IOCtrlMenu controlMenu) {     this.controlMenu = controlMenu;   }
+
+    public int getAccess() {
+        return access;
+    }
+
+    public void setAccess(int access) {
+        this.access = access;
+    }
+
 
 }

@@ -12,6 +12,7 @@ import java.util.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 
@@ -34,7 +35,7 @@ public class IOCtrlLogin implements Initializable {
     @FXML    private AnchorPane window;
 
     @FXML
-    private void login(ActionEvent event) {
+    private void login() {
         UsersDB udb = new UsersDB();
 
         if(udb.validar_ingreso(txtUsuario.getText(), txtPass.getText())==1){
@@ -42,13 +43,16 @@ public class IOCtrlLogin implements Initializable {
             Stage x = (Stage) window.getScene().getWindow();
             x.close();
 
-            controlmenu.disableEverything(true);
             access = udb.getAccess();
             controlmenu.setAccesos(access);
+            controlmenu.disableEverything(access);
             consMasivaMedios.disableSearchItems(false);
-            consMasivaMedios.loadTable();
+            consMasivaMedios.setControlMenu(controlmenu);
+            if(access>0)
+                consMasivaMedios.loadTable();
         }else {
             popUpError("Acceso denegado:\nPor favor ingrese un usuario y/o contraseña correctos");
+            ((Stage)window.getScene().getWindow()).setAlwaysOnTop(true);
         }
     }
 
@@ -71,7 +75,12 @@ public class IOCtrlLogin implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        window.setOnKeyPressed((event) -> { });
+        window.setOnKeyReleased((event)->{
+            if(event.getEventType().equals(KeyEvent.KEY_RELEASED) && event.getCode().equals(KeyCode.ENTER)){
+            login();
+        }
+        });
     }
 
     public IOCtrlMenu getControlmenu() {
