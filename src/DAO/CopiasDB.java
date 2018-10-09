@@ -16,7 +16,7 @@ import java.util.*;
 public class CopiasDB extends DBObject {
 
     private int id;
-    private int swid;
+    private int medioid;
     private int formid;
     private String obs;
     private String ubi;
@@ -25,7 +25,7 @@ public class CopiasDB extends DBObject {
 
     private CopiasDB(int id, String obs, int formid, int swid) {
         this.id = id;
-        this.swid = swid;
+        this.medioid = swid;
         this.obs = obs;
         this.formid = formid;
     }
@@ -70,7 +70,7 @@ public class CopiasDB extends DBObject {
             if(conn == null || conn.isClosed())
                 connect();
 
-            res = instr.executeQuery("SELECT * FROM `Copias` WHERE `sw_id` = " + sw_id);
+            res = instr.executeQuery("SELECT * FROM `Copias` WHERE `medio_id` = " + medioid);
 
             while(res.next()){
                 objDB.add(readResultSet(res));
@@ -90,12 +90,12 @@ public class CopiasDB extends DBObject {
 
         try {
 
-            this.id = res.getInt("cp_id");
+            this.id = res.getInt("copia_id");
             this.obs = res.getString("cp_obs");
             this.formid = res.getInt("form_id");
-            this.swid = res.getInt("sw_id");
+            this.medioid = res.getInt("medio_id");
 
-            obj = new CopiasDB(id, obs, formid, swid);
+            obj = new CopiasDB(id, obs, formid, medioid);
 
         } catch (SQLException ex) {
             System.err.println("Read >> Copias :: " + ex.getLocalizedMessage());
@@ -109,7 +109,7 @@ public class CopiasDB extends DBObject {
         try {
             CallableStatement sp = conn.prepareCall("{CALL alta_copia(?, ?, ?)}");
 
-            sp.setInt(1, swid);
+            sp.setInt(1, medioid);
             sp.setInt(2, formid);
             sp.setString(3, obs);
 
@@ -126,7 +126,7 @@ public class CopiasDB extends DBObject {
             CallableStatement sp = conn.prepareCall("{CALL mod_copia (?, ?, ?, ?)}");
 
             sp.setInt(1, id);
-            sp.setInt(2, swid);
+            sp.setInt(2, medioid);
             sp.setInt(3, formid);
             sp.setString(4, obs);
 
@@ -142,7 +142,7 @@ public class CopiasDB extends DBObject {
         try {
             CallableStatement sp = conn.prepareCall("{CALL elim_copia (?)}");
 
-            sp.setInt(1, swid);
+            sp.setInt(1, medioid);
             sp.setInt(2, formid);
             sp.setString(3, obs);
 
@@ -158,7 +158,7 @@ public class CopiasDB extends DBObject {
         try {
             CallableStatement sp = conn.prepareCall("{CALL get_idcopia (?, ?)}");
 
-            sp.setInt(1, swid);
+            sp.setInt(1, medioid);
             sp.setInt(2, formid);
 
             ResultSet r = sp.executeQuery();
@@ -170,4 +170,57 @@ public class CopiasDB extends DBObject {
         }
         return null;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getMedioid() {
+        return medioid;
+    }
+
+    public void setMedioid(int medioid) {
+        this.medioid = medioid;
+    }
+
+    public int getFormid() {
+        return formid;
+    }
+
+    public void setFormid(int formid) {
+        this.formid = formid;
+    }
+
+    public String getObs() {
+        return obs;
+    }
+
+    public void setObs(String obs) {
+        this.obs = obs;
+    }
+
+    public String getUbi() {
+        return ubi;
+    }
+
+    public void setUbi(String ubi) {
+        this.ubi = ubi;
+    }
+
+    public boolean isEnDepo() {
+        return enDepo;
+    }
+
+    public void setEnDepo(boolean enDepo) {
+        this.enDepo = enDepo;
+    }
+    
+    
+    
+    
+    
 }

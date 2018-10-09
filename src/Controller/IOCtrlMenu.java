@@ -66,11 +66,11 @@ public class IOCtrlMenu implements Initializable {
             consmasivamed = loader.getController();
             consmasivamed.setControlMenu(this);
             mainWindow.setCenter(x);
-            disableEverything(true);
+            disableEverything(false);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        /*
+        
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Login.fxml"));
 
@@ -89,7 +89,7 @@ public class IOCtrlMenu implements Initializable {
             stage.show();
         } catch (IOException ex) {
             Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        }
     }
     /***************JAVAFX FUNCTIONS*******************************************/
 
