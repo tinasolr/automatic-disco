@@ -20,7 +20,7 @@
                   </Menu>
                   <MenuItem fx:id="arcImportar" text="_Importar..." />
                   <MenuItem fx:id="arcExportar" text="_Exportar..." />
-                  <MenuItem fx:id="arcOpciones" mnemonicParsing="false" onAction="#openOptions" text="Unspecified Action" />
+                  <MenuItem fx:id="arcOpciones" text="_Opciones" mnemonicParsing="true" onAction="#openOptions" />
                   <MenuItem fx:id="arcSalir" onAction="#salir" text="_Salir" />
             </items>
           </Menu>
