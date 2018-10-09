@@ -81,9 +81,27 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        chkCaja = new CheckBox();
-        chkEnDeposito = new CheckBox();
-        chkManual = new CheckBox();
+//        chkCaja = new CheckBox();
+//        chkEnDeposito = new CheckBox();
+//        chkManual = new CheckBox();
+
+        //Carga de Combos
+        if(ubCtrl.getUbis().isEmpty())
+            ubCtrl.cargarUbicaciones();
+        if(!cmbUbicacion.getItems().isEmpty())
+            cmbUbicacion.getItems().clear();
+
+        ubCtrl.getUbis().forEach((x) -> { cmbUbicacion.getItems().add(x.getId());});
+        new AutoCompleteComboBoxListener<>(cmbUbicacion);
+
+        FormatoDB f = new FormatoDB();
+        List<String> fo = f.read("Formatos");
+        if(!cmbFormato.getItems().isEmpty())
+            cmbFormato.getItems().clear();
+
+        fo.forEach((x) -> { cmbFormato.getItems().add(x); });
+        new AutoCompleteComboBoxListener<>(cmbFormato);
+        //FIN carga de combos
 
         //LOAD Medio Values
         meCtrl = new MediosCtrl();
@@ -114,35 +132,21 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
 
             for(String x : cmbFormato.getItems())
                 if(x.equalsIgnoreCase(m.getFormato())){
-                    cmbFormato.getSelectionModel().select(cmbFormato.getItems().indexOf(x));
+                    cmbFormato.setEditable(true);
+                    cmbFormato.getSelectionModel().select(x);
                     break;
                 }
 
             for(String x : cmbUbicacion.getItems())
                 if(x.equalsIgnoreCase(m.getUbiDepo().getId())){
-                    cmbUbicacion.getSelectionModel().select(cmbUbicacion.getItems().indexOf(x));
+                    cmbUbicacion.getSelectionModel().select(x);
                     break;
                 }
 
+            SoftwareCtrl sctrl = new SoftwareCtrl();
+            sctrl.softwareDeMedio(m.getCodigo());
+            lstSwContenido.getItems().setAll(sctrl.getSwDeMed());
         }else{popUpError("Algo falló. No reconoce el código.");}
-
-        //Carga de Combos
-        if(ubCtrl.getUbis().isEmpty())
-            ubCtrl.cargarUbicaciones();
-        if(!cmbUbicacion.getItems().isEmpty())
-            cmbUbicacion.getItems().clear();
-
-        ubCtrl.getUbis().forEach((x) -> { cmbUbicacion.getItems().add(x.getId());});
-        new AutoCompleteComboBoxListener<>(cmbUbicacion);
-
-        FormatoDB f = new FormatoDB();
-        List<String> fo = f.read("Formatos");
-        if(!cmbFormato.getItems().isEmpty())
-            cmbFormato.getItems().clear();
-
-        fo.forEach((x) -> { cmbFormato.getItems().add(x); });
-        new AutoCompleteComboBoxListener<>(cmbFormato);
-        //FIN carga de combos
 
         //CARGAR table de Software
         loadTable();

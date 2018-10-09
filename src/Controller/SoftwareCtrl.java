@@ -23,8 +23,22 @@ public class SoftwareCtrl {
     private SistOpDB soDB;
     private ExtrasCtrl exCtrl = new ExtrasCtrl();
     private ExtrasDB extrasDB;
+    private List<String> swDeMed = new ArrayList<>();
 
     public SoftwareCtrl(){}
+
+    //FIND Software de medio
+    public void softwareDeMedio(String cod){
+        swDeMed.clear();
+        if(sws.isEmpty())
+            cargarSoftware();
+        for(Software s : sws)
+            for(Medios m : s.getMedios())
+                if(m.getCodigo().equalsIgnoreCase(cod)){
+                    swDeMed.add(s.getCodigo() + " - " + s.getNombre());
+                    break;
+                }
+    }
 
     //INGRESO DE SOFTWARE
     public void cargarSoftware(){
@@ -181,6 +195,14 @@ public class SoftwareCtrl {
 
     public void setExtrasDB(ExtrasDB extrasDB) {
         this.extrasDB = extrasDB;
+    }
+
+    public List<String> getSwDeMed() {
+        return swDeMed;
+    }
+
+    public void setSwDeMed(List<String> swDeMed) {
+        this.swDeMed = swDeMed;
     }
 
 

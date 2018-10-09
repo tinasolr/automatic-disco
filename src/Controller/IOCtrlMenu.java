@@ -123,7 +123,7 @@ public class IOCtrlMenu implements Initializable {
 
             Parent root = loader.load();
             altamedio = loader.getController();
-            altamedio.setConsmasivasw(consmasivasw);
+            altamedio.setConsmasivamed(consmasivamed);
             altamedio.setControlMenu(this);
             Scene scene = new Scene(root);
             Stage stage = new Stage();

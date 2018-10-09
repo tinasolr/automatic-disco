@@ -5,6 +5,8 @@
  */
 package swteca;
 
+import Controller.*;
+import Model.*;
 import java.io.*;
 import javafx.application.*;
 import javafx.fxml.*;
@@ -47,6 +49,10 @@ public class SWTeca extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        MediosCtrl meCtrl = new MediosCtrl();
+        meCtrl.cargarMedios();
+        for(Medios m : meCtrl.getMedios())
+            System.out.println("swteca.SWTeca.main() > " + m.toString());
         launch(args);
 //        UsersDB u = new UsersDB();
 //        u.createUser("admin", "culo", 3);

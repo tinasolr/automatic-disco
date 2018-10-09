@@ -82,4 +82,10 @@ public class Medios {
     public void setCopias(int pos, String formato, Ubicaciones ubiDepo, String observ) {
         copias.set(pos, new Copias(formato, observ, ubiDepo));
     }
+
+    @Override
+    public String toString() {
+        return "Medios{" + "codigo=" + codigo + ", nombre=" + nombre + ", formato=" + formato + ", caja=" + caja + ", manual=" + manual + ", origen=" + origen + ", ubiDepo=" + ubiDepo.getId() + ", enDepo=" + enDepo + ", imagen=" + imagen + ", observ=" + observ + ", partes=" + partes + ", copias=" + copias.size() + '}';
+    }
+
 }

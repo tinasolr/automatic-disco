@@ -50,6 +50,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     private FormatoDB foDB = new FormatoDB();
     private File archImagen;
     private IOCtrlConsMasivaSw consmasivasw;
+    private IOCtrlConsMasivaMedios consmasivamed;
     private IOCtrlMenu controlMenu;
 
     @FXML    private AnchorPane window;
@@ -93,9 +94,9 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        chkCaja = new CheckBox();
-        chkEnDeposito = new CheckBox();
-        chkManual = new CheckBox();
+//        chkCaja = new CheckBox();
+//        chkEnDeposito = new CheckBox();
+//        chkManual = new CheckBox();
 
         //Carga de Combos
         if(ubCtrl.getUbis().isEmpty())
@@ -182,7 +183,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         String nombre = txtNombre.getText();
         String formato = cmbFormato.getSelectionModel().getSelectedItem();
         String ubicacion = cmbUbicacion.getSelectionModel().getSelectedItem();
-        String imagen="";
+        String imagen=null;
         String observ = txtObservaciones.getText();
 
         int origen = 0;
@@ -260,6 +261,8 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
                                 x.close();
                                 if(cont)
                                     controlMenu.altaMedio(new ActionEvent());
+                                else
+                                    consmasivamed.loadTable();
                             }else{popUpError("Algo no se cargó correctamente a la base.");}
                       }else{ popUpError("Selecione el si el medio es original, mixto u otro.");}
                     }else{ popUpError("Selecione el formato y una ubicacion.");}
@@ -402,4 +405,14 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
     public void setControlMenu(IOCtrlMenu controlMenu) {
         this.controlMenu = controlMenu;
     }
+
+    public IOCtrlConsMasivaMedios getConsmasivamed() {
+        return consmasivamed;
+    }
+
+    public void setConsmasivamed(IOCtrlConsMasivaMedios consmasivamed) {
+        this.consmasivamed = consmasivamed;
+    }
+
+
 }
