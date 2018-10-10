@@ -17,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -33,11 +34,16 @@ public class IOCtrlABMCopias {
    
     @FXML private Label lblMedio;
     @FXML private Label lblFormato;
+    @FXML private Label lblUbicaciones;
     @FXML private TextField txtMedio;
     @FXML private TextArea txtDescripcion;
     @FXML private Button btnFinalizar;
+    @FXML private Button btnModificar;
+    @FXML private Button btnEliminar;
     @FXML private Button btnCancelar;
     @FXML private ComboBox cmbFormato;
+    @FXML private ComboBox cmbUbicaciones;
+    @FXML private CheckBox chkDeposito;
     @FXML private AnchorPane Pane;
     
     private int codMedio;
