@@ -32,6 +32,18 @@ public class CopiasCtrl {
         copdb.write();
     }
     
+     
+     public void asociarUbicacionACopia(){
+        copdb  = new CopiasDB();
+        copdb.connect();
+         
+         
+         
+     } 
+     
+            
+     
+     
     
     public List<Copias> getCopias() { return copias;}
     public void setCopias(List<Copias> copias) {this.copias = copias;}
