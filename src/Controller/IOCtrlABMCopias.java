@@ -69,15 +69,7 @@ public class IOCtrlABMCopias implements Initializable{
 
         form.forEach((x)-> {cmbFormato.getItems().add(x);});
         new AutoCompleteComboBoxListener<>(cmbFormato);
-        
-        /*SistOpDB so = new SistOpDB();
-        List<SistOpDB> sos = so.read("SistOperativos");
-        if(!cmbSos.getItems().isEmpty())
-            cmbSos.getItems().clear();
-        sos.forEach((x) -> { cmbSos.getItems().add(x.getNombre()); });
-        new AutoCompleteComboBoxListener<>(cmbSos);
-        loadTable();*/
-
+   
         UbicacionesDB ubdb = new UbicacionesDB();
         List<UbicacionesDB> ubic = ubdb.read("ubicaciones");
         if(!cmbUbicaciones.getItems().isEmpty())
@@ -85,12 +77,9 @@ public class IOCtrlABMCopias implements Initializable{
         ubic.forEach((y) -> { cmbUbicaciones.getItems().add(y.getCodUbi()); });
         new AutoCompleteComboBoxListener<>(cmbUbicaciones);
 
-        
     }
     
-    
- 
-    
+
     @FXML
     private void agregarCopia(ActionEvent event) throws SQLException {
 
@@ -118,8 +107,8 @@ public class IOCtrlABMCopias implements Initializable{
             //Buscar ID de Ubicaciones
             ubDB.setCodUbi(cmbUbicaciones.getSelectionModel().getSelectedItem());
             ubDB.connect();
-            String ubiid = ubDB.executeSearch();
-            ubicacion = new Ubicaciones(ubiid,cmbUbicaciones.getSelectionModel().getSelectedItem());
+            String ubiobs = ubDB.executeSearch();
+            ubicacion = new Ubicaciones(cmbUbicaciones.getSelectionModel().getSelectedItem(),ubiobs);
             
             //Crea copia en la lista de copias
             copia = new Copias(id,cmbFormato.getSelectionModel().getSelectedItem(),descripcion,ubicacion);

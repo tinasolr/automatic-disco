@@ -93,7 +93,17 @@ public class UbicacionesDB extends DBObject {
 
     @Override
     public String executeSearch() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL get_ubiobs (?)}");
+            sp.setString(1, codUbi);
+            ResultSet r = sp.executeQuery();
+            r.first();
+            return  r.getString(1);
+            
+        } catch (SQLException ex) {
+            System.err.println("Search ID >> Ubicaciones :: " + ex.getLocalizedMessage());
+        }
+        return null;
     }
 
     public UbicacionesDB searchUbicacionesByID(String id) {

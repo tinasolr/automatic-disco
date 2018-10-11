@@ -142,14 +142,12 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMCopias.fxml"));
             IOCtrlABMCopias CtrlCopia =  new IOCtrlABMCopias();
-
-            Parent root = loader.load();
-            CtrlCopia = loader.getController();
-            CtrlCopia.setControlMenu(this);
             CtrlCopia.setNomMedio(tblMedios.getSelectionModel().getSelectedItem().getNombre());
-            //CtrlCopia.setMedioID(Integer.parseInt(tblMedios.getSelectionModel().getSelectedItem().getCodigo()));
-
-            CtrlCopia.getBtnFinalizar().setVisible(true);
+            CtrlCopia.setMedioID(tblMedios.getSelectionModel().getSelectedItem().getCodigo());
+            CtrlCopia.setControlMenu(this);
+      
+            loader.setController(CtrlCopia);
+            Parent root = loader.load();
 
             Scene scene = new Scene(root);
             Stage stage = new Stage();
@@ -158,6 +156,8 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             stage.setScene(scene);
             stage.sizeToScene();
             stage.show();
+            CtrlCopia.getBtnFinalizar().setVisible(true);
+            
         } catch (IOException ex) {
             Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
         }

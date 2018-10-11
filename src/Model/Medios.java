@@ -76,11 +76,11 @@ public class Medios {
     public void setManual(boolean manual) {        this.manual = manual;    }
 
     public List<Copias> getCopias() {        return copias;    }
-    public void setCopias(String formato, Ubicaciones ubiDepo, String observ) {
-        copias.add(new Copias(formato, observ, ubiDepo));
+    public void setCopias(int id, String formato, Ubicaciones ubiDepo, String observ) {
+        copias.add(new Copias(id,formato, observ, ubiDepo));
     }
-    public void setCopias(int pos, String formato, Ubicaciones ubiDepo, String observ) {
-        copias.set(pos, new Copias(formato, observ, ubiDepo));
+    public void setCopias(int pos,int id, String formato, Ubicaciones ubiDepo, String observ) {
+        copias.set(pos, new Copias(id,formato, observ, ubiDepo));
     }
 
     @Override
