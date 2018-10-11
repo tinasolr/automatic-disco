@@ -67,11 +67,11 @@ public class IOCtrlMenu implements Initializable {
             consmasivamed.setAccess(accesos);
             consmasivamed.setControlMenu(this);
             mainWindow.setCenter(x);
-            disableEverything(true);
+            disableEverything(false);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-
+        
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Login.fxml"));
 

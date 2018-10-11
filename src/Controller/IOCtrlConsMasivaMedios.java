@@ -10,6 +10,8 @@ import Vista.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -135,6 +137,32 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
 
     @FXML
     private void altaCopia(ActionEvent event) {
+        
+         try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMCopias.fxml"));
+            IOCtrlABMCopias CtrlCopia =  new IOCtrlABMCopias();
+            
+            Parent root = loader.load();
+            CtrlCopia = loader.getController();
+            CtrlCopia.setControlMenu(this);
+            CtrlCopia.setNomMedio(tblMedios.getSelectionModel().getSelectedItem().getNombre());
+            //CtrlCopia.setMedioID(Integer.parseInt(tblMedios.getSelectionModel().getSelectedItem().getCodigo()));
+
+            CtrlCopia.getBtnFinalizar().setVisible(true);
+            
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Crear Copia");
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
     }
 
     /************************OTHER FUNCTIONS**********************************/
