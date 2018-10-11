@@ -33,15 +33,20 @@ public class CopiasCtrl {
     }
     
      
-     public void asociarUbicacionACopia(){
+     public void asociarUbicacionACopia(int idCopia, String idUbi, boolean EnDepo){
         copdb  = new CopiasDB();
         copdb.connect();
-         
-         
-         
+        copdb.setId(idCopia);
+        copdb.setUbi(idUbi);
+        copdb.setEnDepo(EnDepo);
+        copdb.asociarUbicacionACopia();
      } 
      
-            
+    public String buscarUltimoID() {
+        copdb  = new CopiasDB();
+        copdb.connect();
+        return copdb.buscarUltimoID();
+    }
      
      
     
