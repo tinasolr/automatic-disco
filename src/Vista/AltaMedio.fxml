@@ -13,6 +13,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -20,9 +21,9 @@
 
 <!--expandedPane="$tpaneDatosMedio"-->
 
-<AnchorPane fx:id="window" prefHeight="600.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IOCtrlAltaMedio">
+<AnchorPane fx:id="window" prefHeight="640.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IOCtrlAltaMedio">
    <children>
-      <Accordion expandedPane="$tpaneDatosMedio" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Accordion AnchorPane.bottomAnchor="40.0" expandedPane="$tpaneDatosMedio" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <panes>
           <TitledPane fx:id="tpaneDatosMedio" animated="false" prefWidth="500.0" text="Datos del Medio">
             <content>
@@ -90,8 +91,6 @@
                         <Button fx:id="btnAgregar" layoutX="200.0" layoutY="247.0" mnemonicParsing="false" onMouseClicked="#agregar" prefHeight="27.0" prefWidth="80.0" text="Agregar v" />
                         <Button fx:id="btnQuitar" layoutX="348.0" layoutY="247.0" mnemonicParsing="false" onMouseClicked="#quitar" prefHeight="27.0" prefWidth="80.0" text="Quitar ^" />
                         <Label layoutX="28.0" layoutY="288.0" text="Software seleccionado:" />
-                        <Button fx:id="btnIngresar" layoutX="37.0" layoutY="467.0" mnemonicParsing="false" onAction="#ingresarMedio" prefHeight="27.0" prefWidth="161.0" text="Ingresar Medio" />
-                        <Button fx:id="btnCancelar" layoutX="243.0" layoutY="467.0" mnemonicParsing="false" onMouseClicked="#cancelar" prefHeight="27.0" prefWidth="161.0" text="Cancelar" />
                         <TextField fx:id="txtBusqueda" layoutX="198.0" layoutY="205.0" prefHeight="27.0" prefWidth="232.0" promptText="Ingresar software buscado" />
                         <Button fx:id="btnReload" layoutX="17.0" layoutY="205.0" mnemonicParsing="false" onAction="#reloadTable" text="Recargar lista" />
                      </children>
@@ -103,5 +102,11 @@
           </TitledPane>
         </panes>
       </Accordion>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="561.0">
+        <items>
+            <Button fx:id="btnCancelar" alignment="CENTER" cancelButton="true" mnemonicParsing="false" onMouseClicked="#cancelar" prefHeight="27.0" prefWidth="161.0" text="Cancelar" translateX="20.0" />
+            <Button fx:id="btnIngresar" alignment="CENTER" mnemonicParsing="false" onAction="#ingresarMedio" prefHeight="27.0" prefWidth="161.0" text="Ingresar Medio" translateX="90.0" />
+        </items>
+      </ToolBar>
    </children>
 </AnchorPane>

@@ -10,8 +10,7 @@ import Vista.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -123,7 +122,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
 
     @FXML
     private void elimMedio(ActionEvent event) {
-        if(popUpWarning("Está seguro de que desea eliminar el software?")){
+        if(popUpWarning("Está seguro de que desea eliminar el medio?")){
             meCtrl = new MediosCtrl();
             String codigo = tblMedios.getSelectionModel().getSelectedItem().getCodigo();
             meCtrl.elimMedio(codigo);
@@ -137,11 +136,11 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
 
     @FXML
     private void altaCopia(ActionEvent event) {
-        
+
          try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMCopias.fxml"));
             IOCtrlABMCopias CtrlCopia =  new IOCtrlABMCopias();
-            
+
             Parent root = loader.load();
             CtrlCopia = loader.getController();
             CtrlCopia.setControlMenu(this);
@@ -149,7 +148,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             //CtrlCopia.setMedioID(Integer.parseInt(tblMedios.getSelectionModel().getSelectedItem().getCodigo()));
 
             CtrlCopia.getBtnFinalizar().setVisible(true);
-            
+
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Crear Copia");
@@ -160,9 +159,9 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
         } catch (IOException ex) {
             Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
+
+
+
     }
 
     /************************OTHER FUNCTIONS**********************************/

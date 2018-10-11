@@ -18,7 +18,7 @@ public class SoftwareCtrl {
     private List<Software> sws = new ArrayList<>();
     private Software sw;
     private SoftwareDB swDB;
-    private MediosCtrl medCtrl = new MediosCtrl();
+    private MediosCtrl medCtrl;
     private MediosDB medDB;
     private SistOpDB soDB;
     private ExtrasCtrl exCtrl = new ExtrasCtrl();
@@ -64,6 +64,9 @@ public class SoftwareCtrl {
             //BUSCAR MEDIOS
             medDB = new MediosDB();
             medDB.connect();
+
+            medCtrl = new MediosCtrl();
+            medCtrl.cargarMedios();
             List<MediosDB> m = medDB.mediosDeSoftware(codigo);
             List<Medios> medios = new ArrayList<>();
             if(!m.isEmpty()){

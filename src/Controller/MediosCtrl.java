@@ -106,12 +106,13 @@ public class MediosCtrl {
         return todoOK;
     }
 
-     public boolean modMedio(String id, String nombre, int formid, boolean caja,
+     public boolean modMedio(String nuevoid, String id, String nombre, int formid, boolean caja,
         boolean manual, int origen, Ubicaciones ubiDepo, boolean enDepo,
         String imagen, String observ, int partes, List<Software> soft){
-
+        System.out.println("Controller.MediosCtrl.modMedio()");
         MediosDB meDB = new MediosDB();
         meDB.connect();
+        meDB.setNuevoId(nuevoid);
         meDB.setId(id);
         meDB.setNombre(nombre);
         meDB.setPartes(partes);
@@ -126,45 +127,66 @@ public class MediosCtrl {
         boolean todoOK = false;
         SoftwareCtrl sctrl = new SoftwareCtrl();
         sctrl.softwareDeMedio(id);
-
-        for(Software t : sctrl.getSwDeMed()){
-            boolean found = false;
-
-            int cod = t.getCodigo();
-
-            for(Software s : soft){
-                if(cod == s.getCodigo()){
-                    found = true;
-                    break;
-                }
-            }
-            if(!found){
-                meDB.setSwid(cod);
-                todoOK = meDB.desasociarMedioASoftware();
-            }
+        Set<Software> borrados = findUnCommon(sctrl.getSwDeMed(), soft);
+        Iterator<Software> it = borrados.iterator();
+        while(it.hasNext()){
+            Software x = it.next();
+            meDB.setId(nuevoid);
+            meDB.setSwid(x.getCodigo());
+            todoOK = meDB.desasociarMedioASoftware();
         }
-
-        if(ubiDepo==null)
-            ubiDepo = new UbicacionesCtrl().fetchUbicacion("NOASIG");
-
+        if(todoOK){
+            Set<Software> agregados = findUnCommon(soft, sctrl.getSwDeMed());
+            Iterator<Software> it2 = agregados.iterator();
+            while(it2.hasNext()){
+                Software x = it2.next();
+                meDB.setId(nuevoid);
+                meDB.setSwid(x.getCodigo());
+                todoOK = meDB.asociarMedioASoftware();
+            }
+        }else{System.err.println("Error modif software borrado");}
         Medios m = findMedio(id);
-        meDB.setUbic(m.getUbiDepo().getId());
-        meDB.setEnDepo(m.isEnDepo());
-        todoOK = meDB.desasociarUbicacionAMedio();
-        meDB.setUbic(ubiDepo.getId());
-        meDB.setEnDepo(enDepo);
-        todoOK = meDB.asociarUbicacionAMedio();
 
+        if(todoOK){
+
+            if(ubiDepo==null)
+                ubiDepo = new UbicacionesCtrl().fetchUbicacion("NOASIG");
+
+            meDB.setUbic(m.getUbiDepo().getId());
+            meDB.setEnDepo(m.isEnDepo());
+            todoOK = meDB.desasociarUbicacionAMedio();
+
+        }else{System.err.println("Error modif software agregado");}
+
+        if(todoOK){
+            meDB.setUbic(ubiDepo.getId());
+            meDB.setEnDepo(enDepo);
+            todoOK = meDB.asociarUbicacionAMedio();
+        }else{System.err.println("Error modif ubicacion");}
         return todoOK;
     }
 
      public void elimMedio(String codigo){
+        medios.remove(findMedio(codigo));
         MediosDB meDB  = new MediosDB();
         meDB.connect();
         meDB.setId(codigo);
         meDB.delete();
     }
 
+    public Set<Software> findUnCommon(List<Software> listaUno , List<Software> listaDos){
+
+        Set<Software> a = new HashSet<>(listaUno);
+        Set<Software> b = new HashSet<>(listaDos);
+
+        Set<Software> result = new HashSet<>();
+        for (Software el: a) {
+          if (!b.contains(el)) {
+            result.add(el);
+          }
+        }
+        return result;
+    }
     public List<Medios> getMedSw() {        return medSw;    }
     public void setMedSw(List<Medios> medSw) {        this.medSw = medSw;    }
     public MediosDB getMdb() {   return mdb;    }

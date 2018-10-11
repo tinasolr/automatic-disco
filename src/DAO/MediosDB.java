@@ -16,6 +16,7 @@ import java.util.*;
 public class MediosDB extends DBObject{
 
     private String id;
+    private String nuevoId;
     private int formid;
     private boolean caja;
     private String imagen;
@@ -230,19 +231,20 @@ public class MediosDB extends DBObject{
     public void executeUpdate() {
         try {
 
-            CallableStatement sp = conn.prepareCall("{call mod_medio (?, ?, ?, ?, ?, ?, ?, ?, ?)}");
-            sp.setString(1, id);
-            sp.setString(2, nombre);
-            sp.setInt(3,partes);
-            sp.setBoolean(4,manual);
-            sp.setBoolean(5,caja);
+            CallableStatement sp = conn.prepareCall("{call mod_medio (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)}");
+            sp.setString(1, nuevoId);
+            sp.setString(2, id);
+            sp.setString(3, nombre);
+            sp.setInt(4,partes);
+            sp.setBoolean(5,manual);
+            sp.setBoolean(6,caja);
             if(imagen != null && !imagen.isEmpty())
-                sp.setString(6, imagen);
+                sp.setString(7, imagen);
             else
-                sp.setString(6, "no-image-available.png");
-            sp.setString(7, observ);
-            sp.setInt(8,formid);
-            sp.setInt(9,origen);
+                sp.setString(7, "no-image-available.png");
+            sp.setString(8, observ);
+            sp.setInt(9,formid);
+            sp.setInt(10,origen);
             sp.executeUpdate();
 
         } catch (SQLException ex) {
@@ -376,6 +378,14 @@ public class MediosDB extends DBObject{
 
     public void setEnDepo(boolean enDepo) {
         this.enDepo = enDepo;
+    }
+
+    public String getNuevoId() {
+        return nuevoId;
+    }
+
+    public void setNuevoId(String nuevoId) {
+        this.nuevoId = nuevoId;
     }
 
 

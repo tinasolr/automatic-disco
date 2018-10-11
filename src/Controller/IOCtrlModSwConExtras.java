@@ -23,7 +23,7 @@ import javafx.stage.*;
  */
 public class IOCtrlModSwConExtras implements Initializable {
 
-    @FXML    private AnchorPane panelSuperior;
+    @FXML    private Pane panelSuperior;
     @FXML    private Label lblTituloSw;
     @FXML    private Label lblNombreSw;
     @FXML    private Label lblVersionSw;
@@ -34,7 +34,7 @@ public class IOCtrlModSwConExtras implements Initializable {
     @FXML    private ListView<String> lstSistemasOp = new ListView<>();
     @FXML    private Button btnAgregarSo;
     @FXML    private Button btnQuitarSo;
-    @FXML    private AnchorPane panelInferior;
+    @FXML    private Pane panelInferior;
     @FXML    private TableView<Extras> tblExtras;
     @FXML    private TableColumn<Extras, String> colNombre;
     @FXML    private TableColumn<Extras, String> colVersion;
@@ -276,11 +276,11 @@ public class IOCtrlModSwConExtras implements Initializable {
         this.codigoSw = codigo;
     }
 
-    public AnchorPane getPanelSuperior() {
+    public Pane getPanelSuperior() {
         return panelSuperior;
     }
 
-    public void setPanelSuperior(AnchorPane panelSuperior) {
+    public void setPanelSuperior(Pane panelSuperior) {
         this.panelSuperior = panelSuperior;
     }
 
@@ -364,11 +364,11 @@ public class IOCtrlModSwConExtras implements Initializable {
         this.btnQuitarSo = btnQuitarSo;
     }
 
-    public AnchorPane getPanelInferior() {
+    public Pane getPanelInferior() {
         return panelInferior;
     }
 
-    public void setPanelInferior(AnchorPane panelInferior) {
+    public void setPanelInferior(Pane panelInferior) {
         this.panelInferior = panelInferior;
     }
 

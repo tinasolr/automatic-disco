@@ -63,7 +63,7 @@ public class Software {
 
     @Override
     public String toString() {
-        return "Software{" + "codigo=" + codigo + ", nombre=" + nombre + ", sistOp=" + sistOp + ", version=" + version + ", extras=" + extras + ", medios=" + medios + '}';
+        return "Software{" + "codigo=" + codigo + ", nombre=" + nombre + ", sistOp=" + sistOp.toString() + ", version=" + version + ", extras=" + extras.toString() + ", medios=" + medios.toString() + '}';
     }
 
 }

@@ -7,6 +7,7 @@
 package DAO;
 
 import java.sql.*;
+import java.util.*;
 
 /**
  *
@@ -27,6 +28,30 @@ public class SoftwareDB extends DBObject{
         this.codigo = codigo;
         this.nombre = nombre;
         this.version = version;
+    }
+
+    public List<Integer> softwareDeMedios(String med_id){
+        ResultSet res = null;
+        List<Integer> ids = new ArrayList<>();
+        try {
+            if(conn == null || conn.isClosed())
+                connect();
+
+            res = instr.executeQuery("Select sw_id from Medios_Software AS s WHERE s.medio_id LIKE '" + med_id + "'");
+
+            while(res.next()){
+                ids.add(res.getInt("sw_id"));
+            }
+
+            res.close();
+
+            conn.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.err.println("Error >> Lectura >> Software de Medios " + med_id + " :: " + e.getLocalizedMessage());
+        }
+        return ids;
     }
 
     @Override
