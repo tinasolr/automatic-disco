@@ -23,7 +23,7 @@ public class CopiasCtrl {
     
     
     
-     public void CrearCopia(int medioid, int formatoid, String obs){
+     public void CrearCopia(String medioid, int formatoid, String obs){
         copdb  = new CopiasDB();
         copdb.connect();
         copdb.setMedioid(medioid);

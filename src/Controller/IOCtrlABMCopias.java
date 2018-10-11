@@ -46,7 +46,7 @@ public class IOCtrlABMCopias {
     @FXML private CheckBox chkDeposito;
     @FXML private AnchorPane Pane;
     
-    private int medioID;
+    private String medioID;
     private String nomMedio;
     private IOCtrlConsMasivaMedios controlMenu;
     
@@ -266,11 +266,11 @@ public class IOCtrlABMCopias {
         this.Pane = Pane;
     }
 
-    public int getMedioID() {
+    public String getMedioID() {
         return medioID;
     }
 
-    public void setMedioID(int medioID) {
+    public void setMedioID(String medioID) {
         this.medioID = medioID;
     }
 

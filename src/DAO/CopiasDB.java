@@ -16,14 +16,14 @@ import java.util.*;
 public class CopiasDB extends DBObject {
 
     private int id;
-    private int medioid;
+    private String medioid;
     private int formid;
     private String obs;
     private String ubi;
     private boolean enDepo;
 
 
-    private CopiasDB(int id, String obs, int formid, int swid) {
+    private CopiasDB(int id, String obs, int formid, String swid) {
         this.id = id;
         this.medioid = swid;
         this.obs = obs;
@@ -93,7 +93,7 @@ public class CopiasDB extends DBObject {
             this.id = res.getInt("copia_id");
             this.obs = res.getString("cp_obs");
             this.formid = res.getInt("form_id");
-            this.medioid = res.getInt("medio_id");
+            this.medioid = res.getString("medio_id");
 
             obj = new CopiasDB(id, obs, formid, medioid);
 
@@ -109,7 +109,7 @@ public class CopiasDB extends DBObject {
         try {
             CallableStatement sp = conn.prepareCall("{CALL alta_copia(?, ?, ?)}");
 
-            sp.setInt(1, medioid);
+            sp.setString(1, medioid);
             sp.setInt(2, formid);
             sp.setString(3, obs);
 
@@ -126,7 +126,7 @@ public class CopiasDB extends DBObject {
             CallableStatement sp = conn.prepareCall("{CALL mod_copia (?, ?, ?, ?)}");
 
             sp.setInt(1, id);
-            sp.setInt(2, medioid);
+            sp.setString(2, medioid);
             sp.setInt(3, formid);
             sp.setString(4, obs);
 
@@ -142,7 +142,7 @@ public class CopiasDB extends DBObject {
         try {
             CallableStatement sp = conn.prepareCall("{CALL elim_copia (?)}");
 
-            sp.setInt(1, medioid);
+            sp.setString(1, medioid);
             sp.setInt(2, formid);
             sp.setString(3, obs);
 
@@ -158,7 +158,7 @@ public class CopiasDB extends DBObject {
         try {
             CallableStatement sp = conn.prepareCall("{CALL get_idcopia (?, ?)}");
 
-            sp.setInt(1, medioid);
+            sp.setString(1, medioid);
             sp.setInt(2, formid);
 
             ResultSet r = sp.executeQuery();
@@ -179,11 +179,11 @@ public class CopiasDB extends DBObject {
         this.id = id;
     }
 
-    public int getMedioid() {
+    public String getMedioid() {
         return medioid;
     }
 
-    public void setMedioid(int medioid) {
+    public void setMedioid(String medioid) {
         this.medioid = medioid;
     }
 
