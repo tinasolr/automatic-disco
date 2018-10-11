@@ -14,6 +14,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.*;
 import javafx.fxml.*;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
@@ -140,16 +143,14 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
         
          try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMCopias.fxml"));
-            IOCtrlABMCopias CtrlCopia =  new IOCtrlABMCopias();
-            
+            //IOCtrlABMCopias CtrlCopia =  new IOCtrlABMCopias();
+            //CtrlCopia.setControlMenu(this);
+            //CtrlCopia.setNomMedio(tblMedios.getSelectionModel().getSelectedItem().getNombre());
+            //CtrlCopia.getBtnFinalizar().setVisible(true);            
+            //loader.setController(CtrlCopia);
             Parent root = loader.load();
-            CtrlCopia = loader.getController();
-            CtrlCopia.setControlMenu(this);
-            CtrlCopia.setNomMedio(tblMedios.getSelectionModel().getSelectedItem().getNombre());
             //CtrlCopia.setMedioID(Integer.parseInt(tblMedios.getSelectionModel().getSelectedItem().getCodigo()));
 
-            CtrlCopia.getBtnFinalizar().setVisible(true);
-            
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Crear Copia");
@@ -160,7 +161,24 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
         } catch (IOException ex) {
             Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+        /*
+         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ModSoftware.fxml"));
+            IOCtrlModSwConExtras msce = new IOCtrlModSwConExtras();
+            msce.setCodigoSw(tblSoftware.g0etSelectionModel().getSelectedItem().getCodigo());
+            msce.setConsMas(this);
+            loader.setController(msce);
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Modificar Software");
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+         */
+         
+         
+         
+         
         
         
     }
