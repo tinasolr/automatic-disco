@@ -59,6 +59,21 @@ public class CopiasDB extends DBObject {
         }
     }
 
+    public String buscarUltimoID()
+    {
+        try {
+            instr = conn.createStatement();
+            ResultSet r = instr.executeQuery("select max(copia_id) from Copias");
+            r.first();
+            return r.getString(1);
+        } catch (SQLException ex) {
+            System.err.println("BusquedaID >> Copias :: " + ex.getLocalizedMessage());
+        }
+        return null;
+    }
+    
+    
+    
     public CopiasDB() {}
 
     public List<CopiasDB> copiasDeSoftware(int sw_id){
