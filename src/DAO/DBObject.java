@@ -31,17 +31,15 @@ public abstract class DBObject {
         }
         try {
             if(isRemote){
+
                 conn = DriverManager.getConnection(URL, USER, PASSW);
-
                 instr = conn.createStatement();
 
-                System.out.println("Connection Established.");
             }else{
-                conn = DriverManager.getConnection(URLBDLOCAL, USER, PASSW);
 
+                conn = DriverManager.getConnection(URLBDLOCAL, USER, PASSW);
                 instr = conn.createStatement();
 
-                System.out.println("Connection Established.");
             }
         } catch (SQLException e) {
             System.out.println("Error connecting to database: " + e.getMessage());
@@ -62,7 +60,6 @@ public abstract class DBObject {
                 objetos.add(readResultSet(rs));
             }
             conn.close();
-            System.out.println("Connection closed.");
         } catch (SQLException e) {
             System.out.println("BDObject read() :: " + e.getMessage());
         }
@@ -81,7 +78,6 @@ public abstract class DBObject {
             executeWrite();
 
             conn.close();
-            System.out.println("Connection closed.");
 
         } catch (SQLException e) {
             System.out.println("BDObject write() :: " + e.getMessage());
@@ -99,7 +95,6 @@ public abstract class DBObject {
             executeUpdate();
 
             conn.close();
-            System.out.println("Connection closed.");
 
         } catch (SQLException e) {
             System.out.println("BDObject update() :: " + e.getMessage());
@@ -117,7 +112,6 @@ public abstract class DBObject {
             executeDelete();
 
             conn.close();
-            System.out.println("Connection closed.");
 
         } catch (SQLException e) {
             System.out.println("BDObject delete() :: " + e.getMessage());
@@ -137,7 +131,6 @@ public abstract class DBObject {
             id = executeSearch();
 
             conn.close();
-            System.out.println("Connection closed.");
 
         } catch (SQLException e) {
             System.out.println("BDObject search() :: " + e.getMessage());

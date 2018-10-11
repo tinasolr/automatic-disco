@@ -27,7 +27,7 @@ public class MediosCtrl {
         medSw.clear();
         if(medios.isEmpty())
             cargarMedios();
-        boolean nuevo = true;
+
         for(MediosDB x : m){
             FormatoDB f = new FormatoDB();
 
@@ -49,9 +49,11 @@ public class MediosCtrl {
             boolean estaEnDepo = x.isMedioEnDepo(x.getId());
 
             Ubicaciones ubicacion = new UbicacionesCtrl().fetchUbicacion(x.getUbic());
-            medios.add(new Medios(x.getId(), x.getNombre(), formato, x.isCaja(),
+            Medios nuevo = new Medios(x.getId(), x.getNombre(), formato, x.isCaja(),
                     x.isManual(), x.getOrigen(), ubicacion, estaEnDepo, x.getImagen(),
-                    x.getObserv(), x.getPartes()));
+                    x.getObserv(), x.getPartes());
+            medios.add(nuevo);
+
         }
     }
 
@@ -61,7 +63,7 @@ public class MediosCtrl {
         for(Medios m : medios){
             String isOrig = m.getOrigen()==1?"Sí" : "No";
             String enDep = m.isEnDepo()?"Sí":"No";
-            
+
             mediosForTable.add(new MediosTableFormat(m.getCodigo(), m.getNombre(), m.getFormato(), isOrig, m.getUbiDepo().getId(),enDep, m.getCopias().size()));
         }
     }
@@ -104,10 +106,12 @@ public class MediosCtrl {
         return todoOK;
     }
 
-     public void modMedio(String id, String nombre, int partes, boolean manual, boolean caja, String imagen, String observ, int formid, int origen){
+     public boolean modMedio(String id, String nombre, int formid, boolean caja,
+        boolean manual, int origen, Ubicaciones ubiDepo, boolean enDepo,
+        String imagen, String observ, int partes, List<Software> soft){
+
         MediosDB meDB = new MediosDB();
         meDB.connect();
-        meDB.setNombre(nombre);
         meDB.setId(id);
         meDB.setNombre(nombre);
         meDB.setPartes(partes);
@@ -118,6 +122,40 @@ public class MediosCtrl {
         meDB.setFormid(formid);
         meDB.setOrigen(origen);
         meDB.update();
+
+        boolean todoOK = false;
+        SoftwareCtrl sctrl = new SoftwareCtrl();
+        sctrl.softwareDeMedio(id);
+
+        for(Software t : sctrl.getSwDeMed()){
+            boolean found = false;
+
+            int cod = t.getCodigo();
+
+            for(Software s : soft){
+                if(cod == s.getCodigo()){
+                    found = true;
+                    break;
+                }
+            }
+            if(!found){
+                meDB.setSwid(cod);
+                todoOK = meDB.desasociarMedioASoftware();
+            }
+        }
+
+        if(ubiDepo==null)
+            ubiDepo = new UbicacionesCtrl().fetchUbicacion("NOASIG");
+
+        Medios m = findMedio(id);
+        meDB.setUbic(m.getUbiDepo().getId());
+        meDB.setEnDepo(m.isEnDepo());
+        todoOK = meDB.desasociarUbicacionAMedio();
+        meDB.setUbic(ubiDepo.getId());
+        meDB.setEnDepo(enDepo);
+        todoOK = meDB.asociarUbicacionAMedio();
+
+        return todoOK;
     }
 
      public void elimMedio(String codigo){
@@ -135,8 +173,5 @@ public class MediosCtrl {
     public void setDeDB(List<MediosDB> deDB) {        this.deDB = deDB;    }
     public List<Medios> getMedios() {        return medios;    }
     public void setMedios(List<Medios> medios) {        this.medios = medios;    }
-
-    public List<MediosTableFormat> getMediosForTable() {
-        return mediosForTable;
-    }
+    public List<MediosTableFormat> getMediosForTable() {   return mediosForTable;  }
 }

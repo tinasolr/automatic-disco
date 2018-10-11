@@ -243,7 +243,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
                                 contenido.add(s);
                             }
 
-                            medio = new Medios(id, nombre, formato, caja, manual,origen,ubaux,endepo,imagen, observ,origen);
+                            medio = new Medios(id, nombre, formato, caja, manual,origen,ubaux,endepo,imagen, observ,partes);
 
                             //ADD MEDIO TO EVERY SOFTWARE
                             for(Software s : contenido)
@@ -251,7 +251,7 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
 
                             //Se guarda en BD
                             boolean todoOK = meCtrl.altaMedio(id, nombre, formid, caja, manual, origen, ubaux, endepo, imagen, observ, origen, contenido);
-                            meCtrl.getMedSw().add(medio);
+                            meCtrl.getMedios().add(medio);
 
                             //RELOAD CONS MASIVA MEDIOS
                             if(todoOK){

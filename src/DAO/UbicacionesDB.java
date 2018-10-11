@@ -104,7 +104,7 @@ public class UbicacionesDB extends DBObject {
 
             if(id==null)
                 throw new NullPointerException();
-            
+
             PreparedStatement sp = conn.prepareStatement("SELECT * FROM Ubicaciones WHERE ubi_id LIKE ?");
             sp.setString(1, id);
             ResultSet r = sp.executeQuery();
@@ -143,7 +143,7 @@ public class UbicacionesDB extends DBObject {
         }  finally{
             try {
                 conn.close();
-                System.out.println("Connection closed.");
+
             } catch (SQLException ex) {
                 Logger.getLogger(UbicacionesDB.class.getName()).log(Level.SEVERE, null, ex);
             }

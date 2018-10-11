@@ -23,7 +23,7 @@ public class SoftwareCtrl {
     private SistOpDB soDB;
     private ExtrasCtrl exCtrl = new ExtrasCtrl();
     private ExtrasDB extrasDB;
-    private List<String> swDeMed = new ArrayList<>();
+    private List<Software> swDeMed = new ArrayList<>();
 
     public SoftwareCtrl(){}
 
@@ -35,7 +35,7 @@ public class SoftwareCtrl {
         for(Software s : sws)
             for(Medios m : s.getMedios())
                 if(m.getCodigo().equalsIgnoreCase(cod)){
-                    swDeMed.add(s.getCodigo() + " - " + s.getNombre());
+                    swDeMed.add(s);
                     break;
                 }
     }
@@ -197,11 +197,11 @@ public class SoftwareCtrl {
         this.extrasDB = extrasDB;
     }
 
-    public List<String> getSwDeMed() {
+    public List<Software> getSwDeMed() {
         return swDeMed;
     }
 
-    public void setSwDeMed(List<String> swDeMed) {
+    public void setSwDeMed(List<Software> swDeMed) {
         this.swDeMed = swDeMed;
     }
 

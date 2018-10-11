@@ -25,7 +25,6 @@ import javafx.stage.*;
 
 /**
  * FXML Controller class
- *
  * @author tinar
  */
 public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
@@ -39,6 +38,7 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
     private IOCtrlConsMasivaMedios consmasiva;
     private IOCtrlMenu controlMenu;
     private String codigoMedio;
+    private Medios m;
 
     @FXML    private AnchorPane window;
     @FXML    private TitledPane tpaneDatosMedio;
@@ -107,17 +107,12 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
         meCtrl = new MediosCtrl();
         if(meCtrl.getMedios().isEmpty())
             meCtrl.cargarMedios();
-        Medios m = meCtrl.findMedio(codigoMedio);
+        m = meCtrl.findMedio(codigoMedio);
 
         if(m!=null){
 
-            if(m.getImagen()!=null){
-                File fi = new File("./src/imagenes/" + m.getImagen());
-                image.setImage(new Image("file:///" + fi.getAbsolutePath()));
-            }else if(m.getImagen()==null || m.getImagen().isEmpty()){
-                File fi = new File("./src/imagenes/no-image-available.png");
-                image.setImage(new Image("file:///" + fi.getAbsolutePath()));
-            }
+            File fi = new File("./src/imagenes/" + m.getImagen());
+            image.setImage(new Image("file:///" + fi.getAbsolutePath()));
 
             txtCodigo.setText(m.getCodigo());
             txtNombre.setText(m.getNombre());
@@ -145,7 +140,11 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
 
             SoftwareCtrl sctrl = new SoftwareCtrl();
             sctrl.softwareDeMedio(m.getCodigo());
-            lstSwContenido.getItems().setAll(sctrl.getSwDeMed());
+
+            for(Software s : sctrl.getSwDeMed())
+                System.out.println("Controller.IOCtrlModMedio.initialize() > " + s.getCodigo() + " - " + s.getNombre());
+            
+            sctrl.getSwDeMed().forEach((x) -> { lstSwContenido.getItems().add(x.getCodigo() + " - " + x.getNombre());});
         }else{popUpError("Algo falló. No reconoce el código.");}
 
         //CARGAR table de Software
@@ -184,19 +183,27 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
 
     @FXML
     private void actualizarMedio(ActionEvent event) {
+
         String id = txtCodigo.getText();
+    System.out.println(id);
         String nombre = txtNombre.getText();
+    System.out.println(nombre);
         String formato = cmbFormato.getSelectionModel().getSelectedItem();
+    System.out.println(formato);
         String ubicacion = cmbUbicacion.getSelectionModel().getSelectedItem();
-        String imagen="";
+    System.out.println(ubicacion);
+        String imagen=null;
         String observ = txtObservaciones.getText();
+    System.out.println(observ);
 
         int origen = 0;
         boolean manual = false;
         boolean caja = false;
         boolean endepo = false;
         Ubicaciones ubaux = new Ubicaciones();
-        Medios medio = null;
+
+        if(m == null)
+            m = meCtrl.findMedio(codigoMedio);
 
         try{
             int partes = Integer.parseInt(txtPartes.getText());
@@ -206,8 +213,8 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
                         if(rbOriginal.isSelected() || rbMixto.isSelected() || rbOtros.isSelected()){
 
                             //EMPAQUE
-                            if(chkCaja.isSelected()) caja = true;
-                            if(chkManual.isSelected()) manual = true;
+                            caja = chkCaja.isSelected();
+                            manual = chkManual.isSelected();
 
                             //ORIGINAL-MIXTO-NO ORIGINAL
                             if(rbOriginal.isSelected()) origen = 1;
@@ -215,7 +222,7 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
                             if(rbOtros.isSelected()) origen = 3;
 
                             //EN DEPOSITO
-                            if(chkEnDeposito.isSelected()) endepo = true;
+                            endepo = chkEnDeposito.isSelected();
 
                             //FORMATO
                             FormatoDB f = new FormatoDB();
@@ -244,37 +251,40 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
                             List<Software> contenido = new ArrayList<>();
                             for(String x : lstSwContenido.getItems()){
                                 String[] soft = x.split(" - ");
+                                System.out.println("Controller.IOCtrlModMedio.actualizarMedio() > " + soft[0]);
                                 Software s = sctr.findSoftware(Integer.parseInt(soft[0]));
                                 contenido.add(s);
                             }
 
-                            medio = new Medios(id, nombre, formato, caja, manual,origen,ubaux,endepo,imagen, observ,origen);
+                            //Se guarda en BD y MediosCtrl
+                            boolean todoOk = meCtrl.modMedio(id, nombre, formid, caja, manual, origen, ubaux, endepo, imagen, observ, partes, contenido);
 
-                            //ADD MEDIO TO EVERY SOFTWARE
-                            for(Software s : contenido)
-                                s.getMedios().add(medio);
-
-                            //Se guarda en BD
-                            boolean todoOK = meCtrl.altaMedio(id, nombre, formid, caja, manual, origen, ubaux, endepo, imagen, observ, origen, contenido);
-                            meCtrl.getMedSw().add(medio);
+                            m.setCodigo(id);
+                            m.setNombre(nombre);
+                            m.setFormato(formato);
+                            m.setCaja(caja);
+                            m.setManual(manual);
+                            m.setOrigen(origen);
+                            m.setUbiDepo(ubaux);
+                            m.setEnDepo(endepo);
+                            m.setImagen(imagen);
+                            m.setObserv(observ);
+                            m.setPartes(partes);
 
                             //RELOAD CONS MASIVA MEDIOS
-                            if(todoOK){
-                                boolean cont = popUpWarning("Medio ingresado con éxito. ¿Cargar otro?");
+                            if(todoOk){
+                                popUpExito("Medio actualizado con éxito.");
 
                                 Stage x = (Stage) window.getScene().getWindow();
                                 x.close();
-                                if(cont)
-                                    controlMenu.altaMedio(new ActionEvent());
+
+                                consmasiva.loadTable();
                             }else{popUpError("Algo no se cargó correctamente a la base.");}
                       }else{ popUpError("Selecione el si el medio es original, mixto u otro.");}
                     }else{ popUpError("Selecione el formato y una ubicacion.");}
                 }else{ popUpError("Por favor, ingrese un nombre de al menos 3 caracteres");}
             }else{ popUpError("Por favor, ingrese un identificador del medio. ");}
-
-        }catch(NumberFormatException e){
-            popUpError("Por favor, ingrese un numero de partes.");
-        }
+        }catch(NumberFormatException e){popUpError("Por favor, ingrese un numero de partes.");}
     }
 
     @FXML

@@ -138,7 +138,6 @@ public class SoftwareDB extends DBObject{
             instr.execute("DELETE FROM sistoperativos_software WHERE `so_id` = " + cod + " AND `sw_id` = " + codigo);
 
             conn.close();
-            System.out.println("Connection closed.");
 
         } catch (SQLException e) {
             System.out.println("deleteSOSw() :: " + e.getMessage());
@@ -167,7 +166,6 @@ public class SoftwareDB extends DBObject{
 
             res.close();
             conn.close();
-            System.out.println("Connection closed.");
 
         } catch (SQLException e) {
             System.out.println("insertSOSw() :: " + e.getMessage());

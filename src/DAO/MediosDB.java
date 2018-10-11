@@ -129,7 +129,7 @@ public class MediosDB extends DBObject{
 
             conn.close();
         } catch (SQLException ex) {
-            System.err.println("Escritura >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+            System.err.println("Escritura >> tabla Medio_Ubic :: " + ex.getLocalizedMessage());
             return false;
         }
         return true;
@@ -149,7 +149,7 @@ public class MediosDB extends DBObject{
 
             conn.close();
         } catch (SQLException ex) {
-            System.err.println("Eliminar >> tabla Medios_Software :: " + ex.getLocalizedMessage());
+            System.err.println("Eliminar >> tabla Medio_Ubic :: " + ex.getLocalizedMessage());
             return false;
         }
         return true;
@@ -195,7 +195,7 @@ public class MediosDB extends DBObject{
             esta = rs.getBoolean(2);
 
             conn.close();
-            System.out.println("Connection closed.");
+
         } catch (SQLException e) {
             System.out.println("MediosDB >> fetchUnMedio() :: " + e.getMessage());
         }
@@ -212,7 +212,10 @@ public class MediosDB extends DBObject{
             sp.setInt(3,partes);
             sp.setBoolean(4,manual);
             sp.setBoolean(5,caja);
-            sp.setString(6, imagen);
+            if(imagen != null && !imagen.isEmpty())
+                sp.setString(6, imagen);
+            else
+                sp.setString(6, "no-image-available.png");
             sp.setString(7, observ);
             sp.setInt(8,formid);
             sp.setInt(9,origen);
@@ -233,12 +236,13 @@ public class MediosDB extends DBObject{
             sp.setInt(3,partes);
             sp.setBoolean(4,manual);
             sp.setBoolean(5,caja);
-            sp.setString(6, imagen);
+            if(imagen != null && !imagen.isEmpty())
+                sp.setString(6, imagen);
+            else
+                sp.setString(6, "no-image-available.png");
             sp.setString(7, observ);
             sp.setInt(8,formid);
             sp.setInt(9,origen);
-            sp.executeUpdate();
-
             sp.executeUpdate();
 
         } catch (SQLException ex) {
