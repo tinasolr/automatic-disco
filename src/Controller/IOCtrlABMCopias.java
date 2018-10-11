@@ -9,12 +9,12 @@ import javafx.scene.*;
 import javax.swing.*;
 import Model.*;
 import DAO.*;
-import java.awt.*;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.ResourceBundle;
+import java.net.*;
+import java.sql.*;
+import java.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
@@ -22,6 +22,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -30,8 +34,9 @@ import javafx.stage.Stage;
  *
  * @author Nico
  */
-public class IOCtrlABMCopias {
+public class IOCtrlABMCopias implements Initializable{
    
+    @FXML private AnchorPane AltaCopia;
     @FXML private Label lblMedio;
     @FXML private Label lblFormato;
     @FXML private Label lblUbicaciones;
@@ -44,34 +49,42 @@ public class IOCtrlABMCopias {
     @FXML private ComboBox<String> cmbFormato;
     @FXML private ComboBox<String> cmbUbicaciones;
     @FXML private CheckBox chkDeposito;
-    @FXML private AnchorPane Pane;
     
     private String medioID;
     private String nomMedio;
     private IOCtrlConsMasivaMedios controlMenu;
     
+    /*******Initializes the controller class.**********************************/
+
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
         txtMedio.setText(nomMedio);
         
+        
         FormatoDB formdb = new FormatoDB();
-        java.util.List<FormatoDB> form = formdb.read("formatos");
+        List<String> form = formdb.read("formatos");
         if(!cmbFormato.getItems().isEmpty())
             cmbFormato.getItems().clear();
-        form.forEach((x) -> { cmbFormato.getItems().add(x.getFormato()); });
+
+        form.forEach((x)-> {cmbFormato.getItems().add(x);});
         new AutoCompleteComboBoxListener<>(cmbFormato);
         
+        /*SistOpDB so = new SistOpDB();
+        List<SistOpDB> sos = so.read("SistOperativos");
+        if(!cmbSos.getItems().isEmpty())
+            cmbSos.getItems().clear();
+        sos.forEach((x) -> { cmbSos.getItems().add(x.getNombre()); });
+        new AutoCompleteComboBoxListener<>(cmbSos);
+        loadTable();*/
+
         UbicacionesDB ubdb = new UbicacionesDB();
-        java.util.List<UbicacionesDB> ubic = ubdb.read("ubicaciones");
+        List<UbicacionesDB> ubic = ubdb.read("ubicaciones");
         if(!cmbUbicaciones.getItems().isEmpty())
             cmbUbicaciones.getItems().clear();
         ubic.forEach((y) -> { cmbUbicaciones.getItems().add(y.getCodUbi()); });
         new AutoCompleteComboBoxListener<>(cmbUbicaciones);
-        
-        
-        
-        
+
         
     }
     
@@ -79,33 +92,43 @@ public class IOCtrlABMCopias {
  
     
     @FXML
-    private void agregar(ActionEvent event) throws SQLException {
+    private void agregarCopia(ActionEvent event) throws SQLException {
 
         String descripcion = txtDescripcion.getText();
         CopiasCtrl coCtrl = new CopiasCtrl();
         FormatoDB foDB = new FormatoDB();
         UbicacionesDB ubDB = new UbicacionesDB();
+        Copias copia;
+        Ubicaciones ubicacion;
 
         if(cmbFormato.getSelectionModel().getSelectedItem() != null){
                 
             
             foDB.setFormato(cmbFormato.getSelectionModel().getSelectedItem());
             foDB.connect();
+            
+            //Buscar ID Formato
             int formId=Integer.parseInt(foDB.executeSearch());
+            //Creación de Copia en BD
             coCtrl.CrearCopia(medioID,formId ,descripcion);
             
+            //Buscar ID de la copia Creada
+            int id = Integer.parseInt(coCtrl.buscarUltimoID());
             
+            //Buscar ID de Ubicaciones
             ubDB.setCodUbi(cmbUbicaciones.getSelectionModel().getSelectedItem());
             ubDB.connect();
-            //int formId=Integer.parseInt(ubDB.executeSearch());
-            //coCtrl.asociarUbicacionACopia();
+            String ubiid = ubDB.executeSearch();
+            ubicacion = new Ubicaciones(ubiid,cmbUbicaciones.getSelectionModel().getSelectedItem());
             
-            /*sp.setInt(1, id);
-            sp.setString(2, ubi);
-            sp.setBoolean(3, enDepo);*/
-                
-                
-                
+            //Crea copia en la lista de copias
+            copia = new Copias(id,cmbFormato.getSelectionModel().getSelectedItem(),descripcion,ubicacion);
+            coCtrl.getCopias().add(copia);
+  
+            
+            //Asocia la Copia con la Ubicacion en la BD
+            coCtrl.asociarUbicacionACopia(id, cmbUbicaciones.getSelectionModel().getSelectedItem(), chkDeposito.isSelected());
+
             popUpExito("Copia creada con éxito.");
             txtMedio.setText("");
             txtDescripcion.setText("");
@@ -119,9 +142,9 @@ public class IOCtrlABMCopias {
         
         
     }
-
+    @FXML
     private void cancelar(ActionEvent event) {
-        Stage x = (Stage) Pane.getScene().getWindow();
+        Stage x = (Stage) AltaCopia.getScene().getWindow();
         x.close();
     }
     
@@ -259,11 +282,11 @@ public class IOCtrlABMCopias {
     }
 
     public AnchorPane getPane() {
-        return Pane;
+        return AltaCopia;
     }
 
     public void setPane(AnchorPane Pane) {
-        this.Pane = Pane;
+        this.AltaCopia = Pane;
     }
 
     public String getMedioID() {
