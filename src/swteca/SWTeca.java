@@ -12,7 +12,6 @@ import javafx.scene.*;
 import javafx.stage.*;
 
 /**
- *
  * @author tinar
  */
 public class SWTeca extends Application {
@@ -47,6 +46,8 @@ public class SWTeca extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+
+
 //        MediosCtrl meCtrl = new MediosCtrl();
 //        SoftwareCtrl sctrl = new SoftwareCtrl();
 //        meCtrl.cargarMedios();
@@ -57,7 +58,7 @@ public class SWTeca extends Application {
 //                System.out.println("swteca.SWTeca.main() > " + s.toString());
 //            }
 //        }
-        
+
         launch(args);
 
 //        UsersDB u = new UsersDB();

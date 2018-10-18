@@ -111,9 +111,9 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
 
         if(m!=null){
 
-            File fi = new File("./src/imagenes/" + m.getImagen());
-            image.setImage(new Image("file:///" + fi.getAbsolutePath()));
-
+//            File fi = new File("./src/imagenes/" + m.getImagen());
+//            image.setImage(new Image("file:///" + fi.getAbsolutePath()));
+            image.setImage(new Image(getClass().getResource("/imagenes/" + m.getImagen()).toExternalForm()));
             txtCodigo.setText(m.getCodigo());
             txtNombre.setText(m.getNombre());
             txtObservaciones.setText(m.getObserv());
