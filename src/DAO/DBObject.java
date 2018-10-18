@@ -6,6 +6,8 @@
 
 package DAO;
 
+import com.mysql.cj.jdbc.exceptions.*;
+import java.io.*;
 import java.sql.*;
 import java.util.*;
 
@@ -41,7 +43,15 @@ public abstract class DBObject {
                 instr = conn.createStatement();
 
             }
-        } catch (SQLException e) {
+        } catch(CommunicationsException e){
+            String command = "~path~\\mysql-5.6.10-win32\\bin\\mysqld.exe";
+
+            try{
+                Process process = Runtime.getRuntime().exec(command);
+            } catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }catch (SQLException e) {
             System.out.println("Error connecting to database: " + e.getMessage());
         }
     }

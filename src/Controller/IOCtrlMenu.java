@@ -71,7 +71,7 @@ public class IOCtrlMenu implements Initializable {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-        
+
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Login.fxml"));
 

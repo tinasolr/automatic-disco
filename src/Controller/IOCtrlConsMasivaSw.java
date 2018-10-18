@@ -198,6 +198,7 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
             derVer.setDisable(false);
             derModificar.setDisable(false);
             derEliminar.setDisable(false);
+            loadTable();
         }
     }
 

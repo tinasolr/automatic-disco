@@ -13,8 +13,6 @@ import java.util.*;
 import java.util.logging.*;
 import javafx.event.*;
 import javafx.fxml.*;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
@@ -63,7 +61,6 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
     /************Initializes the controller class.*****************************/
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        disableSearchItems(true);
 
         txtFiltrar.setOnKeyPressed((KeyEvent event) -> {  });
         txtFiltrar.setOnKeyReleased(this);
@@ -137,7 +134,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
     }
 
     @FXML
-    private void altaCopia(ActionEvent event) {
+    public void altaCopia(ActionEvent event) {
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMCopias.fxml"));
@@ -145,7 +142,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             CtrlCopia.setNomMedio(tblMedios.getSelectionModel().getSelectedItem().getNombre());
             CtrlCopia.setMedioID(tblMedios.getSelectionModel().getSelectedItem().getCodigo());
             CtrlCopia.setControlMenu(this);
-      
+
             loader.setController(CtrlCopia);
             Parent root = loader.load();
 
@@ -157,7 +154,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             stage.sizeToScene();
             stage.show();
             CtrlCopia.getBtnFinalizar().setVisible(true);
-            
+
         } catch (IOException ex) {
             Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -296,11 +293,14 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             derModificar.setDisable(true);
             derEliminar.setDisable(true);
             derAltaCopia.setDisable(true);
+            disableSearchItems(true);
         }else{
             derVer.setDisable(false);
             derModificar.setDisable(false);
             derEliminar.setDisable(false);
             derAltaCopia.setDisable(false);
+            disableSearchItems(false);
+            loadTable();
         }
     }
 
