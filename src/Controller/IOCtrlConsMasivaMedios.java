@@ -131,6 +131,31 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
 
     @FXML
     private void verCopias(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMCopias.fxml"));
+            IOCtrlABMCopias CtrlCopia =  new IOCtrlABMCopias();
+            CtrlCopia.setNomMedio(tblMedios.getSelectionModel().getSelectedItem().getNombre());
+            CtrlCopia.setMedioID(tblMedios.getSelectionModel().getSelectedItem().getCodigo());
+            CtrlCopia.setControlMenu(this);
+      
+            loader.setController(CtrlCopia);
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Ver Copias");
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+            CtrlCopia.visualizarVerCopia();
+                  
+            
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
 
     @FXML
@@ -148,18 +173,79 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
 
             Scene scene = new Scene(root);
             Stage stage = new Stage();
-            stage.setTitle("Crear Copia");
+            stage.setTitle("Crear Copias");
             stage.setResizable(false);
             stage.setScene(scene);
             stage.sizeToScene();
             stage.show();
-            CtrlCopia.getBtnFinalizar().setVisible(true);
-
+            CtrlCopia.visualizarAltaCopia();
+                  
+            
         } catch (IOException ex) {
             Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
+    @FXML
+    private void ModificarCopia(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMCopias.fxml"));
+            IOCtrlABMCopias CtrlCopia =  new IOCtrlABMCopias();
+            CtrlCopia.setNomMedio(tblMedios.getSelectionModel().getSelectedItem().getNombre());
+            CtrlCopia.setMedioID(tblMedios.getSelectionModel().getSelectedItem().getCodigo());
+            CtrlCopia.setControlMenu(this);
+      
+            loader.setController(CtrlCopia);
+            Parent root = loader.load();
 
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Modificar Copias");
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+            CtrlCopia.visualizarModificarCopia();
+                  
+            
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    
+    }
+    
+    @FXML
+    private void EliminarCopia(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMCopias.fxml"));
+            IOCtrlABMCopias CtrlCopia =  new IOCtrlABMCopias();
+            CtrlCopia.setNomMedio(tblMedios.getSelectionModel().getSelectedItem().getNombre());
+            CtrlCopia.setMedioID(tblMedios.getSelectionModel().getSelectedItem().getCodigo());
+            CtrlCopia.setControlMenu(this);
+      
+            loader.setController(CtrlCopia);
+            Parent root = loader.load();
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Eliminar Copias");
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+            CtrlCopia.visualizarEliminarCopia();
+                  
+            
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+    }
+    
+    
     /************************OTHER FUNCTIONS**********************************/
 
     public void loadTable(String searchTerm){
