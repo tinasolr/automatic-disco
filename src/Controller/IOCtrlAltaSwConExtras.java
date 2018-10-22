@@ -155,7 +155,7 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
                 if(cantSO>0){
 
                     //GuardaSW en BD
-                    swCtrl.altaSoftware(nombre, version);
+                    boolean ok = swCtrl.altaSoftware(nombre, version);
                     soft.setNombre(nombre);
                     soft.setVersion(version);
                     //GuardaSO en BD
@@ -179,7 +179,8 @@ public class IOCtrlAltaSwConExtras  implements Initializable {
 
                     SoftwareCtrl swCtrl = new SoftwareCtrl();
                     swCtrl.getSws().add(soft);
-                    popUpExito("Software ingresado con éxito.");
+                    if(ok) popUpExito("Software ingresado con éxito.");
+                    else popUpError("Error de guardado.");
                     reloadConsultaSw();
 
                 }else{ popUpError("Ingrese el sistema operativo.");}

@@ -59,7 +59,7 @@ public class SWTeca extends Application {
 //                System.out.println("swteca.SWTeca.main() > " + s.toString());
 //            }
 //        }
-    BasicConfigurator.configure();
+        BasicConfigurator.configure();
         launch(args);
 
 //        UsersDB u = new UsersDB();

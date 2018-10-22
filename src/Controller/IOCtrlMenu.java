@@ -46,7 +46,6 @@ public class IOCtrlMenu implements Initializable {
     @FXML    private Menu mVer;
     @FXML    private MenuItem ConsultaSoftware;
     @FXML    private Menu mAyuda;
-    @FXML    private MenuItem ayAbout;
     @FXML    private MenuItem AltaSoftware;
     @FXML    private MenuItem AltaMedio;
     @FXML    private MenuItem ConsultaMedios;
@@ -55,6 +54,27 @@ public class IOCtrlMenu implements Initializable {
     @FXML    private MenuItem ABMUbicaciones;
     @FXML    private MenuItem ABMSistemaOperat;
     @FXML    private MenuItem arcOpciones;
+    @FXML
+    private MenuItem ayVerManual;
+    @FXML
+    private MenuItem ayInformacion;
+
+    @FXML
+    private void importar(ActionEvent event) {
+        ExcelCtrl ex = new ExcelCtrl();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar archivo");
+
+        File excel = fileChooser.showOpenDialog(new Stage());
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("XLSX", "*.xlsx")
+        );
+        ex.read(excel.getAbsolutePath());
+    }
+
+    @FXML
+    private void exportar(ActionEvent event) {
+    }
 
     /*** Initializes the controller class.************************************/
     @Override
@@ -67,7 +87,8 @@ public class IOCtrlMenu implements Initializable {
             consmasivamed.setAccess(accesos);
             consmasivamed.setControlMenu(this);
             mainWindow.setCenter(x);
-            disableEverything(false);
+            disableEverything(true);
+            consmasivamed.disableSearchItems(true);
         } catch (IOException ex) {
             ex.printStackTrace();
         }

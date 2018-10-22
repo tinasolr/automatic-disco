@@ -111,12 +111,17 @@ public class SoftwareCtrl {
         swDB.insertSOSw();
     }
 
-     public void altaSoftware(String nombre, String version){
-        swDB  = new SoftwareDB();
+     public boolean altaSoftware(String nombre, String version){
+        boolean ok = true;
+         swDB  = new SoftwareDB();
         swDB.connect();
         swDB.setNombre(nombre);
         swDB.setVersion(version);
-        swDB.write();
+        String id = swDB.executeSearch();
+        if(id==null)
+            swDB.write();
+        else ok = false;
+        return ok;
     }
 
      public void modSoftware(String nombre, String version, String newNom, String newVers){

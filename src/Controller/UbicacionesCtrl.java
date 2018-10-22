@@ -49,6 +49,14 @@ public class UbicacionesCtrl {
                 return u;
         return null;
     }
+
+    public Ubicaciones findUbicacion(String codigo){
+        for(Ubicaciones u : ubis)
+            if(u.getId().equalsIgnoreCase(codigo))
+                return u;
+        return null;
+    }
+
     public List<Ubicaciones> getUbis() {        return ubis;    }
     public void setUbis(List<Ubicaciones> ubis) {        this.ubis = ubis;   }
 

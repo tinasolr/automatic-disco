@@ -219,6 +219,9 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
                             f.connect();
                             f.setFormato(cmbFormato.getSelectionModel().getSelectedItem());
                             String fo = f.searchTable();
+                            if(fo==null)
+                                f.setFormato("INVALIDO");
+                            fo = f.searchTable();
                             int formid = Integer.parseInt(fo);
 
                             //IMAGEN
