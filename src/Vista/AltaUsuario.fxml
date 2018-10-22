@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="309.0" prefWidth="446.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="Controller.IOCtrlABMUsuarios">
+   <children>
+      <Label layoutX="40.0" layoutY="34.0" text="Nombre:" />
+      <Label layoutX="38.0" layoutY="74.0" text="Usuario:" />
+      <Label layoutX="36.0" layoutY="115.0" text="Contraseña:" />
+      <Label layoutX="37.0" layoutY="146.0" text="Accesos:" />
+      <RadioButton layoutX="33.0" layoutY="235.0" mnemonicParsing="false" text="Crear, modificar y borrar medios y software" />
+      <RadioButton layoutX="33.0" layoutY="208.0" mnemonicParsing="false" text="Crear, modificar y borrar formatos, ubicaciones y sistemas opeartivos" />
+      <RadioButton layoutX="33.0" layoutY="262.0" mnemonicParsing="false" text="Visualización" />
+      <RadioButton layoutX="33.0" layoutY="182.0" mnemonicParsing="false" text="Acceso total" />
+      <TextField layoutX="135.0" layoutY="30.0" prefHeight="25.0" prefWidth="233.0" />
+      <TextField layoutX="135.0" layoutY="70.0" prefHeight="25.0" prefWidth="233.0" />
+      <TextField layoutX="135.0" layoutY="111.0" prefHeight="25.0" prefWidth="233.0" />
+   </children>
+</AnchorPane>

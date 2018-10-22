@@ -36,6 +36,7 @@
                           <RadioButton fx:id="rdbNombre" layoutX="14.0" layoutY="122.0" mnemonicParsing="true" prefHeight="20.0" text="_Nombre" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="122.0" />
                           <RadioButton fx:id="rdbVersion" layoutX="14.0" layoutY="148.0" mnemonicParsing="true" text="_Versión" toggleGroup="$groupFiltrar" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="148.0" />
                           <Button fx:id="btnFiltrar" layoutX="157.0" layoutY="208.0" mnemonicParsing="false" onAction="#loadTable" snapToPixel="false" text="Ver Todos" AnchorPane.leftAnchor="157.0" AnchorPane.topAnchor="208.0" />
+                        <Button fx:id="btnExport" layoutX="14.0" layoutY="208.0" mnemonicParsing="false" onAction="#exportarTabla" text="Exportar Lista" />
                        </children>
                     </AnchorPane>
                  </content>

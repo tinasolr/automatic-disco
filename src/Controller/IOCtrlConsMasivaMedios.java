@@ -100,6 +100,23 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
 
     @FXML
     private void consIndividual(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ConsultaIndividualMedio.fxml"));
+            IOCtrlConsultaIndividualMedio cis = new IOCtrlConsultaIndividualMedio();
+            cis.setCodigoMedio(tblMedios.getSelectionModel().getSelectedItem().getCodigo());
+            cis.setControlMenu(controlmenu);
+            cis.setConsmasiva(this);
+            loader.setController(cis);
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Ver Medio");
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML
