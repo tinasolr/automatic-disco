@@ -18,8 +18,8 @@
                         <MenuItem fx:id="AltaMedio" onAction="#altaMedio" text="Me_dio" />
                     </items>
                   </Menu>
-                  <MenuItem fx:id="arcImportar" text="_Importar..." />
-                  <MenuItem fx:id="arcExportar" text="_Exportar..." />
+                  <MenuItem fx:id="arcImportar" onAction="#importar" text="_Importar..." />
+                  <MenuItem fx:id="arcExportar" onAction="#exportar" text="_Exportar..." />
                   <MenuItem fx:id="arcOpciones" mnemonicParsing="true" onAction="#openOptions" text="_Opciones" />
                   <MenuItem fx:id="arcSalir" onAction="#salir" text="_Salir" />
             </items>

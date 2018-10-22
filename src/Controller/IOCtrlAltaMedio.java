@@ -115,6 +115,8 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
         fo.forEach((x) -> { cmbFormato.getItems().add(x); });
         new AutoCompleteComboBoxListener<>(cmbFormato);
 
+        image.setImage(new Image(getClass().getResource("/imagenes/no-image-available.png").toExternalForm()));
+
         loadTable();
         txtBusqueda.setOnKeyPressed((KeyEvent event) -> {});
         txtBusqueda.setOnKeyReleased(this);
@@ -217,6 +219,9 @@ public class IOCtrlAltaMedio implements Initializable, EventHandler<KeyEvent> {
                             f.connect();
                             f.setFormato(cmbFormato.getSelectionModel().getSelectedItem());
                             String fo = f.searchTable();
+                            if(fo==null)
+                                f.setFormato("INVALIDO");
+                            fo = f.searchTable();
                             int formid = Integer.parseInt(fo);
 
                             //IMAGEN

@@ -7,9 +7,14 @@
 package Controller;
 
 import Model.*;
+import ar.com.fdvs.dj.core.*;
+import ar.com.fdvs.dj.core.layout.*;
+import ar.com.fdvs.dj.domain.*;
+import ar.com.fdvs.dj.domain.builders.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
@@ -18,6 +23,8 @@ import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.view.*;
 
 public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
 
@@ -44,6 +51,9 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
     @FXML    private RadioButton rdbVersion;
     @FXML    private Button btnFiltrar;
     @FXML    private BorderPane mainWindow;
+    @FXML    private Button btnExport;
+
+
 
 /***********************INITIALIZE CONTROLLER CLASS***************************/
 
@@ -66,7 +76,39 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
 
 /*******************RIGHT CLICK MENU*****************************************/
 
-    @FXML    private void consIndividual(ActionEvent event) {   }
+    @FXML
+    private void exportarTabla(ActionEvent event) {
+        try {
+            SoftwareReport report = new SoftwareReport(tblSoftware.getItems());
+
+            JasperPrint jp = report.getReport();
+            //JasperViewer jasperViewer = new JasperViewer(jp);
+            //jasperViewer.setVisible(true);
+            JasperViewer.viewReport(jp, false);
+        } catch (JRException | ColumnBuilderException | ClassNotFoundException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @FXML    private void consIndividual(ActionEvent event) {
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ConsultaIndividualSoftware.fxml"));
+            IOCtrlConsultaIndividualSoftware cis = new IOCtrlConsultaIndividualSoftware();
+            cis.setCodigoSW(tblSoftware.getSelectionModel().getSelectedItem().getCodigo());
+            cis.setConsMasivaSw(this);
+            loader.setController(cis);
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Ver Software");
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlConsMasivaSw.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @FXML
     private void modSoftware(ActionEvent event) {
@@ -226,5 +268,12 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
         this.access = access;
     }
 
+    protected void exportToJRXML(JasperReport jr, DynamicReport dr, Map params) throws JRException {
+        if (jr != null){
+            DynamicJasperHelper.generateJRXML(jr, "UTF-8",System.getProperty("user.dir")+ "/target/reports/" + this.getClass().getName() + ".jrxml");
+        } else {
+            DynamicJasperHelper.generateJRXML(dr, new ClassicLayoutManager(), params, "UTF-8",System.getProperty("user.dir")+ "/target/reports/" +this.getClass().getName() + ".jrxml");
+        }
+    }
 
 }

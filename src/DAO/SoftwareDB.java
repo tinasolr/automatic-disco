@@ -135,12 +135,17 @@ public class SoftwareDB extends DBObject{
             storedProc.setString(1, nombre);
             storedProc.setString(2, version);
             res = storedProc.executeQuery();
-            res.first();
-            int r = res.getInt(1);
-            result = String.valueOf(r);
-
+            int r = 0;
+            if(res.first()){
+                r = res.getInt(1);
+                result = String.valueOf(r);
+            }
+            else{
               res.close();
+              return null;
+            }
         } catch (SQLException ex) {
+            ex.printStackTrace();
             System.err.println("Search ID >> Software :: " + ex.getLocalizedMessage());
         }
         return result;

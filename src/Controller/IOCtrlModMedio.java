@@ -111,9 +111,9 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
 
         if(m!=null){
 
-            File fi = new File("./src/imagenes/" + m.getImagen());
-            image.setImage(new Image("file:///" + fi.getAbsolutePath()));
-
+//            File fi = new File("./src/imagenes/" + m.getImagen());
+//            image.setImage(new Image("file:///" + fi.getAbsolutePath()));
+            image.setImage(new Image(getClass().getResource("/imagenes/" + m.getImagen()).toExternalForm()));
             txtCodigo.setText(m.getCodigo());
             txtNombre.setText(m.getNombre());
             txtObservaciones.setText(m.getObserv());
@@ -183,16 +183,11 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
     private void actualizarMedio(ActionEvent event) {
 
         String id = txtCodigo.getText();
-    System.out.println(id);
         String nombre = txtNombre.getText();
-    System.out.println(nombre);
         String formato = cmbFormato.getSelectionModel().getSelectedItem();
-    System.out.println(formato);
         String ubicacion = cmbUbicacion.getSelectionModel().getSelectedItem();
-    System.out.println(ubicacion);
         String imagen=null;
         String observ = txtObservaciones.getText();
-    System.out.println(observ);
 
         int origen = 0;
         boolean manual;
@@ -213,30 +208,25 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
                             //EMPAQUE
                             caja = chkCaja.isSelected();
                             manual = chkManual.isSelected();
-                            System.out.println("Controller.IOCtrlModMedio.actualizarMedio() > " + caja + " man: " + manual);
                             //ORIGINAL-MIXTO-NO ORIGINAL
                             if(rbOriginal.isSelected()) origen = 1;
                             if(rbMixto.isSelected()) origen = 2;
                             if(rbOtros.isSelected()) origen = 3;
-                            System.out.println("Controller.IOCtrlModMedio.actualizarMedio() > orig: " + origen);
 
                             //EN DEPOSITO
                             endepo = chkEnDeposito.isSelected();
-                            System.out.println("Controller.IOCtrlModMedio.actualizarMedio() > endepo: " + endepo);
                             //FORMATO
                             FormatoDB f = new FormatoDB();
                             f.connect();
                             f.setFormato(cmbFormato.getSelectionModel().getSelectedItem());
                             String fo = f.searchTable();
                             int formid = Integer.parseInt(fo);
-                            System.out.println("Controller.IOCtrlModMedio.actualizarMedio() > " + formid);
 
                             //IMAGEN
                             if(archImagen!=null)
                                 imagen=archImagen.getName();
                             else
                                 imagen=m.getImagen();
-                            System.out.println("Controller.IOCtrlModMedio.actualizarMedio() > " + imagen);
                             //UBICACION
                             if(ubCtrl.getUbis().isEmpty())
                                 ubCtrl.cargarUbicaciones();
@@ -245,7 +235,6 @@ public class IOCtrlModMedio implements Initializable, EventHandler<KeyEvent> {
                                     ubaux=u;
                                     break;
                                 }
-                            System.out.println("Controller.IOCtrlModMedio.actualizarMedio() > " + ubaux.getId());
 
                             //SOFTWARE CONTENIDO
                             SoftwareCtrl sctr = new SoftwareCtrl();
