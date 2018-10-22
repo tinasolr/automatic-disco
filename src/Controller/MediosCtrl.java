@@ -20,7 +20,7 @@ public class MediosCtrl {
     private List<Medios> medSw = new ArrayList<>();
     private MediosDB mdb = new MediosDB();
     private List<MediosDB> deDB = new ArrayList<>();
-    private List<Medios> medios = new ArrayList<>();
+    private static List<Medios> medios = new ArrayList<>();
     private List<MediosTableFormat> mediosForTable = new ArrayList<>();
 
     public void buscarMedios(List<MediosDB> m) {
@@ -76,7 +76,7 @@ public class MediosCtrl {
        return null;
     }
 
-     public boolean altaMedio(String codigo, String nombre, int formato, boolean caja,
+     public boolean altaMedio(String codigo, String nombre, int formId, boolean caja,
         boolean manual, int origen, Ubicaciones ubiDepo, boolean enDepo,
         String imagen, String observ, int partes, List<Software> soft){
 
@@ -89,7 +89,7 @@ public class MediosCtrl {
         meDB.setCaja(caja);
         meDB.setImagen(imagen);
         meDB.setObserv(observ);
-        meDB.setFormid(formato);
+        meDB.setFormid(formId);
         meDB.setOrigen(origen);
         meDB.write();
         boolean todoOK = true;
@@ -193,7 +193,7 @@ public class MediosCtrl {
     public void setMdb(MediosDB mdb) {        this.mdb = mdb;    }
     public List<MediosDB> getDeDB() {        return deDB;    }
     public void setDeDB(List<MediosDB> deDB) {        this.deDB = deDB;    }
-    public List<Medios> getMedios() {        return medios;    }
-    public void setMedios(List<Medios> medios) {        this.medios = medios;    }
+    public static List<Medios> getMedios() {        return medios;    }
+    public static void setMedios(List<Medios> med) {        medios = med;    }
     public List<MediosTableFormat> getMediosForTable() {   return mediosForTable;  }
 }

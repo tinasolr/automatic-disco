@@ -5,6 +5,8 @@
  */
 
 package Controller;
+import DAO.*;
+import Model.*;
 import java.io.*;
 import java.util.*;
 import org.apache.poi.hssf.usermodel.*;
@@ -33,35 +35,55 @@ public class ExcelCtrl {
 
             while(rowIterator.hasNext()) {
                     row = rowIterator.next();
-
+                //CODIGO
                     Cell col1 = row.getCell(1);
                     double numReg = 0;
-
+                    String codigo = null;
                     if (!isCellEmpty(col1)) {
                         numReg = col1.getNumericCellValue();
+                        codigo = String.valueOf(numReg);
                     }
+                //NOMBRE
                     Cell col2 = row.getCell(2);
                     String titulo = "";
                     if (!isCellEmpty(col2)) {
                         titulo = col2.getStringCellValue();
                     }
+                //FORMATO
                     Cell col3 = row.getCell(3);
                     String formato = "";
+                    String formato1 = "INVALIDO";
+                    FormatoDB f = new FormatoDB();
+                    f.connect();
                     if (!isCellEmpty(col3)) {
                         formato = col3.getStringCellValue();
+                        List<String> fo = f.read("Formatos");
+                        for(String form : fo)
+                            if(form.equalsIgnoreCase(formato)){
+                                formato1=form;
+                                break;
+                            }
                     }
+                //ORIGEN
                     Cell col4 = row.getCell(4);
                     String original = "";
-                    boolean orig;
+                    int origen = 0;
                     if (!isCellEmpty(col4)) {
                         original = col4.getStringCellValue();
-                        orig = original.equalsIgnoreCase("si");
+                        if(original.equalsIgnoreCase("si"))
+                            origen = 1;
+                        else if(original.equalsIgnoreCase("no"))
+                            origen = 3;
+                        else
+                            origen = 2;
                     }
+                //DRIVER/PROGRAMA/DESCONOCIDO/de Recup/Galeria de Videos/Sistema Operativo
                     Cell col5 = row.getCell(5);
                     String tipoSoft = "";
                     if (!isCellEmpty(col5)) {
                         tipoSoft = col5.getStringCellValue();
                     }
+                //MANUAL
                     Cell col6 = row.getCell(6);
                     String man ="";
                     boolean manual = false;
@@ -69,6 +91,7 @@ public class ExcelCtrl {
                         man = col6.getStringCellValue();
                         manual = man.equalsIgnoreCase("si");
                     }
+                //CAJA
                     Cell col7 = row.getCell(7);
                     String ca ="";
                     boolean caja = false;
@@ -76,6 +99,7 @@ public class ExcelCtrl {
                         ca = col7.getStringCellValue();
                         caja = ca.equalsIgnoreCase("si");
                     }
+                //SISTEMA OPERATIVO
                     Cell col8 = row.getCell(8);
                     String sistemaOperativo = "";
                     String[] so = null;
@@ -83,23 +107,67 @@ public class ExcelCtrl {
                         sistemaOperativo = col8.getStringCellValue();
                         so = sistemaOperativo.split(",");
                     }
+                //PARTES
                     Cell col9 = row.getCell(9);
                     double partes = 0;
                     if (!isCellEmpty(col9)) {
                         partes = col9.getNumericCellValue();
                     }
+                //UBICACION
                     Cell col10 = row.getCell(10);
                     String ubicacion = "";
+                    UbicacionesCtrl u = new UbicacionesCtrl();
+                    if(u.getUbis().isEmpty())
+                        u.cargarUbicaciones();
+                    Ubicaciones ub = null;
                     if (!isCellEmpty(col10)) {
                         ubicacion = col10.getStringCellValue();
+                        ub = u.findUbicacion(ubicacion);
                     }
+                //OBSERVACIONES
                     Cell col11 = row.getCell(11);
-                    double numcaja = 0;
+                    String obs = null;
                     if (!isCellEmpty(col11)) {
-                        numcaja = col11.getNumericCellValue();
+                        obs = col11.getStringCellValue();
                     }
+                    String version=" ";
 
-                    System.out.println(numReg + " " + titulo + " " + formato + " " + original + " " + tipoSoft + " " + manual + " " + caja + " " + sistemaOperativo + " " + partes + " " + ubicacion + " " + numcaja);
+                    SoftwareCtrl s = new SoftwareCtrl();
+                    boolean nuevo = s.altaSoftware(titulo, version);
+                    SoftwareDB swDB = new SoftwareDB();
+                    swDB.setNombre(titulo);
+                    swDB.setVersion(version);
+                    swDB.connect();
+                    String y = swDB.executeSearch();
+                    int codidoSw = 0;
+                    if(y.matches("[0-9]*"))
+                        codidoSw = Integer.parseInt(swDB.executeSearch());
+                    Software soft = new SoftwareCtrl().findSoftware(codidoSw);
+                    List<String> sistOp = new ArrayList<>();
+                    if(nuevo){
+                        for(String x : so){
+                           s.agregarSoDeSw(codidoSw, x);
+                           sistOp.add(x);
+                        }
+                        soft.setSistOp(sistOp);
+                    }else if(soft!=null)
+                        sistOp = soft.getSistOp();
+                    List<Software> listSw = new ArrayList<>();
+                    if(soft!=null)
+                        listSw.add(soft);
+                    MediosCtrl mec = new MediosCtrl();
+                    if(MediosCtrl.getMedios().isEmpty())
+                        mec.cargarMedios();
+                    Medios m = mec.findMedio(codigo);
+                    if(m==null){
+                        f.setFormato(formato1);
+                        String fo = f.searchTable();
+                        int formid = Integer.parseInt(fo);
+                        mec.altaMedio(codigo, titulo, formid, caja, manual, origen, ub, false, " ", " ", (int)partes, listSw);
+                        m = new Medios(codigo, titulo, formato1, caja, manual, origen, ub, false, " ", obs, (int)partes);
+                        MediosCtrl.getMedios().add(m);
+                    }
+                    //System.out.println(numReg + " " + titulo + " " + formato + " " + original + " " + tipoSoft + " " + manual + " " + caja + " " + sistemaOperativo + " " + partes + " " + ubicacion + " " + obs);
 //                    Iterator<Cell> cellIterator = row.cellIterator();
 //                    while(cellIterator.hasNext()) {
 //

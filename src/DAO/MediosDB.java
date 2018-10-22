@@ -130,6 +130,7 @@ public class MediosDB extends DBObject{
 
             conn.close();
         } catch (SQLException ex) {
+            ex.printStackTrace();
             System.err.println("Escritura >> tabla Medio_Ubic :: " + ex.getLocalizedMessage());
             return false;
         }
@@ -223,6 +224,7 @@ public class MediosDB extends DBObject{
             sp.executeUpdate();
 
         } catch (SQLException ex) {
+            ex.printStackTrace();
             System.err.println("Problema en la escritura de una fila de la tabla Medios :: " + ex.getLocalizedMessage());
         }
     }
