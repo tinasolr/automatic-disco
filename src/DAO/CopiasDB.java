@@ -30,7 +30,7 @@ public class CopiasDB extends DBObject {
         this.formid = formid;
     }
 
-        public void asociarUbicacionACopia(){
+    public void asociarUbicacionACopia(){
         try {
             CallableStatement sp = conn.prepareCall("{CALL asociar_copia_ubicacion(?, ?, ?)}");
 
@@ -47,16 +47,30 @@ public class CopiasDB extends DBObject {
 
     public void desasociarUbicacionACopia(){
         try {
-            CallableStatement sp = conn.prepareCall("{CALL desasociar_copia_ubicacion(?, ?)}");
+            CallableStatement sp = conn.prepareCall("{CALL desasociar_copia_ubicacion(?)}");
 
             sp.setInt(1, id);
-            sp.setString(2, ubi);
-
             sp.executeUpdate();
 
         } catch (SQLException ex) {
             System.err.println("Delete >> tabla Copia_Ubic :: " + ex.getLocalizedMessage());
         }
+    }
+    
+    public void actualizarUbicacionACopia(){
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL mod_copia_Ubic(?, ?, ?)}");
+
+            sp.setInt(1, id);
+            sp.setString(2, ubi);
+            sp.setBoolean(3, enDepo);
+
+            sp.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.err.println("Modificar >> tabla Copia_Ubic :: " + ex.getLocalizedMessage());
+        }
+    
     }
 
     public String buscarUltimoID()
@@ -67,7 +81,7 @@ public class CopiasDB extends DBObject {
             r.first();
             return r.getString(1);
         } catch (SQLException ex) {
-            System.err.println("BusquedaID >> Copias :: " + ex.getLocalizedMessage());
+            System.err.println("BusquedaIDMAX >> Copias :: " + ex.getLocalizedMessage());
         }
         return null;
     }
@@ -157,10 +171,7 @@ public class CopiasDB extends DBObject {
         try {
             CallableStatement sp = conn.prepareCall("{CALL elim_copia (?)}");
 
-            sp.setString(1, medioid);
-            sp.setInt(2, formid);
-            sp.setString(3, obs);
-
+            sp.setInt(1, id);
             sp.executeUpdate();
 
         } catch (SQLException ex) {
@@ -185,6 +196,21 @@ public class CopiasDB extends DBObject {
         }
         return null;
     }
+    
+    public String findubiid (){
+     try {
+            connect();
+            instr = conn.createStatement();
+            ResultSet r = instr.executeQuery("SELECT ubi_id FROM `copia_ubic` WHERE `cp_id` = "+id);
+            r.first();
+            return r.getString(1);
+        } catch (SQLException ex) {
+            System.err.println("BusquedaID Ubicacion >> Copias :: " + ex.getLocalizedMessage());
+        }
+        return null;
+    }
+    
+    
 
     public int getId() {
         return id;
