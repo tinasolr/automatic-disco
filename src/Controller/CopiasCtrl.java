@@ -23,6 +23,34 @@ public class CopiasCtrl {
     
     
     
+    
+    public void cargarCopias(String medid){
+        if(!copias.isEmpty())
+            copias.clear();
+        copdb.connect();
+        List<CopiasDB> dbcopia = copdb.read("copias");
+        
+        FormatoDB formdb = new FormatoDB();
+        UbicacionesDB ubidb = new UbicacionesDB();
+        formdb.connect();
+        ubidb.connect();
+        Ubicaciones ubi;
+        String nombreform,ubiid;
+        
+        for(CopiasDB c : dbcopia){
+            if (c.getMedioid().equalsIgnoreCase(medid))
+            {
+                copdb.setId(c.getId());
+                ubiid = copdb.findubiid();
+                ubidb.setCodUbi(ubiid);
+                ubi = new Ubicaciones(ubiid, ubidb.executeSearch());
+
+                nombreform = formdb.find_formatonom(c.getFormid());
+                copias.add(new Copias(c.getId(),nombreform,c.getObs(),ubi));
+            }
+        }
+    }
+    
      public void CrearCopia(String medioid, int formatoid, String obs){
         copdb  = new CopiasDB();
         copdb.connect();
@@ -41,6 +69,35 @@ public class CopiasCtrl {
         copdb.setEnDepo(EnDepo);
         copdb.asociarUbicacionACopia();
      } 
+     
+    public void desasociarUbicacionACopia(int idCopia){
+        copdb  = new CopiasDB();
+        copdb.connect();
+        copdb.setId(idCopia);
+        copdb.desasociarUbicacionACopia();
+     }  
+    
+    public void modificarUbicacionACopia(int idCopia, String idUbi, boolean EnDepo){
+        copdb  = new CopiasDB();
+        copdb.connect();
+        copdb.setId(idCopia);
+        copdb.setUbi(idUbi);
+        copdb.setEnDepo(EnDepo);
+        copdb.actualizarUbicacionACopia();
+     } 
+     
+    public void ModificarCopia(){
+        copdb  = new CopiasDB();
+        copdb.connect();
+      
+    }
+     
+    public void EliminarCopia(int id){
+        copdb = new CopiasDB();
+        copdb.connect();
+        copdb.setId(id);
+        copdb.delete();
+    } 
      
     public String buscarUltimoID() {
         copdb  = new CopiasDB();

@@ -99,6 +99,24 @@ public class FormatoDB extends DBObject {
         return null;
     }
 
+    public String find_formatonom(int id)
+    {
+        try {
+            CallableStatement sp = conn.prepareCall("{call find_formatonom(?)}");
+
+            sp.setInt(1, id);
+            ResultSet r = sp.executeQuery();
+            r.first();
+            return  r.getString(1);
+
+        } catch (SQLException ex) {
+            System.err.println("Search Nombre >> Formatos :: " + ex.getLocalizedMessage());
+        }
+        return null;
+    }
+    
+    
+    
     public String fetchFormatoByID(int id) {
         try {
 

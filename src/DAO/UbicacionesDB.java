@@ -101,10 +101,26 @@ public class UbicacionesDB extends DBObject {
             return  r.getString(1);
             
         } catch (SQLException ex) {
+            System.err.println("Search Obs >> Ubicaciones :: " + ex.getLocalizedMessage());
+        }
+        return null;
+    }
+    
+    public String find_ubiid()
+    {
+        try {
+            CallableStatement sp = conn.prepareCall("{CALL get_ubiid (?)}");
+            sp.setString(1, obsUbi);
+            ResultSet r = sp.executeQuery();
+            r.first();
+            return  r.getString(1);
+            
+        } catch (SQLException ex) {
             System.err.println("Search ID >> Ubicaciones :: " + ex.getLocalizedMessage());
         }
         return null;
     }
+    
 
     public UbicacionesDB searchUbicacionesByID(String id) {
         try {
@@ -160,6 +176,21 @@ public class UbicacionesDB extends DBObject {
         }
         return false;
     }
+    
+    public int find_EnDepo(){
+    
+     try {
+            CallableStatement sp = conn.prepareCall("{CALL find_EnDepo(?)}");
+            sp.setString(1, codUbi);
+            ResultSet r = sp.executeQuery();
+            r.first();
+            return  r.getInt(1);
+        } catch (SQLException ex) {
+            System.err.println("Buscar EnDepo >> copia_ubic :: " + ex.getLocalizedMessage());
+        }
+        return -1;
+    }
+    
 
     public String getCodUbi() {
         return codUbi;
