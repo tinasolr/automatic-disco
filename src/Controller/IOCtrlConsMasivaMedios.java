@@ -42,6 +42,11 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
     @FXML    private AnchorPane showMedios;
     @FXML    private TableView<MediosTableFormat> tblMedios;
     @FXML    private ContextMenu mnuDerecho;
+    @FXML    private Menu derAdministrar;
+    @FXML    private MenuItem derVerCopias;
+    @FXML    private MenuItem derAltaCopia;
+    @FXML    private MenuItem derModifCopia;
+    @FXML    private MenuItem derElimCopia;
     @FXML    private MenuItem derVer;
     @FXML    private MenuItem derModificar;
     @FXML    private MenuItem derEliminar;
@@ -55,8 +60,8 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
     @FXML    private CheckBox chkOriginal;
     @FXML    private Button btnTodo;
     @FXML    private CheckBox chkGuardado;
-    @FXML    private MenuItem derVerCopias;
-    @FXML    private MenuItem derAltaCopia;
+    
+    
 
     /************Initializes the controller class.*****************************/
     @Override

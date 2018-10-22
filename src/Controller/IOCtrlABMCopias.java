@@ -11,36 +11,20 @@ import Model.*;
 import java.net.*;
 import java.sql.*;
 import java.util.*;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Button;
-import javafx.scene.control.ScrollPane.ScrollBarPolicy;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.fxml.*;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.event.*;
-import javafx.fxml.*;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
-import javafx.stage.*;
+import javafx.scene.input.KeyEvent;
+
 
 /**
  *
  * @author Nico
  */
-public class IOCtrlABMCopias implements Initializable{
+public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
 
     @FXML private AnchorPane AltaCopia;
     @FXML private Label lblBuscarCopia;
@@ -67,13 +51,14 @@ public class IOCtrlABMCopias implements Initializable{
     private String medioID;
     private String nomMedio;
     private IOCtrlConsMasivaMedios controlMenu;
-
+    private List<CopiasTableFormat> CopTabla = new ArrayList();
     /*******Initializes the controller class.**********************************/
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
+        txtBuscarCopia.setOnKeyPressed((KeyEvent event) -> {  });
+        txtBuscarCopia.setOnKeyReleased(this);
         txtMedio.setText(nomMedio);
         cargarTabla();
         FormatoDB formdb = new FormatoDB();
@@ -253,11 +238,14 @@ public class IOCtrlABMCopias implements Initializable{
         
         CopiasCtrl copctrl = new CopiasCtrl();
         UbicacionesDB ubidb = new UbicacionesDB();
-        List<CopiasTableFormat> CopTabla = new ArrayList();
+        
         String enDepo="";
         if(copctrl.getCopias().isEmpty())
             copctrl.cargarCopias(medioID);
-   
+        
+        if(!CopTabla.isEmpty())
+            CopTabla.clear();
+        
         colIDCopia.setCellValueFactory(new PropertyValueFactory<>("id"));
         colFormato.setCellValueFactory(new PropertyValueFactory<>("formato"));
         colEnDeposito.setCellValueFactory(new PropertyValueFactory<>("enDepo"));
@@ -323,6 +311,44 @@ public class IOCtrlABMCopias implements Initializable{
         cmbUbicaciones.setDisable(true);
         chkDeposito.setVisible(true);
         txtDescripcion.setEditable(true);
+    }
+    
+    @Override
+    public void handle(Event event) {
+        if(event.getEventType().equals(KeyEvent.KEY_RELEASED) && event.getSource().equals(txtBuscarCopia))
+            if(txtBuscarCopia.getText().isEmpty() || txtBuscarCopia.getText() == null)
+                cargarTodo();
+            else
+                loadTable(txtBuscarCopia.getText());
+    }
+    
+    public void loadTable(String id){
+        if(CopTabla.isEmpty())
+            cargarTabla();
+        
+        String idtabla;
+        id = id.toLowerCase(Locale.ROOT);
+        
+        List<CopiasTableFormat> aux = new ArrayList();
+
+        for(CopiasTableFormat c: CopTabla){
+            idtabla = String.valueOf(c.getId()).toLowerCase(Locale.ROOT);
+            if(idtabla.contains(id)) aux.add(c);
+        }
+        
+        
+        TablaCopias.getItems().setAll(aux);
+
+    }
+    
+    public void cargarTodo(){
+    
+        colIDCopia.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colFormato.setCellValueFactory(new PropertyValueFactory<>("formato"));
+        colEnDeposito.setCellValueFactory(new PropertyValueFactory<>("enDepo"));
+        colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+         
+        if(!CopTabla.isEmpty()) TablaCopias.getItems().setAll(CopTabla);
     }
     
     public Label getLblMedio() {
