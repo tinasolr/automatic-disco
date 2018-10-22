@@ -10,6 +10,7 @@ import javafx.application.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.stage.*;
+import org.apache.log4j.*;
 
 /**
  * @author tinar
@@ -48,7 +49,7 @@ public class SWTeca extends Application {
     public static void main(String[] args) {
 
 
-//        MediosCtrl meCtrl = new MediosCtrl();
+            //        MediosCtrl meCtrl = new MediosCtrl();
 //        SoftwareCtrl sctrl = new SoftwareCtrl();
 //        meCtrl.cargarMedios();
 //        for(Medios m : meCtrl.getMedios()){
@@ -58,13 +59,14 @@ public class SWTeca extends Application {
 //                System.out.println("swteca.SWTeca.main() > " + s.toString());
 //            }
 //        }
-
+    BasicConfigurator.configure();
         launch(args);
 
 //        UsersDB u = new UsersDB();
 //        u.createUser("admin", "culo", 3);
 //       ExcelCtrl ex = new ExcelCtrl();
 //       ex.read("C:\\Users\\tinar\\Desktop\\Registro-de-software.xlsx");
+
     }
 
 }
