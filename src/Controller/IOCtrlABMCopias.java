@@ -45,8 +45,10 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
     @FXML private TableView<CopiasTableFormat> TablaCopias;
     @FXML private TableColumn colIDCopia;
     @FXML private TableColumn colFormato;
+    @FXML private TableColumn colUbicacion;
     @FXML private TableColumn colEnDeposito;
     @FXML private TableColumn colDescripcion;
+    
     
     private String medioID;
     private String nomMedio;
@@ -248,6 +250,7 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
         
         colIDCopia.setCellValueFactory(new PropertyValueFactory<>("id"));
         colFormato.setCellValueFactory(new PropertyValueFactory<>("formato"));
+        colUbicacion.setCellValueFactory(new PropertyValueFactory<>("codUbi"));
         colEnDeposito.setCellValueFactory(new PropertyValueFactory<>("enDepo"));
         colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
         
@@ -258,7 +261,7 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
             int ubi= ubidb.find_EnDepo();
             if (ubi==1)enDepo="Si";
             else enDepo="No";
-            CopTabla.add(new CopiasTableFormat(c.getId(),c.getFormato(),enDepo,c.getObserv()));
+            CopTabla.add(new CopiasTableFormat(c.getId(),c.getFormato(),c.getUbiDepo().getId(),enDepo,c.getObserv()));
         }
  
         if(copctrl.getCopias()!=null)

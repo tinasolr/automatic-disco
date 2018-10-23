@@ -14,18 +14,19 @@ public class CopiasTableFormat {
     
     private int id;
     private String formato;
+    private String codUbi;
     private String enDepo;
     private String descripcion;
 
     
     public CopiasTableFormat(){}
-    public CopiasTableFormat(int i,String f, String ed,String d)
+    public CopiasTableFormat(int i,String f,String c, String ed,String d)
     {
         id=i;
         formato=f;
+        codUbi=c;
         enDepo=ed;
         descripcion=d;
-        
     }
     
     
@@ -59,6 +60,14 @@ public class CopiasTableFormat {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public String getCodUbi() {
+        return codUbi;
+    }
+
+    public void setCodUbi(String codUbi) {
+        this.codUbi = codUbi;
     }
     
     

@@ -8,6 +8,7 @@ package Controller;
 
 import DAO.*;
 import Model.*;
+import Vista.CopiasTableFormat;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -64,7 +65,7 @@ public class IOCtrlConsultaIndividualMedio implements Initializable {
     @FXML    private TableColumn<Software, String> colCodigoSw;
     @FXML    private TableColumn<Software, String> colNombreSw;
     @FXML    private TableColumn<Software, String> colVersionSw;
-    @FXML    private TableView<?> tblCopias;
+    @FXML    private TableView<CopiasTableFormat> tblCopias;
     @FXML    private TableColumn<?, ?> colCodCop;
     @FXML    private TableColumn<?, ?> colFormCop;
     @FXML    private TableColumn<?, ?> colUbiCop;
@@ -115,7 +116,24 @@ public class IOCtrlConsultaIndividualMedio implements Initializable {
 
         if(sctrl.getSwDeMed()!=null)
             tblSoftware.getItems().setAll(sctrl.getSwDeMed());
-
+        
+            CopiasCtrl copctrl = new CopiasCtrl();
+            copctrl.cargarCopias(m.getCodigo());
+            
+            colCodCop.setCellValueFactory(new PropertyValueFactory<>("id"));
+            colFormCop.setCellValueFactory(new PropertyValueFactory<>("formato"));
+            colUbiCop.setCellValueFactory(new PropertyValueFactory<>("codUbi"));
+            colGuardCop.setCellValueFactory(new PropertyValueFactory<>("enDepo"));
+            colObservCop.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
+            
+            ArrayList<CopiasTableFormat> copTabla = new ArrayList();
+            for(Copias c:copctrl.getCopias())
+            {
+                copTabla.add(new CopiasTableFormat(c.getId(),c.getFormato(),c.getUbiDepo().getId(),c.getUbiDepo().getDescripcion(),c.getObserv()));
+            }
+            
+            if(!copTabla.isEmpty()) tblCopias.getItems().setAll(copTabla);
+            
         }else{popUpError("Algo falló. No reconoce el código.");}
 
     }

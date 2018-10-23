@@ -52,6 +52,13 @@ public class MediosCtrl {
             Medios nuevo = new Medios(x.getId(), x.getNombre(), formato, x.isCaja(),
                     x.isManual(), x.getOrigen(), ubicacion, estaEnDepo, x.getImagen(),
                     x.getObserv(), x.getPartes());
+            
+            CopiasCtrl copCtrl = new CopiasCtrl();
+            copCtrl.cargarCopias(x.getId());
+            for(Copias c: copCtrl.getCopias()){
+                nuevo.setCopias(c.getId(),c.getFormato(),c.getUbiDepo(),c.getObserv());
+            }
+            
             medios.add(nuevo);
 
         }

@@ -75,9 +75,9 @@
                         <contextMenu>
                            <ContextMenu fx:id="mnuDerecho">
                              <items>
+                                 <MenuItem fx:id="derVer" onAction="#consIndividual" text="_Ver" />
                                  <MenuItem fx:id="derEliminar" onAction="#elimMedio" text="_Eliminar" />
                                <MenuItem fx:id="derModificar" onAction="#modMedio" text="_Modificar" />
-                                 <MenuItem fx:id="derVer" onAction="#consIndividual" text="_Ver" />
                               <Menu fx:id="derAdministrar" mnemonicParsing="false" text="Administrar Copias">
                                 <items>
                                     <MenuItem fx:id="derVerCopias" onAction="#verCopias" text="Ve_r Copias" />
