@@ -80,14 +80,15 @@ public class UbicacionesDB extends DBObject {
     @Override
     public void executeDelete() {
         try {
-            CallableStatement sp = conn.prepareCall("{CALL eliminar_ubicacion(?)}");
+            CallableStatement sp = conn.prepareCall("{CALL eliminar_ubicacion(?,?)}");
 
             sp.setString(1, codUbi);
-
+            sp.setString(2, newCod);
             sp.executeUpdate();
 
         } catch (SQLException ex) {
             System.err.println("Eliminacion >> tabla Ubicaciones :: " + ex.getLocalizedMessage());
+            ex.printStackTrace();
         }
     }
 
@@ -99,13 +100,13 @@ public class UbicacionesDB extends DBObject {
             ResultSet r = sp.executeQuery();
             r.first();
             return  r.getString(1);
-            
+
         } catch (SQLException ex) {
             System.err.println("Search Obs >> Ubicaciones :: " + ex.getLocalizedMessage());
         }
         return null;
     }
-    
+
     public String find_ubiid()
     {
         try {
@@ -114,13 +115,64 @@ public class UbicacionesDB extends DBObject {
             ResultSet r = sp.executeQuery();
             r.first();
             return  r.getString(1);
-            
+
         } catch (SQLException ex) {
             System.err.println("Search ID >> Ubicaciones :: " + ex.getLocalizedMessage());
         }
         return null;
     }
-    
+
+    public int cantidadMediosEnUbicacion(String id){
+        int cant = -1;
+        try {
+
+            if(conn == null || conn.isClosed())
+                connect();
+
+            if(id==null)
+                throw new NullPointerException();
+
+            PreparedStatement sp = conn.prepareStatement("SELECT COUNT(ubi_id) FROM medio_ubic WHERE ubi_id LIKE ? GROUP BY ubi_id");
+            sp.setString(1, id);
+            ResultSet r = sp.executeQuery();
+            if(r.first())
+                cant = r.getInt(1);
+            else
+                cant=0;
+            conn.close();
+            return cant;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return cant;
+    }
+
+    public int cantidadCopiasEnUbicacion(String id){
+        int cant = -1;
+        try {
+
+            if(conn == null || conn.isClosed())
+                connect();
+
+            if(id==null)
+                throw new NullPointerException();
+
+            PreparedStatement sp = conn.prepareStatement("SELECT COUNT(ubi_id) FROM copia_ubic WHERE ubi_id LIKE ? GROUP BY ubi_id");
+            sp.setString(1, id);
+            ResultSet r = sp.executeQuery();
+            if(r.first())
+                cant = r.getInt(1);
+            else
+                cant=0;
+            conn.close();
+            return cant;
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return cant;
+    }
 
     public UbicacionesDB searchUbicacionesByID(String id) {
         try {
@@ -137,7 +189,7 @@ public class UbicacionesDB extends DBObject {
             r.first();
             this.codUbi = r.getString(1);
             this.obsUbi = r.getString(2);
-            printResultSet(r);
+
             conn.close();
             return this;
 
@@ -176,9 +228,9 @@ public class UbicacionesDB extends DBObject {
         }
         return false;
     }
-    
+
     public int find_EnDepo(){
-    
+
      try {
             CallableStatement sp = conn.prepareCall("{CALL find_EnDepo(?)}");
             sp.setString(1, codUbi);
@@ -190,7 +242,7 @@ public class UbicacionesDB extends DBObject {
         }
         return -1;
     }
-    
+
 
     public String getCodUbi() {
         return codUbi;

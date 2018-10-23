@@ -181,6 +181,8 @@ public class IOCtrlMenu implements Initializable {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ABMUbicaciones.fxml"));
 
             Parent root = loader.load();
+            IOCtrlABMUbicaciones c = loader.getController();
+            c.setConsMasivaMedios(consmasivamed);
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setTitle("Ubicaciones");

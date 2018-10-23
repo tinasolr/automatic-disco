@@ -25,6 +25,7 @@ import javafx.stage.*;
  */
 public class IOCtrlABMUbicaciones implements Initializable, EventHandler<KeyEvent> {
 
+    private IOCtrlConsMasivaMedios consMasivaMedios;
     @FXML    private Button btnQuitar;
     @FXML    private TextField txtCodigo;
     @FXML    private Button btnAgregar;
@@ -54,18 +55,53 @@ public class IOCtrlABMUbicaciones implements Initializable, EventHandler<KeyEven
     @FXML
     private void quitar(ActionEvent event) {
         if(tblUbicaciones.getSelectionModel().getSelectedItem() != null){
+            UbicacionesCtrl ubictrl = new UbicacionesCtrl();
+            UbicacionesDB u = new UbicacionesDB();
+            u.connect();
+            String ub = tblUbicaciones.getSelectionModel().getSelectedItem().getId();
+
             if(!tblUbicaciones.getSelectionModel().getSelectedItem().getId().equalsIgnoreCase("NOASIG")){
-                if(popUpWarning("Está seguro de que desea eliminar la ubicación " + tblUbicaciones.getSelectionModel().getSelectedItem().getId() + "?")){
-                    UbicacionesDB u = new UbicacionesDB();
-                    u.connect();
+
+                char answer = popUpWarning("Está seguro de que desea eliminar la ubicación " + ub + "? \n "
+                        + "Hay " + u.cantidadMediosEnUbicacion(ub) +
+                        " medios y " + u.cantidadCopiasEnUbicacion(ub) + " copias en esa ubicación.");
+                if(answer=='y'){
+
                     u.setCodUbi(tblUbicaciones.getSelectionModel().getSelectedItem().getId());
+                    u.setCodUbi("NOASIG");
                     u.delete();
-                    UbicacionesCtrl ubictrl = new UbicacionesCtrl();
+
                     ubictrl.getUbis().remove(tblUbicaciones.getSelectionModel().getSelectedItem());
                     loadTable();
                     txtCodigo.clear();
                     txtDescripcion.clear();
+
+                }else if(answer=='n'){
+
+                    List<String> choices = new ArrayList<>();
+                    for(Ubicaciones x : tblUbicaciones.getItems())
+                        choices.add(x.getId());
+
+                    ChoiceDialog<String> dialog = new ChoiceDialog(
+                            choices.get(tblUbicaciones.getSelectionModel().getSelectedIndex()), choices);
+                    dialog.setTitle("Nueva ubicacion");
+                    dialog.setHeaderText("Elija dónde reubicar las piezas.");
+                    dialog.setContentText("Codigo: ");
+
+                    // Traditional way to get the response value.
+                    Optional<String> result = dialog.showAndWait();
+                    if (result.isPresent()){
+                        u.setCodUbi(tblUbicaciones.getSelectionModel().getSelectedItem().getId());
+                        u.setNewCod(result.get());
+                        u.delete();
+                        ubictrl.getUbis().remove(tblUbicaciones.getSelectionModel().getSelectedItem());
+                        loadTable();
+                    }
+                    txtCodigo.clear();
+                    txtDescripcion.clear();
+
                 }
+                consMasivaMedios.loadTable();
             }else{popUpError("No puede eliminar este valor.");}
         }else{popUpError("Por favor, seleccione una ubicación a eliminar.");}
     }
@@ -162,16 +198,21 @@ public class IOCtrlABMUbicaciones implements Initializable, EventHandler<KeyEven
             }
     }
 
-    public boolean popUpWarning(String texto){
-        Alert alert = new Alert(Alert.AlertType.WARNING, texto, ButtonType.YES, ButtonType.NO);
+    public char popUpWarning(String texto){
+        ButtonType buttonTypeOne = new ButtonType("Reubicar");
+        Alert alert = new Alert(Alert.AlertType.WARNING, texto, ButtonType.YES, buttonTypeOne, ButtonType.CANCEL);
             alert.showAndWait();
 
             if (alert.getResult() == ButtonType.YES) {
                 alert.close();
-                return true;
+                return 'y';
+            } else if(alert.getResult() == buttonTypeOne){
+                alert.close();
+                return 'n';
+            } else {
+                alert.close();
+                return 'c';
             }
-        alert.close();
-        return false;
     }
 
     /**************EVENT HANDLERS*********************************************/
@@ -191,5 +232,13 @@ public class IOCtrlABMUbicaciones implements Initializable, EventHandler<KeyEven
             else
                 loadTable(txtCodigo.getText(), txtDescripcion.getText());
         }
+    }
+
+    public IOCtrlConsMasivaMedios getConsMasivaMedios() {
+        return consMasivaMedios;
+    }
+
+    public void setConsMasivaMedios(IOCtrlConsMasivaMedios consMasivaMedios) {
+        this.consMasivaMedios = consMasivaMedios;
     }
 }
