@@ -60,8 +60,8 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
     @FXML    private CheckBox chkOriginal;
     @FXML    private Button btnTodo;
     @FXML    private CheckBox chkGuardado;
-    
-    
+
+
 
     /************Initializes the controller class.*****************************/
     @Override
@@ -76,6 +76,10 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
         rdbUbicacion.setOnAction((event) -> {loadTable(txtFiltrar.getText());});
         chkGuardado.setOnAction((event)->{loadTable(txtFiltrar.getText());});
         chkOriginal.setOnAction((event)->{loadTable(txtFiltrar.getText());});
+
+        access = IOCtrlLogin.getUserdb().getUserAccess();
+        if(access>-1)loadTable();
+        disableMenuItems();
     }
 
     /***************************JAVAFX FUNCTIONS*******************************/
@@ -159,7 +163,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             CtrlCopia.setNomMedio(tblMedios.getSelectionModel().getSelectedItem().getNombre());
             CtrlCopia.setMedioID(tblMedios.getSelectionModel().getSelectedItem().getCodigo());
             CtrlCopia.setControlMenu(this);
-      
+
             loader.setController(CtrlCopia);
             Parent root = loader.load();
 
@@ -171,13 +175,13 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             stage.sizeToScene();
             stage.show();
             CtrlCopia.visualizarVerCopia();
-                  
-            
+
+
         } catch (IOException ex) {
             Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
+
     }
 
     @FXML
@@ -201,14 +205,14 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             stage.sizeToScene();
             stage.show();
             CtrlCopia.visualizarAltaCopia();
-                  
-            
+
+
         } catch (IOException ex) {
             Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    
+
+
     @FXML
     private void ModificarCopia(ActionEvent event) {
         try {
@@ -217,7 +221,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             CtrlCopia.setNomMedio(tblMedios.getSelectionModel().getSelectedItem().getNombre());
             CtrlCopia.setMedioID(tblMedios.getSelectionModel().getSelectedItem().getCodigo());
             CtrlCopia.setControlMenu(this);
-      
+
             loader.setController(CtrlCopia);
             Parent root = loader.load();
 
@@ -229,14 +233,14 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             stage.sizeToScene();
             stage.show();
             CtrlCopia.visualizarModificarCopia();
-                  
-            
+
+
         } catch (IOException ex) {
             Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-    
+
     }
-    
+
     @FXML
     private void EliminarCopia(ActionEvent event) {
         try {
@@ -245,7 +249,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             CtrlCopia.setNomMedio(tblMedios.getSelectionModel().getSelectedItem().getNombre());
             CtrlCopia.setMedioID(tblMedios.getSelectionModel().getSelectedItem().getCodigo());
             CtrlCopia.setControlMenu(this);
-      
+
             loader.setController(CtrlCopia);
             Parent root = loader.load();
 
@@ -257,17 +261,17 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             stage.sizeToScene();
             stage.show();
             CtrlCopia.visualizarEliminarCopia();
-                  
-            
+
+
         } catch (IOException ex) {
             Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
+
+
+
     }
-    
-    
+
+
     /************************OTHER FUNCTIONS**********************************/
 
     public void loadTable(String searchTerm){
@@ -401,7 +405,7 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
             derModificar.setDisable(true);
             derEliminar.setDisable(true);
             derAltaCopia.setDisable(true);
-            disableSearchItems(true);
+            disableSearchItems(false);
         }else{
             derVer.setDisable(false);
             derModificar.setDisable(false);
@@ -430,14 +434,5 @@ public class IOCtrlConsMasivaMedios implements Initializable, EventHandler<Event
     public IOCtrlMenu setControlMenu() {
         return controlmenu;
     }
-
-    public int getAccess() {
-        return access;
-    }
-
-    public void setAccess(int access) {
-        this.access = access;
-    }
-
 
 }

@@ -3,12 +3,13 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="641.0" prefWidth="927.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.IOCtrlMenu">
    <children>
-      <MenuBar fx:id="mnuPpal" layoutX="-8.0" layoutY="2.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="934.0" AnchorPane.bottomAnchor="615.6666666666666" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <MenuBar fx:id="mnuPpal" layoutX="-8.0" layoutY="2.0" maxHeight="25.0" minHeight="25.0" prefHeight="25.0" prefWidth="934.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu fx:id="mArchivo" text="_Archivo">
             <items>
@@ -20,7 +21,19 @@
                   </Menu>
                   <MenuItem fx:id="arcImportar" onAction="#importar" text="_Importar..." />
                   <MenuItem fx:id="arcExportar" onAction="#exportar" text="_Exportar..." />
-                  <MenuItem fx:id="arcOpciones" mnemonicParsing="true" onAction="#openOptions" text="_Opciones" />
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <Menu fx:id="mnuOpciones" text="_Opciones">
+                    <items>
+                        <Menu fx:id="mnuAdmUsers" text="Admin. de _usuarios">
+                          <items>
+                            <MenuItem fx:id="altaUser" onAction="#altaUsuario" text="_Alta de usuario" />
+                              <MenuItem fx:id="modUser" onAction="#modifUsuario" text="Cambiar con_traseña" />
+                              <MenuItem fx:id="bajaUser" onAction="#bajaUsuario" text="_Baja de usuario" />
+                          </items>
+                        </Menu>
+                    </items>
+                  </Menu>
+                  <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="arcSalir" onAction="#salir" text="_Salir" />
             </items>
           </Menu>

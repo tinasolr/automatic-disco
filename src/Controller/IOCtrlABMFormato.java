@@ -52,17 +52,35 @@ public class IOCtrlABMFormato implements Initializable, EventHandler<KeyEvent> {
         @FXML
     private void quitar(ActionEvent event) {
         if(lstFormato.getSelectionModel().getSelectedItem()!=null){
-            if(popUpWarning("Está seguro de que desea eliminar el formato '" + lstFormato.getSelectionModel().getSelectedItem() + "'?")){
 
+            TextInputDialog dialog = new TextInputDialog(lstFormato.getSelectionModel().getSelectedItem());
+            dialog.setTitle("Eliminar formato");
+            dialog.setHeaderText(null);
+            dialog.setContentText("Ingrese el valor por el cual quiera reemplazar:");
+
+            // Traditional way to get the response value.
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(name -> {
                 FormatoDB f = new FormatoDB();
                 f.connect();
                 f.setFormato(lstFormato.getSelectionModel().getSelectedItem());
-                f.delete();
-                formatosDB.remove(lstFormato.getSelectionModel().getSelectedItem());
+                f.setNewFormat(name);
+                f.update();
                 loadList();
                 txtFormato.clear();
+            });
 
-            }
+//            if(popUpWarning("Está seguro de que desea eliminar el formato '" + lstFormato.getSelectionModel().getSelectedItem() + "'?")){
+//
+//                FormatoDB f = new FormatoDB();
+//                f.connect();
+//                f.setFormato(lstFormato.getSelectionModel().getSelectedItem());
+//                f.delete();
+//                formatosDB.remove(lstFormato.getSelectionModel().getSelectedItem());
+//                loadList();
+//                txtFormato.clear();
+//
+//            }
         }else{
             popUpError("Por favor, seleccione un formato a eliminar.");
         }

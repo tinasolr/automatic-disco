@@ -6,18 +6,18 @@
 package Controller;
 
 import DAO.*;
-import Vista.CopiasTableFormat;
 import Model.*;
+import Vista.*;
 import java.net.*;
 import java.sql.*;
 import java.util.*;
+import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
-import javafx.event.*;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.cell.*;
+import javafx.scene.input.*;
+import javafx.scene.layout.*;
+import javafx.stage.*;
 
 
 /**
@@ -48,42 +48,47 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
     @FXML private TableColumn colUbicacion;
     @FXML private TableColumn colEnDeposito;
     @FXML private TableColumn colDescripcion;
-    
-    
+
     private String medioID;
     private String nomMedio;
     private IOCtrlConsMasivaMedios controlMenu;
+    private int access;
     private List<CopiasTableFormat> CopTabla = new ArrayList();
+
     /*******Initializes the controller class.**********************************/
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        txtBuscarCopia.setOnKeyPressed((KeyEvent event) -> {  });
-        txtBuscarCopia.setOnKeyReleased(this);
-        txtMedio.setText(nomMedio);
-        cargarTabla();
-        FormatoDB formdb = new FormatoDB();
-        List<String> form = formdb.read("formatos");
-        if(!cmbFormato.getItems().isEmpty())
-            cmbFormato.getItems().clear();
+        access = IOCtrlLogin.getUserdb().getUserAccess();
+        if(access>-1){
+            txtBuscarCopia.setOnKeyPressed((KeyEvent event) -> {  });
+            txtBuscarCopia.setOnKeyReleased(this);
+            txtMedio.setText(nomMedio);
+            cargarTabla();
+            FormatoDB formdb = new FormatoDB();
+            List<String> form = formdb.read("formatos");
+            if(!cmbFormato.getItems().isEmpty())
+                cmbFormato.getItems().clear();
 
-        form.forEach((x)-> {cmbFormato.getItems().add(x);});
-        new AutoCompleteComboBoxListener<>(cmbFormato);
+            form.forEach((x)-> {cmbFormato.getItems().add(x);});
+            new AutoCompleteComboBoxListener<>(cmbFormato);
 
-        UbicacionesDB ubdb = new UbicacionesDB();
-        List<UbicacionesDB> ubic = ubdb.read("ubicaciones");
-        if(!cmbUbicaciones.getItems().isEmpty())
-            cmbUbicaciones.getItems().clear();
-        ubic.forEach((y) -> { cmbUbicaciones.getItems().add(y.getCodUbi()); });
-        new AutoCompleteComboBoxListener<>(cmbUbicaciones);
-
+            UbicacionesDB ubdb = new UbicacionesDB();
+            List<UbicacionesDB> ubic = ubdb.read("ubicaciones");
+            if(!cmbUbicaciones.getItems().isEmpty())
+                cmbUbicaciones.getItems().clear();
+            ubic.forEach((y) -> { cmbUbicaciones.getItems().add(y.getCodUbi()); });
+            new AutoCompleteComboBoxListener<>(cmbUbicaciones);
+        }else{
+            disableEverything(true);
+        }
     }
 
+    /** FXML FUNCTIONS *********************************************************/
 
     @FXML
     private void agregarCopia(ActionEvent event) throws SQLException {
-
         String descripcion = txtDescripcion.getText();
         CopiasCtrl coCtrl = new CopiasCtrl();
         FormatoDB foDB = new FormatoDB();
@@ -93,7 +98,7 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
 
         if(cmbFormato.getSelectionModel().getSelectedItem() != null){
             if(cmbUbicaciones.getSelectionModel().getSelectedItem() != null){
-            
+
                 foDB.setFormato(cmbFormato.getSelectionModel().getSelectedItem());
                 foDB.connect();
 
@@ -122,13 +127,13 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
                 popUpExito("Copia creada con éxito.");
                 txtDescripcion.setText("");
                 cargarTabla();
-            }else{popUpError("Por favor, seleccione una ubicacion para la copia.");}    
+            }else{popUpError("Por favor, seleccione una ubicacion para la copia.");}
         }else{popUpError("Por favor, seleccione un formato para la copia.");}
     }
-    
+
     @FXML
     private void modificarCopia(ActionEvent event) throws SQLException{
-        
+
         if (TablaCopias.getSelectionModel().getSelectedItem()!=null){
             if(cmbFormato.getSelectionModel().getSelectedItem() != null){
                 if(cmbUbicaciones.getSelectionModel().getSelectedItem() != null){
@@ -139,16 +144,16 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
                         foDB.connect();
                         //Buscar ID Formato
                         int formId=Integer.parseInt(foDB.executeSearch());
-                        
+
                         CopiasDB c = new CopiasDB();
                         c.connect();
                         c.setId(TablaCopias.getSelectionModel().getSelectedItem().getId());
                         c.setMedioid(medioID);
                         c.setFormid(formId);
-                        c.setObs(txtDescripcion.getText());                                
+                        c.setObs(txtDescripcion.getText());
                         c.update();
                         CopiasCtrl copctrl = new CopiasCtrl();
-                        
+
                         //Crea Ubicacion
                         UbicacionesDB ubDB = new UbicacionesDB();
                         Ubicaciones ubicacion = new Ubicaciones();
@@ -156,8 +161,8 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
                         ubDB.connect();
                         String ubiobs = ubDB.executeSearch();
                         ubicacion = new Ubicaciones(cmbUbicaciones.getSelectionModel().getSelectedItem(),ubiobs);
-                        
-                        
+
+
                         for (Copias co: copctrl.getCopias())
                         {
                             if(co.getId()==TablaCopias.getSelectionModel().getSelectedItem().getId())
@@ -165,24 +170,22 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
                                 co.setFormato(cmbFormato.getSelectionModel().getSelectedItem());
                                 co.setObserv(txtDescripcion.getText());
                                 co.setUbiDepo(ubicacion);
-                            }    
+                            }
                         }
 
                         copctrl.modificarUbicacionACopia(TablaCopias.getSelectionModel().getSelectedItem().getId(), ubicacion.getId(), chkDeposito.isSelected());
-                        
-                        
+
                         cargarTabla();
                         txtBuscarCopia.setText("");
                     }else{popUpError("No se pudo modidifcar este valor.");}
-                }else{popUpError("Por favor, seleccione una ubicacion para la copia.");}    
-            }else{popUpError("Por favor, seleccione un formato para la copia.");}        
+                }else{popUpError("Por favor, seleccione una ubicacion para la copia.");}
+            }else{popUpError("Por favor, seleccione un formato para la copia.");}
         }else{popUpError("Seleccione una copia de la tabla para modificar");}
     }
-    
-    
+
     @FXML
-    private void eliminarCopia(ActionEvent event) throws SQLException{ 
-    
+    private void eliminarCopia(ActionEvent event) throws SQLException{
+
      if(TablaCopias.getSelectionModel().getSelectedItem()!=null)
         if(popUpWarning("¿Está seguro de que desea eliminar la copia " + TablaCopias.getSelectionModel().getSelectedItem().getId() + "?"))
         {
@@ -192,19 +195,33 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
             c.getCopias().remove(TablaCopias.getSelectionModel().getSelectedItem());
             cargarTabla();
             txtBuscarCopia.setText("");
-            
-        }else{popUpError("No se pudo eliminar este valor.");}    
+
+        }else{popUpError("No se pudo eliminar este valor.");}
      else{popUpError("Seleccione una copia de la tabla para eliminar");}
-        
+
     }
-    
-    
+
     @FXML
     private void cancelar(ActionEvent event) {
         Stage x = (Stage) AltaCopia.getScene().getWindow();
         x.close();
     }
 
+    /****************** OTHER FUNCTIONS *************************************/
+
+    public void disableEverything(boolean x){
+        txtBuscarCopia.setDisable(x);
+        txtDescripcion.setDisable(x);
+        txtMedio.setDisable(x);
+        btnCancelar.setDisable(x);
+        btnEliminar.setDisable(x);
+        btnFinalizar.setDisable(x);
+        btnModificar.setDisable(x);
+        cmbFormato.setDisable(x);
+        cmbUbicaciones.setDisable(x);
+        chkDeposito.setDisable(x);
+        TablaCopias.setDisable(x);
+    }
 
      public void popUpError(String texto){
         Alert alert = new Alert(Alert.AlertType.ERROR, texto);
@@ -226,7 +243,7 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
         alert.close();
         return false;
     }
-    
+
     public void popUpExito(String texto){
         Alert alert = new Alert(Alert.AlertType.INFORMATION, texto);
         alert.showAndWait();
@@ -235,39 +252,39 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
             alert.close();
         }
     }
-     
+
     public void cargarTabla(){
-        
+
         CopiasCtrl copctrl = new CopiasCtrl();
         UbicacionesDB ubidb = new UbicacionesDB();
-        
+
         String enDepo="";
         if(copctrl.getCopias().isEmpty())
             copctrl.cargarCopias(medioID);
-        
+
         if(!CopTabla.isEmpty())
             CopTabla.clear();
-        
+
         colIDCopia.setCellValueFactory(new PropertyValueFactory<>("id"));
         colFormato.setCellValueFactory(new PropertyValueFactory<>("formato"));
         colUbicacion.setCellValueFactory(new PropertyValueFactory<>("codUbi"));
         colEnDeposito.setCellValueFactory(new PropertyValueFactory<>("enDepo"));
         colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-        
+
         ubidb.connect();
         for(Copias c : copctrl.getCopias()){
             ubidb.setCodUbi(c.getUbiDepo().getId());
-            
+
             int ubi= ubidb.find_EnDepo();
             if (ubi==1)enDepo="Si";
             else enDepo="No";
             CopTabla.add(new CopiasTableFormat(c.getId(),c.getFormato(),c.getUbiDepo().getId(),enDepo,c.getObserv()));
         }
- 
+
         if(copctrl.getCopias()!=null)
             TablaCopias.getItems().setAll(CopTabla);
-    } 
-    
+    }
+
     public void visualizarAltaCopia(){
         lblBuscarCopia.setVisible(false);
         txtBuscarCopia.setVisible(false);
@@ -291,7 +308,7 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
         chkDeposito.setVisible(false);
         txtDescripcion.setEditable(false);
     }
-    
+
     public void visualizarModificarCopia(){
         lblBuscarCopia.setVisible(true);
         txtBuscarCopia.setVisible(true);
@@ -303,7 +320,7 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
         chkDeposito.setVisible(true);
         txtDescripcion.setEditable(true);
     }
-    
+
     public void visualizarEliminarCopia(){
         lblBuscarCopia.setVisible(true);
         txtBuscarCopia.setVisible(true);
@@ -315,7 +332,7 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
         chkDeposito.setVisible(true);
         txtDescripcion.setEditable(true);
     }
-    
+
     @Override
     public void handle(Event event) {
         if(event.getEventType().equals(KeyEvent.KEY_RELEASED) && event.getSource().equals(txtBuscarCopia))
@@ -324,36 +341,38 @@ public class IOCtrlABMCopias implements Initializable, EventHandler<Event>{
             else
                 loadTable(txtBuscarCopia.getText());
     }
-    
+
     public void loadTable(String id){
         if(CopTabla.isEmpty())
             cargarTabla();
-        
+
         String idtabla;
         id = id.toLowerCase(Locale.ROOT);
-        
+
         List<CopiasTableFormat> aux = new ArrayList();
 
         for(CopiasTableFormat c: CopTabla){
             idtabla = String.valueOf(c.getId()).toLowerCase(Locale.ROOT);
             if(idtabla.contains(id)) aux.add(c);
         }
-        
-        
+
+
         TablaCopias.getItems().setAll(aux);
 
     }
-    
+
     public void cargarTodo(){
-    
+
         colIDCopia.setCellValueFactory(new PropertyValueFactory<>("id"));
         colFormato.setCellValueFactory(new PropertyValueFactory<>("formato"));
         colEnDeposito.setCellValueFactory(new PropertyValueFactory<>("enDepo"));
         colDescripcion.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-         
+
         if(!CopTabla.isEmpty()) TablaCopias.getItems().setAll(CopTabla);
     }
-    
+
+    /***************** GETTERS AND SETTERS ***********************************/
+
     public Label getLblMedio() {
         return lblMedio;
     }

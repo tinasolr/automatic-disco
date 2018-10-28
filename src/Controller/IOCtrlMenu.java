@@ -32,8 +32,8 @@ public class IOCtrlMenu implements Initializable {
     private IOCtrlConsMasivaSw consmasivasw;
     private IOCtrlConsMasivaMedios consmasivamed;
     private IOCtrlModSwConExtras modsoftware;
+    private IOCtrlABMUsuarios abmusuarios;
     private IOCtrlLogin login;
-
     private int accesos;
 
     @FXML    private MenuBar mnuPpal;
@@ -53,45 +53,19 @@ public class IOCtrlMenu implements Initializable {
     @FXML    private MenuItem ABMFormatos;
     @FXML    private MenuItem ABMUbicaciones;
     @FXML    private MenuItem ABMSistemaOperat;
-    @FXML    private MenuItem arcOpciones;
-    @FXML
-    private MenuItem ayVerManual;
-    @FXML
-    private MenuItem ayInformacion;
-
-    @FXML
-    private void importar(ActionEvent event) {
-        ExcelCtrl ex = new ExcelCtrl();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleccionar archivo");
-
-        File excel = fileChooser.showOpenDialog(new Stage());
-        fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("XLSX", "*.xlsx")
-        );
-        ex.read(excel.getAbsolutePath());
-    }
-
-    @FXML
-    private void exportar(ActionEvent event) {
-    }
+    @FXML    private MenuItem ayVerManual;
+    @FXML    private MenuItem ayInformacion;
+    @FXML    private Menu mnuOpciones;
+    @FXML    private Menu mnuAdmUsers;
+    @FXML    private MenuItem altaUser;
+    @FXML    private MenuItem modUser;
+    @FXML    private MenuItem bajaUser;
 
     /*** Initializes the controller class.************************************/
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ConsultaMedios.fxml"));
-            Node x = loader.load();
-            consmasivamed = loader.getController();
-            consmasivamed.setAccess(accesos);
-            consmasivamed.setControlMenu(this);
-            mainWindow.setCenter(x);
-            disableEverything(true);
-            consmasivamed.disableSearchItems(true);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        disableEverything(true);
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/Login.fxml"));
@@ -114,6 +88,89 @@ public class IOCtrlMenu implements Initializable {
         }
     }
     /***************JAVAFX FUNCTIONS*******************************************/
+
+    @FXML
+    private void importar(ActionEvent event) {
+        ExcelCtrl ex = new ExcelCtrl();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar archivo");
+
+        File excel = fileChooser.showOpenDialog(new Stage());
+        fileChooser.getExtensionFilters().addAll(
+            new FileChooser.ExtensionFilter("XLSX", "*.xlsx")
+        );
+        ex.read(excel.getAbsolutePath());
+    }
+
+    @FXML
+    private void exportar(ActionEvent event) {
+    }
+
+    @FXML
+    private void altaUsuario(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/AltaUsuario.fxml"));
+
+            Parent root = loader.load();
+            abmusuarios = loader.getController();
+            abmusuarios.setLogin(login);
+            abmusuarios.setMenu(this);
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Nuevo usuario");
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void modifUsuario(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/ModifUsuario.fxml"));
+
+            Parent root = loader.load();
+            abmusuarios = loader.getController();
+            abmusuarios.setLogin(login);
+            abmusuarios.setMenu(this);
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Modificar usuario");
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @FXML
+    private void bajaUsuario(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/Vista/BajaUsuario.fxml"));
+
+            Parent root = loader.load();
+            abmusuarios = loader.getController();
+            abmusuarios.setLogin(login);
+            abmusuarios.setMenu(this);
+
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Baja de usuario");
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.sizeToScene();
+            stage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(IOCtrlMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @FXML
     public void altaSoftware(ActionEvent event) {
@@ -227,13 +284,9 @@ public class IOCtrlMenu implements Initializable {
             if(menuItemID.contains("ConsultaMedios")){
                 consmasivamed = loader.getController();
                 consmasivamed.setControlMenu(this);
-                consmasivamed.setAccess(accesos);
-                consmasivamed.disableMenuItems();
             }else if(menuItemID.contains("ConsultaSoftware")){
                 consmasivasw = loader.getController();
                 consmasivasw.setControlMenu(this);
-                consmasivasw.setAccess(accesos);
-                consmasivasw.disableMenuItems();
             }
             mainWindow.setCenter(x);
 
@@ -247,29 +300,15 @@ public class IOCtrlMenu implements Initializable {
         System.exit(0);
     }
 
-    @FXML
-    private void openOptions(ActionEvent event) {
-    }
     /************************OTHER FUNCTIONS*********************************/
-
-    public void changeScene(String url){
-        try {
-            FXMLLoader loader = new FXMLLoader(IOCtrlMenu.class.getResource("/Vista/Menu.fxml"));
-
-            Scene scene = new Scene(loader.load(getClass().getResource(url)));
-            swteca.SWTeca.primaryStage.setScene(scene);
-            swteca.SWTeca.primaryStage.show();
-
-        } catch (IOException iOException) {
-            System.err.println(iOException.getLocalizedMessage());
-        }
-    }
 
     public void disableEverything(boolean x){
 
         arcImportar.setDisable(x);
         arcExportar.setDisable(x);
+        mnuOpciones.setDisable(x);
         mEditar.setDisable(x);
+        mAyuda.setDisable(x);
         mVer.setDisable(x);
         arcNuevo.setDisable(x);
         AltaSoftware.setDisable(x);
@@ -279,6 +318,7 @@ public class IOCtrlMenu implements Initializable {
         ABMFormatos.setDisable(x);
         ABMUbicaciones.setDisable(x);
         ABMSistemaOperat.setDisable(x);
+
     }
 
     public void disableEverything(int access) {
@@ -290,6 +330,9 @@ public class IOCtrlMenu implements Initializable {
                 mEditar.setDisable(true);
                 mVer.setDisable(false);
                 arcNuevo.setDisable(true);
+                mAyuda.setDisable(false);
+                mnuOpciones.setDisable(false);
+                mnuAdmUsers.setDisable(true);
                 boolean ed = mEditar.isDisable();
                 boolean ver = mVer.isDisable();
                 boolean nu = arcNuevo.isDisable();
@@ -300,6 +343,7 @@ public class IOCtrlMenu implements Initializable {
                 ABMFormatos.setDisable(ed);
                 ABMUbicaciones.setDisable(ed);
                 ABMSistemaOperat.setDisable(ed);
+
                 break;
             case 1:
                 arcImportar.setDisable(true);
@@ -307,6 +351,8 @@ public class IOCtrlMenu implements Initializable {
                 mEditar.setDisable(true);
                 mVer.setDisable(false);
                 arcNuevo.setDisable(false);
+                mnuOpciones.setDisable(false);
+                mnuAdmUsers.setDisable(true);
                 boolean ed1 = mEditar.isDisable();
                 boolean ver1 = mVer.isDisable();
                 boolean nu1 = arcNuevo.isDisable();
@@ -324,6 +370,8 @@ public class IOCtrlMenu implements Initializable {
                 mEditar.setDisable(false);
                 mVer.setDisable(false);
                 arcNuevo.setDisable(false);
+                mnuOpciones.setDisable(false);
+                mnuAdmUsers.setDisable(true);
                 boolean ed2 = mEditar.isDisable();
                 boolean ver2 = mVer.isDisable();
                 boolean nu2 = arcNuevo.isDisable();
@@ -341,6 +389,8 @@ public class IOCtrlMenu implements Initializable {
                 mEditar.setDisable(false);
                 mVer.setDisable(false);
                 arcNuevo.setDisable(false);
+                mnuOpciones.setDisable(false);
+                mnuAdmUsers.setDisable(false);
                 boolean ed3 = mEditar.isDisable();
                 boolean ver3 = mVer.isDisable();
                 boolean nu3 = arcNuevo.isDisable();
@@ -362,5 +412,14 @@ public class IOCtrlMenu implements Initializable {
     public void setAccesos(int accesos) {
         this.accesos = accesos;
     }
+
+    public BorderPane getMainWindow() {
+        return mainWindow;
+    }
+
+    public void setMainWindow(BorderPane mainWindow) {
+        this.mainWindow = mainWindow;
+    }
+
 
 }

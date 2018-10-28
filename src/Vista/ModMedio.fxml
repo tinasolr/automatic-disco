@@ -23,7 +23,7 @@
 
 <AnchorPane fx:id="window" prefHeight="640.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-      <Accordion expandedPane="$tpaneDatosMedio" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Accordion AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <panes>
           <TitledPane fx:id="tpaneDatosMedio" animated="false" prefWidth="500.0" text="Datos del Medio">
             <content>
@@ -105,7 +105,7 @@
       <ToolBar prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <items>
             <Button fx:id="btnCancelar" cancelButton="true" mnemonicParsing="false" onMouseClicked="#cancelar" prefHeight="27.0" prefWidth="161.0" text="Cancelar" translateX="20.0" />
-            <Button fx:id="btnActualizar" mnemonicParsing="false" onAction="#actualizarMedio" prefHeight="27.0" prefWidth="161.0" text="Actualizar Medio" translateX="90.0" />
+            <Button fx:id="btnActualizar" defaultButton="true" mnemonicParsing="false" onAction="#actualizarMedio" prefHeight="27.0" prefWidth="161.0" text="Actualizar Medio" translateX="90.0" />
         </items>
       </ToolBar>
    </children>

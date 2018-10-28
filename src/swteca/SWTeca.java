@@ -65,6 +65,7 @@ public class SWTeca extends Application {
 //        UsersDB u = new UsersDB();
 //        u.createUser("admin", "culo", 3);
 //       ExcelCtrl ex = new ExcelCtrl();
+//       ex.writeExcelTemplate();
 //       ex.read("C:\\Users\\tinar\\Desktop\\Registro-de-software.xlsx");
 
     }

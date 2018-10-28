@@ -244,6 +244,40 @@ public class ExcelCtrl {
         }
     }
 
+    public void writeExcelTemplate(){
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        HSSFSheet sheet = workbook.createSheet("Template sheet");
+
+        int rownum = 0;
+        Row row = sheet.createRow(rownum++);
+        int cellnum = 0;
+        row.createCell(0).setCellValue("Codigo Medio");
+        row.createCell(1).setCellValue("Nombre Medio");
+        row.createCell(2).setCellValue("Formato Medio");
+        row.createCell(3).setCellValue("Caja?");
+        row.createCell(4).setCellValue("Manual?");
+        row.createCell(6).setCellValue("Original = 1 - Mixto = 2 - Otro = 3");
+        row.createCell(7).setCellValue("Ubicacion Medio");
+        row.createCell(8).setCellValue("Guardado?");
+        row.createCell(9).setCellValue("Imagen (nombre.jpg)");
+        row.createCell(10).setCellValue("Observaciones");
+        row.createCell(5).setCellValue("Partes");
+        row.createCell(11).setCellValue("Nombre Software");
+        row.createCell(12).setCellValue("Version Software");
+
+        try {
+                FileOutputStream out = new FileOutputStream("TemplateMedioSoftware.xls");
+                workbook.write(out);
+                out.close();
+                System.out.println("Excel written successfully..");
+
+        } catch (FileNotFoundException e) {
+                e.printStackTrace();
+        } catch (IOException e) {
+                e.printStackTrace();
+        }
+    }
+
     public static boolean isCellEmpty(final Cell cell) {
     if (cell == null || cell.getCellType() == CellType.BLANK) {
         return true;
