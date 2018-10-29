@@ -118,6 +118,12 @@ public class UbicacionesDB extends DBObject {
 
         } catch (SQLException ex) {
             System.err.println("Search ID >> Ubicaciones :: " + ex.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return null;
     }
@@ -144,6 +150,12 @@ public class UbicacionesDB extends DBObject {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return cant;
     }
@@ -170,6 +182,12 @@ public class UbicacionesDB extends DBObject {
 
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return cant;
     }
@@ -195,6 +213,12 @@ public class UbicacionesDB extends DBObject {
 
         } catch (SQLException ex) {
             System.err.println("searchUbicacionesByID >> Ubicaciones :: " + ex.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return null;
     }
@@ -239,6 +263,12 @@ public class UbicacionesDB extends DBObject {
             return  r.getInt(1);
         } catch (SQLException ex) {
             System.err.println("Buscar EnDepo >> copia_ubic :: " + ex.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return -1;
     }

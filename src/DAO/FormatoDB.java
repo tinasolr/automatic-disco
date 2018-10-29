@@ -7,6 +7,7 @@
 package DAO;
 
 import java.sql.*;
+import java.util.logging.*;
 
 
 /**
@@ -111,12 +112,18 @@ public class FormatoDB extends DBObject {
 
         } catch (SQLException ex) {
             System.err.println("Search Nombre >> Formatos :: " + ex.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return null;
     }
-    
-    
-    
+
+
+
     public String fetchFormatoByID(int id) {
         try {
 
@@ -134,7 +141,13 @@ public class FormatoDB extends DBObject {
             return nombre;
 
         } catch (SQLException ex) {
-            System.err.println("Search ID >> Formatos :: " + ex.getLocalizedMessage());
+            ex.printStackTrace();
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return null;
     }

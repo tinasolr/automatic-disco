@@ -60,6 +60,9 @@ public class IOCtrlMenu implements Initializable {
     @FXML    private MenuItem altaUser;
     @FXML    private MenuItem modUser;
     @FXML    private MenuItem bajaUser;
+    @FXML    private MenuItem expMedios;
+    @FXML    private MenuItem expSoftware;
+    @FXML    private MenuItem expCopias;
 
     /*** Initializes the controller class.************************************/
     @Override
@@ -91,19 +94,39 @@ public class IOCtrlMenu implements Initializable {
 
     @FXML
     private void importar(ActionEvent event) {
-        ExcelCtrl ex = new ExcelCtrl();
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Seleccionar archivo");
-
-        File excel = fileChooser.showOpenDialog(new Stage());
-        fileChooser.getExtensionFilters().addAll(
-            new FileChooser.ExtensionFilter("XLSX", "*.xlsx")
-        );
-        ex.read(excel.getAbsolutePath());
+//        ExcelCtrl ex = new ExcelCtrl();
+//        FileChooser fileChooser = new FileChooser();
+//        fileChooser.setTitle("Seleccionar archivo");
+//
+//        File excel = fileChooser.showOpenDialog(new Stage());
+//        fileChooser.getExtensionFilters().addAll(
+//            new FileChooser.ExtensionFilter("XLSX", "*.xlsx")
+//        );
+//        ex.read(excel.getAbsolutePath());
     }
 
     @FXML
     private void exportar(ActionEvent event) {
+        final DirectoryChooser directoryChooser = new DirectoryChooser();
+        configuringDirectoryChooser(directoryChooser);
+
+        File dir = directoryChooser.showDialog(new Stage());
+
+        if(event.getSource() == expMedios){
+            new CSVCtrl().writeMediosDataLineByLine(dir.getAbsolutePath());
+        }else if(event.getSource() == expSoftware){
+            new CSVCtrl().writeSoftwareDataLineByLine(dir.getAbsolutePath());
+        }else if(event.getSource() == expCopias){
+            new CSVCtrl().writeCopiasDataLineByLine(dir.getAbsolutePath());
+        }
+    }
+
+    private void configuringDirectoryChooser(DirectoryChooser directoryChooser) {
+        // Set title for DirectoryChooser
+        directoryChooser.setTitle("Seleccionar ubicacion");
+
+        // Set Initial Directory
+        directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
     }
 
     @FXML
@@ -350,6 +373,7 @@ public class IOCtrlMenu implements Initializable {
                 arcExportar.setDisable(true);
                 mEditar.setDisable(true);
                 mVer.setDisable(false);
+                mAyuda.setDisable(false);
                 arcNuevo.setDisable(false);
                 mnuOpciones.setDisable(false);
                 mnuAdmUsers.setDisable(true);
@@ -369,6 +393,7 @@ public class IOCtrlMenu implements Initializable {
                 arcExportar.setDisable(false);
                 mEditar.setDisable(false);
                 mVer.setDisable(false);
+                mAyuda.setDisable(false);
                 arcNuevo.setDisable(false);
                 mnuOpciones.setDisable(false);
                 mnuAdmUsers.setDisable(true);
@@ -387,6 +412,7 @@ public class IOCtrlMenu implements Initializable {
                 arcImportar.setDisable(false);
                 arcExportar.setDisable(false);
                 mEditar.setDisable(false);
+                mAyuda.setDisable(false);
                 mVer.setDisable(false);
                 arcNuevo.setDisable(false);
                 mnuOpciones.setDisable(false);
@@ -419,6 +445,14 @@ public class IOCtrlMenu implements Initializable {
 
     public void setMainWindow(BorderPane mainWindow) {
         this.mainWindow = mainWindow;
+    }
+
+    public IOCtrlConsMasivaMedios getConsmasivamed() {
+        return consmasivamed;
+    }
+
+    public void setConsmasivamed(IOCtrlConsMasivaMedios consmasivamed) {
+        this.consmasivamed = consmasivamed;
     }
 
 

@@ -53,6 +53,7 @@ public class IOCtrlLogin implements Initializable {
                 consMasivaMedios = loader.getController();
                 consMasivaMedios.setControlMenu(controlmenu);
                 controlmenu.getMainWindow().setCenter(y);
+                controlmenu.setConsmasivamed(consMasivaMedios);
                 controlmenu.disableEverything(access);
 
             } catch (IOException ex) {

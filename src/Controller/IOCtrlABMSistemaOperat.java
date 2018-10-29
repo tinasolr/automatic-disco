@@ -52,15 +52,40 @@ public class IOCtrlABMSistemaOperat implements Initializable, EventHandler<KeyEv
     @FXML
     private void quitar(ActionEvent event) {
         if(lstSistemaOperativo.getSelectionModel().getSelectedItem()!=null){
-            if(popUpWarning("Está seguro de que desea eliminar el sistema operativo '" + lstSistemaOperativo.getSelectionModel().getSelectedItem() + "'?")){
+
+            TextInputDialog dialog = new TextInputDialog(lstSistemaOperativo.getSelectionModel().getSelectedItem());
+            dialog.setTitle("Eliminar sistema operativo");
+            dialog.setHeaderText("El sistema operativo debe ser reemplazado donde era utilizado.");
+            dialog.setContentText("Ingrese el valor por el cual lo quiera "
+                    + "reemplazar: ");
+
+            // Traditional way to get the response value.
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(name -> {
                 SistOpDB s = new SistOpDB();
                 s.connect();
                 s.setNombre(lstSistemaOperativo.getSelectionModel().getSelectedItem());
-                s.delete();
-                soDB.remove(lstSistemaOperativo.getSelectionModel().getSelectedItem());
+                s.setNewNombre(name);
+                /*
+                    Update en bd se fija si existe uno con este nuevo nombre,
+                    si existe, modifica las tablas que lo usan al id del que
+                    corresponde con este nombre nuevo y borra el otro.
+                    De no existir, cambia el nombre de este al nuevo nombre.
+                */
+                s.update();
+                soDB.set(lstSistemaOperativo.getSelectionModel().getSelectedIndex(), name);
                 loadList();
                 txtSistOperativo.clear();
-            }
+            });
+//            if(popUpWarning("Está seguro de que desea eliminar el sistema operativo '" + lstSistemaOperativo.getSelectionModel().getSelectedItem() + "'?")){
+//                SistOpDB s = new SistOpDB();
+//                s.connect();
+//                s.setNombre(lstSistemaOperativo.getSelectionModel().getSelectedItem());
+//                s.delete();
+//                soDB.remove(lstSistemaOperativo.getSelectionModel().getSelectedItem());
+//                loadList();
+//                txtSistOperativo.clear();
+//            }
         }else{popUpError("Por favor, seleccione un sistema operativo a eliminar.");}
     }
 

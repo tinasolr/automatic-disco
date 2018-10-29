@@ -20,8 +20,14 @@
                     </items>
                   </Menu>
                   <MenuItem fx:id="arcImportar" onAction="#importar" text="_Importar..." />
-                  <MenuItem fx:id="arcExportar" onAction="#exportar" text="_Exportar..." />
-                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <Menu fx:id="arcExportar" text="_Exportar...">
+                    <items>
+                        <MenuItem fx:id="expMedios" onAction="#exportar" text="_Medios" />
+                      <MenuItem fx:id="expSoftware" onAction="#exportar" text="_Software" />
+                        <MenuItem fx:id="expCopias" onAction="#exportar" text="Co_pias" />
+                    </items>
+                  </Menu>
+                  <SeparatorMenuItem />
                   <Menu fx:id="mnuOpciones" text="_Opciones">
                     <items>
                         <Menu fx:id="mnuAdmUsers" text="Admin. de _usuarios">
@@ -33,7 +39,7 @@
                         </Menu>
                     </items>
                   </Menu>
-                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <SeparatorMenuItem />
                   <MenuItem fx:id="arcSalir" onAction="#salir" text="_Salir" />
             </items>
           </Menu>

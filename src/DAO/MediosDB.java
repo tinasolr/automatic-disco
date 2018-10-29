@@ -8,6 +8,7 @@ package DAO;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  *
@@ -71,6 +72,12 @@ public class MediosDB extends DBObject{
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Error >> Lectura >> Medios de Software " + sw_id + " :: " + e.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return objDB;
     }
@@ -91,6 +98,12 @@ public class MediosDB extends DBObject{
         } catch (SQLException ex) {
             System.err.println("Escritura >> tabla Medios_Software :: " + ex.getLocalizedMessage());
             return false;
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return true;
     }
@@ -111,6 +124,12 @@ public class MediosDB extends DBObject{
         } catch (SQLException ex) {
             System.err.println("Eliminar >> tabla Medios_Software :: " + ex.getLocalizedMessage());
             return false;
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return true;
     }
@@ -133,6 +152,12 @@ public class MediosDB extends DBObject{
             ex.printStackTrace();
             System.err.println("Escritura >> tabla Medio_Ubic :: " + ex.getLocalizedMessage());
             return false;
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return true;
     }
@@ -153,6 +178,12 @@ public class MediosDB extends DBObject{
         } catch (SQLException ex) {
             System.err.println("Eliminar >> tabla Medio_Ubic :: " + ex.getLocalizedMessage());
             return false;
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return true;
     }
@@ -200,6 +231,12 @@ public class MediosDB extends DBObject{
 
         } catch (SQLException e) {
             System.out.println("MediosDB >> fetchUnMedio() :: " + e.getMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return esta;

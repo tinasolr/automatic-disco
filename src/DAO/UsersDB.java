@@ -7,6 +7,7 @@
 package DAO;
 
 import java.sql.*;
+import java.util.logging.*;
 
 /**
  *
@@ -35,7 +36,14 @@ public class UsersDB extends DBObject{
             }
 
             conn.close();
-        } catch (SQLException ex) {ex.printStackTrace();}
+        } catch (SQLException ex) {ex.printStackTrace();
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
     public int validarIngreso(String txtUsuario, String txtPass){
@@ -60,7 +68,14 @@ public class UsersDB extends DBObject{
             access = sp.getInt(3);
 
             conn.close();
-        } catch (SQLException ex) {ex.printStackTrace();}
+        } catch (SQLException ex) {ex.printStackTrace();
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         return access;
 
@@ -81,7 +96,14 @@ public class UsersDB extends DBObject{
             returnValue = sp.getInt(2);
 
             conn.close();
-        } catch (SQLException ex) {ex.printStackTrace();}
+        } catch (SQLException ex) {ex.printStackTrace();
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         if(returnValue==1)
             return true;
         else
@@ -101,7 +123,14 @@ public class UsersDB extends DBObject{
             sp.executeUpdate();
 
             conn.close();
-        } catch (SQLException ex) {ex.printStackTrace();}
+        } catch (SQLException ex) {ex.printStackTrace();
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }
 
@@ -118,7 +147,14 @@ public class UsersDB extends DBObject{
             sp.executeUpdate();
 
             conn.close();
-        } catch (SQLException ex) {ex.printStackTrace();}
+        } catch (SQLException ex) {ex.printStackTrace();
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }
 
@@ -136,7 +172,14 @@ public class UsersDB extends DBObject{
             sp.executeUpdate();
 
             conn.close();
-        } catch (SQLException ex) {System.out.println("Error de conexión");}
+        } catch (SQLException ex) {System.out.println("Error de conexión");
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     }
 
@@ -156,7 +199,14 @@ public class UsersDB extends DBObject{
             userAccess = sp.getInt(2);
 
             conn.close();
-        } catch (SQLException ex) {System.out.println("Error de conexión");}
+        } catch (SQLException ex) {System.out.println("Error de conexión");
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         return userAccess;
     }
 

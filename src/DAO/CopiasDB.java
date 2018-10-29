@@ -8,6 +8,7 @@ package DAO;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  *
@@ -21,7 +22,6 @@ public class CopiasDB extends DBObject {
     private String obs;
     private String ubi;
     private boolean enDepo;
-
 
     private CopiasDB(int id, String obs, int formid, String swid) {
         this.id = id;
@@ -42,6 +42,12 @@ public class CopiasDB extends DBObject {
 
         } catch (SQLException ex) {
             System.err.println("Write >> tabla Copia_Ubic :: " + ex.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CopiasDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -54,10 +60,16 @@ public class CopiasDB extends DBObject {
 
         } catch (SQLException ex) {
             System.err.println("Delete >> tabla Copia_Ubic :: " + ex.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CopiasDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
-    
-    public void actualizarUbicacionACopia(){
+
+    public void actualizarUbicacionACopia() {
         try {
             CallableStatement sp = conn.prepareCall("{CALL mod_copia_Ubic(?, ?, ?)}");
 
@@ -69,12 +81,17 @@ public class CopiasDB extends DBObject {
 
         } catch (SQLException ex) {
             System.err.println("Modificar >> tabla Copia_Ubic :: " + ex.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CopiasDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-    
+
     }
 
-    public String buscarUltimoID()
-    {
+    public String buscarUltimoID() {
         try {
             instr = conn.createStatement();
             ResultSet r = instr.executeQuery("select max(copia_id) from Copias");
@@ -82,15 +99,21 @@ public class CopiasDB extends DBObject {
             return r.getString(1);
         } catch (SQLException ex) {
             System.err.println("BusquedaIDMAX >> Copias :: " + ex.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CopiasDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return null;
     }
-    
-    
-    
+
+
+
     public CopiasDB() {}
 
-    public List<CopiasDB> copiasDeSoftware(int sw_id){
+    public List<CopiasDB> copiasDeSoftware(int sw_id) {
         ResultSet res = null;
         List<CopiasDB> objDB = new ArrayList<>();
 
@@ -109,6 +132,12 @@ public class CopiasDB extends DBObject {
 
         } catch (SQLException e) {
             System.err.println("Read >> Copias >> Software " + sw_id + " :: " + e.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(CopiasDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return objDB;
     }
@@ -127,7 +156,7 @@ public class CopiasDB extends DBObject {
             obj = new CopiasDB(id, obs, formid, medioid);
 
         } catch (SQLException ex) {
-            System.err.println("Read >> Copias :: " + ex.getLocalizedMessage());
+            ex.printStackTrace();
         }
 
         return obj;
@@ -196,8 +225,8 @@ public class CopiasDB extends DBObject {
         }
         return null;
     }
-    
-    public String findubiid (){
+
+    public String findubiid () {
      try {
             connect();
             instr = conn.createStatement();
@@ -206,11 +235,15 @@ public class CopiasDB extends DBObject {
             return r.getString(1);
         } catch (SQLException ex) {
             System.err.println("BusquedaID Ubicacion >> Copias :: " + ex.getLocalizedMessage());
+        } finally{
+         try {
+             conn.close();
+         } catch (SQLException ex) {
+             Logger.getLogger(CopiasDB.class.getName()).log(Level.SEVERE, null, ex);
+         }
         }
         return null;
     }
-    
-    
 
     public int getId() {
         return id;
@@ -259,9 +292,4 @@ public class CopiasDB extends DBObject {
     public void setEnDepo(boolean enDepo) {
         this.enDepo = enDepo;
     }
-    
-    
-    
-    
-    
 }

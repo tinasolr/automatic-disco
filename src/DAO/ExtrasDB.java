@@ -8,6 +8,7 @@ package DAO;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  *
@@ -111,7 +112,7 @@ public class ExtrasDB extends DBObject{
         }
     }
 
-    public List<ExtrasDB> extrasDeSoftware(int sw_id){
+    public List<ExtrasDB> extrasDeSoftware(int sw_id) {
         ResultSet res = null;
         List<ExtrasDB> exDB = new ArrayList<>();
 
@@ -130,6 +131,12 @@ public class ExtrasDB extends DBObject{
 
         } catch (SQLException e) {
             System.err.println("GET >> Extras de software " + sw_id + " :: " + e.getLocalizedMessage());
+        } finally {
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ExtrasDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return exDB;
     }
@@ -148,7 +155,7 @@ public class ExtrasDB extends DBObject{
         }
     }
 
-    public void deleteAllExtras(){
+    public void deleteAllExtras() {
         try {
 
             if(conn == null || conn.isClosed())
@@ -160,6 +167,12 @@ public class ExtrasDB extends DBObject{
 
         } catch (SQLException e) {
             System.err.println("deleteAllExtras() :: " + e.getMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(ExtrasDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

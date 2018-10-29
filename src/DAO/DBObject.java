@@ -6,10 +6,9 @@
 
 package DAO;
 
-import com.mysql.cj.jdbc.exceptions.*;
-import java.io.*;
 import java.sql.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  *
@@ -25,7 +24,7 @@ public abstract class DBObject {
     protected Connection conn;
     protected Statement instr;
 
-    public void connect(){
+    public void connect() {
         try {
             Class.forName(DRIVER);
         } catch (ClassNotFoundException e) {
@@ -43,15 +42,7 @@ public abstract class DBObject {
                 instr = conn.createStatement();
 
             }
-        } catch(CommunicationsException e){
-            String command = "~path~\\mysql-5.6.10-win32\\bin\\mysqld.exe";
-
-            try{
-                Process process = Runtime.getRuntime().exec(command);
-            } catch (IOException ex){
-                ex.printStackTrace();
-            }
-        }catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println("Error connecting to database: " + e.getMessage());
         }
     }
@@ -70,8 +61,15 @@ public abstract class DBObject {
                 objetos.add(readResultSet(rs));
             }
             conn.close();
+
         } catch (SQLException e) {
             System.out.println("BDObject read() :: " + e.getMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBObject.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
         return objetos;
@@ -91,6 +89,12 @@ public abstract class DBObject {
 
         } catch (SQLException e) {
             System.out.println("BDObject write() :: " + e.getMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBObject.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -108,12 +112,18 @@ public abstract class DBObject {
 
         } catch (SQLException e) {
             System.out.println("BDObject update() :: " + e.getMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBObject.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
     public abstract void executeUpdate();
 
-    public void delete(){
+    public void delete() {
         try {
 
             if(conn == null || conn.isClosed())
@@ -126,12 +136,18 @@ public abstract class DBObject {
         } catch (SQLException e) {
             System.out.println("BDObject delete() :: " + e.getMessage());
             e.printStackTrace();
+        }finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBObject.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
     public abstract void executeDelete();
 
-    public String searchTable(){
+    public String searchTable() {
         String id = null;
         try {
 
@@ -144,6 +160,12 @@ public abstract class DBObject {
 
         } catch (SQLException e) {
             System.out.println("BDObject search() :: " + e.getMessage());
+        }finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(DBObject.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return id;
     }

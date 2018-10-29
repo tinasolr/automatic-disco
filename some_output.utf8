@@ -1,0 +1,16 @@
+"Codigo","Nombre","Software","","Partes","Manual","Caja","Imagen","Observaciones","Formato","Original","Ubicacion",""
+"","","Nombre","Version","","","","","","","","Codigo","Observaciones"
+"12345","qwert","jkl","5.4","1","No","No","No","","DVD","Si","ASD123","lugar alto"
+"12345","qwert","test","0.4.2","1","No","No","No","","DVD","Si","ASD123","lugar alto"
+"12345","qwert","otro","5.0.6","1","No","No","No","","DVD","Si","ASD123","lugar alto"
+"12345","qwert","asdasd","1.2","1","No","No","No","","DVD","Si","ASD123","lugar alto"
+"12345","qwert","jkl","5.4","1","No","No","No","","DVD","Si","EST003","El más bajo"
+"12345","qwert","test","0.4.2","1","No","No","No","","DVD","Si","EST003","El más bajo"
+"12345","qwert","otro","5.0.6","1","No","No","No","","DVD","Si","EST003","El más bajo"
+"12345","qwert","asdasd","1.2","1","No","No","No","","DVD","Si","EST003","El más bajo"
+"3274","medio","Ventanas","3.5","2","No","No","S4e25_Marceline_in_her_cave.png","","Cinta","Mixto","NOASIG","Aun no tiene ubicacion asignada"
+"3274","medio","a","2.3","2","No","No","S4e25_Marceline_in_her_cave.png","","Cinta","Mixto","NOASIG","Aun no tiene ubicacion asignada"
+"43","adfko","a","2.3","3","Si","Si","No","eafaf","Disk 5 1/4""","No","EST2014",
+"arf","hola","jkl","5.4","2","No","No","No","una observacion","DVD","Mixto","EST2014",
+"Ererer","22222222","Ventanas","3.5","3","Si","Si","download.jpeg","asdf blerf","DVD","No","EST003","El más bajo"
+"Ererer","22222222","Soup","4.5.3.1","3","Si","Si","download.jpeg","asdf blerf","DVD","No","EST003","El más bajo"

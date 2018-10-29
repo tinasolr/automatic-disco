@@ -7,10 +7,6 @@
 package Controller;
 
 import Model.*;
-import ar.com.fdvs.dj.core.*;
-import ar.com.fdvs.dj.core.layout.*;
-import ar.com.fdvs.dj.domain.*;
-import ar.com.fdvs.dj.domain.builders.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -23,13 +19,12 @@ import javafx.scene.control.cell.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.view.*;
 
 public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
 
     private SoftwareCtrl swCtrl;
     private IOCtrlMenu controlMenu;
+    private IOCtrlLogin login;
     private int access;
 
     @FXML    private AnchorPane showSw;
@@ -61,7 +56,7 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         loadTable();
-
+        access = IOCtrlLogin.getUserdb().getUserAccess();
         txtFiltrar.setOnKeyPressed((KeyEvent event) -> {  });
         txtFiltrar.setOnKeyReleased(this);
         derVer.setDisable(true);
@@ -78,16 +73,16 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
 
     @FXML
     private void exportarTabla(ActionEvent event) {
-        try {
-            SoftwareReport report = new SoftwareReport(tblSoftware.getItems());
-
-            JasperPrint jp = report.getReport();
-            //JasperViewer jasperViewer = new JasperViewer(jp);
-            //jasperViewer.setVisible(true);
-            JasperViewer.viewReport(jp, false);
-        } catch (JRException | ColumnBuilderException | ClassNotFoundException ex) {
-            ex.printStackTrace();
-        }
+//        try {
+//            SoftwareReport report = new SoftwareReport(tblSoftware.getItems());
+//
+//            JasperPrint jp = report.getReport();
+//            //JasperViewer jasperViewer = new JasperViewer(jp);
+//            //jasperViewer.setVisible(true);
+//            JasperViewer.viewReport(jp, false);
+//        } catch (JRException | ColumnBuilderException | ClassNotFoundException ex) {
+//            ex.printStackTrace();
+//        }
     }
 
     @FXML    private void consIndividual(ActionEvent event) {
@@ -268,12 +263,13 @@ public class IOCtrlConsMasivaSw implements Initializable, EventHandler<Event> {
         this.access = access;
     }
 
-    protected void exportToJRXML(JasperReport jr, DynamicReport dr, Map params) throws JRException {
-        if (jr != null){
-            DynamicJasperHelper.generateJRXML(jr, "UTF-8",System.getProperty("user.dir")+ "/target/reports/" + this.getClass().getName() + ".jrxml");
-        } else {
-            DynamicJasperHelper.generateJRXML(dr, new ClassicLayoutManager(), params, "UTF-8",System.getProperty("user.dir")+ "/target/reports/" +this.getClass().getName() + ".jrxml");
-        }
-    }
+//    protected void exportToJRXML(JasperReport jr, DynamicReport dr, Map params) throws JRException {
+//        if (jr != null){
+//            DynamicJasperHelper.generateJRXML(jr, "UTF-8",System.getProperty("user.dir")+ "/target/reports/" + this.getClass().getName() + ".jrxml");
+//        } else {
+//            DynamicJasperHelper.generateJRXML(dr, new ClassicLayoutManager(), params, "UTF-8",System.getProperty("user.dir")+ "/target/reports/" +this.getClass().getName() + ".jrxml");
+//        }
+//    }
+
 
 }

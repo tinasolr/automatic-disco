@@ -8,7 +8,7 @@ package Controller;
 
 import DAO.*;
 import Model.*;
-import Vista.CopiasTableFormat;
+import Vista.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -104,7 +104,7 @@ public class IOCtrlConsultaIndividualMedio implements Initializable {
             fillCaja.setText(m.isCaja()?"Sí":"No");
             fillGuardado.setText(m.isEnDepo()?"Sí":"No");
             fillManual.setText(m.isManual()?"Sí":"No");
-            fillOriginal.setText(m.getOrigen()==1?"Sí":m.getOrigen()==2?"Muxto":"No");
+            fillOriginal.setText(m.getOrigen()==1?"Sí":m.getOrigen()==2?"Mixto":"No");
             fillFormato.setText(m.getFormato());
             fillUbicacion.setText(m.getUbiDepo().getId());
 
@@ -116,24 +116,24 @@ public class IOCtrlConsultaIndividualMedio implements Initializable {
 
         if(sctrl.getSwDeMed()!=null)
             tblSoftware.getItems().setAll(sctrl.getSwDeMed());
-        
+
             CopiasCtrl copctrl = new CopiasCtrl();
             copctrl.cargarCopias(m.getCodigo());
-            
+
             colCodCop.setCellValueFactory(new PropertyValueFactory<>("id"));
             colFormCop.setCellValueFactory(new PropertyValueFactory<>("formato"));
             colUbiCop.setCellValueFactory(new PropertyValueFactory<>("codUbi"));
             colGuardCop.setCellValueFactory(new PropertyValueFactory<>("enDepo"));
             colObservCop.setCellValueFactory(new PropertyValueFactory<>("descripcion"));
-            
+
             ArrayList<CopiasTableFormat> copTabla = new ArrayList();
             for(Copias c:copctrl.getCopias())
             {
                 copTabla.add(new CopiasTableFormat(c.getId(),c.getFormato(),c.getUbiDepo().getId(),c.getUbiDepo().getDescripcion(),c.getObserv()));
             }
-            
+
             if(!copTabla.isEmpty()) tblCopias.getItems().setAll(copTabla);
-            
+
         }else{popUpError("Algo falló. No reconoce el código.");}
 
     }

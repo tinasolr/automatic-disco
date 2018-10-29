@@ -8,6 +8,7 @@ package DAO;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  *
@@ -53,6 +54,12 @@ public class SistOpDB extends DBObject{
 
         } catch (SQLException e) {
             System.err.println("GET >> so de software " + sw_id + " :: " + e.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return objDB;
     }
@@ -138,5 +145,14 @@ public class SistOpDB extends DBObject{
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public String getNewNombre() {
+        return newNombre;
+    }
+
+    public void setNewNombre(String newNombre) {
+        this.newNombre = newNombre;
+    }
+
 
 }

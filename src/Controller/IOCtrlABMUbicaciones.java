@@ -101,7 +101,6 @@ public class IOCtrlABMUbicaciones implements Initializable, EventHandler<KeyEven
                     txtDescripcion.clear();
 
                 }
-                consMasivaMedios.loadTable();
             }else{popUpError("No puede eliminar este valor.");}
         }else{popUpError("Por favor, seleccione una ubicación a eliminar.");}
     }

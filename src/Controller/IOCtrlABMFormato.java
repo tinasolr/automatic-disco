@@ -55,8 +55,9 @@ public class IOCtrlABMFormato implements Initializable, EventHandler<KeyEvent> {
 
             TextInputDialog dialog = new TextInputDialog(lstFormato.getSelectionModel().getSelectedItem());
             dialog.setTitle("Eliminar formato");
-            dialog.setHeaderText(null);
-            dialog.setContentText("Ingrese el valor por el cual quiera reemplazar:");
+            dialog.setHeaderText("El formato debe ser reemplazado donde era utilizado.");
+            dialog.setContentText("Ingrese el valor por el cual lo quiera "
+                    + "reemplazar: ");
 
             // Traditional way to get the response value.
             Optional<String> result = dialog.showAndWait();
@@ -65,22 +66,18 @@ public class IOCtrlABMFormato implements Initializable, EventHandler<KeyEvent> {
                 f.connect();
                 f.setFormato(lstFormato.getSelectionModel().getSelectedItem());
                 f.setNewFormat(name);
+                /*
+                    Update en bd se fija si existe uno con este nuevo nombre,
+                    si existe, modifica medios y copias al id de formato del que
+                    tiene este nombre y borra el otro formato. De no existir,
+                    cambia el nombre de este formato al nuevo.
+                */
                 f.update();
+                formatosDB.set(lstFormato.getSelectionModel().getSelectedIndex(), name);
                 loadList();
                 txtFormato.clear();
             });
 
-//            if(popUpWarning("Está seguro de que desea eliminar el formato '" + lstFormato.getSelectionModel().getSelectedItem() + "'?")){
-//
-//                FormatoDB f = new FormatoDB();
-//                f.connect();
-//                f.setFormato(lstFormato.getSelectionModel().getSelectedItem());
-//                f.delete();
-//                formatosDB.remove(lstFormato.getSelectionModel().getSelectedItem());
-//                loadList();
-//                txtFormato.clear();
-//
-//            }
         }else{
             popUpError("Por favor, seleccione un formato a eliminar.");
         }

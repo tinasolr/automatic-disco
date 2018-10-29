@@ -8,6 +8,7 @@ package DAO;
 
 import java.sql.*;
 import java.util.*;
+import java.util.logging.*;
 
 /**
  *
@@ -50,6 +51,12 @@ public class SoftwareDB extends DBObject{
         } catch (SQLException e) {
             e.printStackTrace();
             System.err.println("Error >> Lectura >> Software de Medios " + med_id + " :: " + e.getLocalizedMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         return ids;
     }
@@ -171,6 +178,12 @@ public class SoftwareDB extends DBObject{
 
         } catch (SQLException e) {
             System.out.println("deleteSOSw() :: " + e.getMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
@@ -199,6 +212,12 @@ public class SoftwareDB extends DBObject{
 
         } catch (SQLException e) {
             System.out.println("insertSOSw() :: " + e.getMessage());
+        } finally{
+            try {
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormatoDB.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
